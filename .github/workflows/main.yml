@@ -1,0 +1,16 @@
+name: Publish Blog
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up permissions
+        run: chmod +x publi.sh
+      - name: Run a multi-line script
+        run: ./publi.sh
