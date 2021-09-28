@@ -12,7 +12,8 @@ git config user.name "jentrialgo"
 sudo pip3 install -r requirements.txt
 
 # pelican commands - install theme put your theme in themes directory
-pelican-themes --install themes/theme-name
+#pelican-themes --install themes/theme-name
+pelican
 
 # publish to github pages
 ghp-import -m "Generate Pelican site" -b gh-pages output
