@@ -180,3 +180,6 @@ sure to use the basic fields required for pelican (you can see then in the
 example `about` post above), add and commit the file and (after testing
 locally if you want), push the files to the remote directory. After the GitHub
 action has finished you should be able to see your new post in your GitHub page.
+
+If you don't see it, check your GitHub actions page, where you can find
+errors that are generated after each push.
