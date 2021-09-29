@@ -1,4 +1,6 @@
 Title: Integrating Prometheus, InfluxDB and Grafana
+Category: Kubernetes
+Tags: Kubernetes, Prometheus, Telegraf, InfluxDB, Grafana
 
 I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
 i.e., all relevant information is exposed with `/metrics` and scraped by a

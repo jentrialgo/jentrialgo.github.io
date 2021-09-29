@@ -1,6 +1,7 @@
 Title: Using Pelican as blogging platform for GitHub
 Date: 2021-09-28 22:20
 Category: Blogging
+Tags: Pelican, GitHub pages, Blog
 
 So I guess my first blog should be about setting up this blog.
 
