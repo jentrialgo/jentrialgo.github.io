@@ -1,5 +1,4 @@
-Integrating Prometheus, InfluxDB and Grafana
-============================================
+Title: Integrating Prometheus, InfluxDB and Grafana
 
 I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
 i.e., all relevant information is exposed with `/metrics` and scraped by a
@@ -276,3 +275,17 @@ this information:
 
 Click on `Save and test`.
 
+Add a new Dashboard and a new panel. You can add the query given above to check
+that the connection between all elements works:
+
+```bash
+import "experimental/aggregate"
+from(bucket: "default")
+|> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+|> filter(fn: (r) => r["_measurement"] == "prometheus_remote_write")
+|> filter(fn: (r) => r["cpu"] == "total")
+|> filter(fn: (r) => r["_field"] == "container_cpu_usage_seconds_total")
+|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+|> aggregate.rate(every: 1m, unit: 1s)
+|> yield(name: "mean")
+```
