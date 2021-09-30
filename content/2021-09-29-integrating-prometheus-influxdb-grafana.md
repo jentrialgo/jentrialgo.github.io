@@ -8,15 +8,17 @@ Prometheus instance. I want to save the information long term and I've decided
 that Influx DB is the best option for that. In addition, I want to create
 dashboards using Grafana.
 
-This would require moving the information from Prometheus to Influx DB. For
-Influx DB v1, this would be acomplished by using directly remote writes in
+This would require moving the information from Prometheus to Influx DB.
+According to
+[this](https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/),
+for Influx DB v1, this would be accomplished by using directly remote writes in
 Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
 Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
 be `Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana`.
 
 I'm using EKS to deploy the cluster, but these instructions should work with any
 other Kubernetes cluster. I'll only assume that `kubectl` is already configured
-to work with your cluster. We are going to deploy meny services, so you may
+to work with your cluster. We are going to deploy many services, so you may
 require new nodes in your cluster.
 
 Helm
@@ -137,7 +139,7 @@ You have to exchange the `$INFLUX_TOKEN` with the token that you obtained before
 from the InfluxDB web console.
 
 This prepares Telegraf to receive the information in port 1234 with the path
-`/recive` and forward the data to Influx DB.
+`/receive` and forward the data to Influx DB.
 
 In addition, increase the value of `metric_buffer_limit` to something like
 50000.
