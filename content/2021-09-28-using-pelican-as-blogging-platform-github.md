@@ -19,7 +19,7 @@ mkdir blog
 cd blog
 python -m venv .venv
 source .venv/bin/activate
-````
+```
 
 Install pelican with one of these options:
 
