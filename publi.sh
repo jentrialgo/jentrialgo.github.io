@@ -11,6 +11,9 @@ git config user.name "jentrialgo"
 # install dependencies
 sudo pip3 install -r requirements.txt
 
+# Clone the theme
+git clone https://github.com/alexandrevicenzi/Flex
+
 # pelican commands - install theme put your theme in themes directory
 #pelican-themes --install themes/theme-name
 pelican

@@ -34,7 +34,7 @@ DEFAULT_PAGINATION = True
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
 
-#THEME = "Flex"
+THEME = "Flex"
 
 EXTRA_PATH_METADATA = {
     "extra/custom.css": {"path": "static/custom.css"},
