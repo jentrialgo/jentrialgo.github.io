@@ -41,6 +41,9 @@ I'll leave the standard theme. Read in the [mentioned
 post](https://avinal.space/posts/development/twilight-blog.html) if you want to
 change the theme.
 
+> **Note** I've created a new post about [how to change the style to
+Flex]({filename}2021-09-30-changing-the-theme-to-flex.md)
+
 To test locally the blog, generate the site with:
 
 ```bash
@@ -62,9 +65,6 @@ directory. For instance, you can create an `about.md` file with this content:
 Title: About
 Date: 2021-09-28 20:20
 Category: About
-
-About
------
 
 This is just a blog.
 ```
