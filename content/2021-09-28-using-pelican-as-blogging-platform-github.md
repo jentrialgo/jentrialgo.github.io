@@ -142,6 +142,7 @@ git push -u origin main
 Go to the GitHub page of the repository and then to the `Actions` section and
 click on `Set up a workflow yourself`. Then, paste this code and commit it:
 
+```yaml
 name: Publish Blog
 on:
   push:
@@ -158,6 +159,7 @@ jobs:
         run: chmod +x publi.sh
       - name: Run a multi-line script
         run: ./publi.sh
+```
 
 Now, pull the changes to your local repo:
 
