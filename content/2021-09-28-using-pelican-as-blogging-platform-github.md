@@ -69,6 +69,11 @@ Category: About
 This is just a blog.
 ```
 
+> **Note** This type of pages which are not articles should usually go in a
+> folder called `pages` inside the `content` folder. See the [documentation
+> about them](https://docs.getpelican.com/en/3.6.3/content.html#pages) in the
+> Pelican docs.
+
 You can make the html again and serve it to test it locally, but the idea is
 using GitHub actions so that when this code is push to a repository, the
 website is generated.
@@ -169,7 +174,7 @@ git pull
 
 In the GitHub interface, you should be able to see in the branch `gh-pages` the
 content of your blog, i.e., the HTML, CSS and javascript files that you also
-obtain in your local `output` directoy when you run `make html`.
+obtain in your local `output` directory when you run `make html`.
 
 Go to the settings in your GitHub repo, select the `Pages` option in the menu
 and in the `Source` section, indicate that your source is the branch `gh-pages`.
@@ -179,10 +184,10 @@ If everything is correct, you should be able to see your blog by going to
 `USERNAME.github.io`.
 
 If you want to add new content, create a new file in the `content` folder, be
-sure to use the basic fields required for pelican (you can see then in the
-example `about` post above), add and commit the file and (after testing
-locally if you want), push the files to the remote directory. After the GitHub
-action has finished you should be able to see your new post in your GitHub page.
+sure to use the basic fields required for pelican (you can see them in the
+example `about` post above), add and commit the file, and (after testing locally
+if you want) push the files to the remote directory. After the GitHub action has
+finished you should be able to see your new post in your GitHub page.
 
 If you don't see it, check your GitHub actions page, where you can find
 errors that are generated after each push.
