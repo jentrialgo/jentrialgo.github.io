@@ -53,3 +53,5 @@ SUMMARY_MAX_LENGTH = 175
 
 SITELOGO = "images/profile.jpg"
 SITETITLE = "Giving back to tech"
+
+REL_CANONICAL = True
