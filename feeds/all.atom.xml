@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/all.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2022-06-20T12:00:00+02:00</updated><subtitle></subtitle><entry><title>Using IPVS in kube-proxy with eksctl</title><link href="https://jentrialgo.github.io/using-ipvs-in-kube-proxy-with-eksctl.html" rel="alternate"></link><published>2022-06-20T12:00:00+02:00</published><updated>2022-06-20T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2022-06-20:/using-ipvs-in-kube-proxy-with-eksctl.html</id><summary type="html">&lt;p&gt;I have a kubernetes cluster launched with &lt;code&gt;eksctl&lt;/code&gt;. I can get the configuration
+of &lt;code&gt;kube-proxy&lt;/code&gt; with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit configmap kube-proxy-config -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I see that the default configuration uses the &lt;code&gt;iptables&lt;/code&gt; mode. In order to
+change it, the &lt;code&gt;mode&lt;/code&gt; parameter has to be changed to &lt;code&gt;ipvs&lt;/code&gt; and the scheduler
+parameter in the &lt;code&gt;ipvs&lt;/code&gt; section, which is initially empty, has to be assigned one
+of &lt;a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes"&gt;these
+policies&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rr: round-robin&lt;/li&gt;
+&lt;li&gt;lc: least connection&lt;/li&gt;
+&lt;li&gt;dh: destination hashing&lt;/li&gt;
+&lt;li&gt;sh: source hashing&lt;/li&gt;
+&lt;li&gt;sed: shortest expected delay&lt;/li&gt;
+&lt;li&gt;nq: never queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;lsmod | grep ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to apply the configuration, kube-proxy has to be restarted with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl rollout restart ds kube-proxy -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I get this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This means that the modules …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have a kubernetes cluster launched with &lt;code&gt;eksctl&lt;/code&gt;. I can get the configuration
+of &lt;code&gt;kube-proxy&lt;/code&gt; with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit configmap kube-proxy-config -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I see that the default configuration uses the &lt;code&gt;iptables&lt;/code&gt; mode. In order to
+change it, the &lt;code&gt;mode&lt;/code&gt; parameter has to be changed to &lt;code&gt;ipvs&lt;/code&gt; and the scheduler
+parameter in the &lt;code&gt;ipvs&lt;/code&gt; section, which is initially empty, has to be assigned one
+of &lt;a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes"&gt;these
+policies&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rr: round-robin&lt;/li&gt;
+&lt;li&gt;lc: least connection&lt;/li&gt;
+&lt;li&gt;dh: destination hashing&lt;/li&gt;
+&lt;li&gt;sh: source hashing&lt;/li&gt;
+&lt;li&gt;sed: shortest expected delay&lt;/li&gt;
+&lt;li&gt;nq: never queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;lsmod | grep ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to apply the configuration, kube-proxy has to be restarted with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl rollout restart ds kube-proxy -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I get this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This means that the modules for the policies lc and sed are not loaded. You can
+load them running the following commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo modprobe ip_vs_sed
+sudo modprobe ip_vs_lc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In my example, using a service with 7 replicas that takes around 200 ms of
+processing, I see an extra 100 ms of latency added by the kube-proxy load
+balancer when using the &lt;code&gt;iptables&lt;/code&gt; mode, and only 4 ms of latency added when
+using the &lt;code&gt;ipvs&lt;/code&gt; mode, even when both are using the round-robin policy.&lt;/p&gt;</content><category term="kubernetes, eksctl, kube-proxy"></category><category term="kubernetes"></category><category term="eksctl"></category><category term="kube-proxy"></category></entry><entry><title>Pinning CPUs in Kubernetes using full-pcpus-only with eksctl</title><link href="https://jentrialgo.github.io/pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html" rel="alternate"></link><published>2022-05-16T12:00:00+02:00</published><updated>2022-05-16T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2022-05-16:/pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html</id><summary type="html">&lt;p&gt;I was trying to use the option &lt;code&gt;full-pcpus-only&lt;/code&gt; with eksctl and I was not
+having luck. In the end, I was able to do it by using this &lt;code&gt;cluster.yaml&lt;/code&gt;
+configuration file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;apiVersion&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;eksctl.io/v1alpha5&lt;/span&gt;
+&lt;span class="nt"&gt;kind&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ClusterConfig&lt;/span&gt;
+
+&lt;span class="nt"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;k8s-Stokholm-Cluster&lt;/span&gt;
+  &lt;span class="nt"&gt;region&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;eu-north-1&lt;/span&gt;
+
+&lt;span class="nt"&gt;nodeGroups&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ng-1&lt;/span&gt;
+    &lt;span class="nt"&gt;instanceType&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;c5.4xlarge&lt;/span&gt;
+    &lt;span class="nt"&gt;desiredCapacity&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;1&lt;/span&gt;
+    &lt;span class="nt"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="nt"&gt;publicKeyPath&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;/home/joaquin/k8s/joaquin-k8s-stockholm.pub&lt;/span&gt;
+    &lt;span class="nt"&gt;kubeletExtraConfig&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="nt"&gt;cpuManagerPolicy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;static&lt;/span&gt;
+      &lt;span class="nt"&gt;cpuManagerPolicyOptions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;full-pcpus-only&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;true&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;kubeReserved&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;cpu&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300m&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300Mi&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;ephemeral-storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1Gi&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;kubeReservedCgroup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/kube-reserved&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;systemReserved&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;cpu&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300m&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300Mi&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;ephemeral-storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1Gi&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;featureGates&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;CPUManager&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+        &lt;span class="nt"&gt;CPUManagerPolicyOptions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;When my file had not the correct options, the problem I was seeing was that
+eksctl got stuck with the message:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;waiting for at least 1 node(s) to become ready in &amp;quot;ng-1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;For debugging the errors, I connected by ssh to the EC2 instance that was
+created and I check the logs of the kubelet service with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;journalctl -u kubelet.service
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to have the CPUs pinned to a physical CPU, I had to make the requests
+and the limits equal (both for CPU and memory …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I was trying to use the option &lt;code&gt;full-pcpus-only&lt;/code&gt; with eksctl and I was not
+having luck. In the end, I was able to do it by using this &lt;code&gt;cluster.yaml&lt;/code&gt;
+configuration file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;apiVersion&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;eksctl.io/v1alpha5&lt;/span&gt;
+&lt;span class="nt"&gt;kind&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ClusterConfig&lt;/span&gt;
+
+&lt;span class="nt"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;k8s-Stokholm-Cluster&lt;/span&gt;
+  &lt;span class="nt"&gt;region&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;eu-north-1&lt;/span&gt;
+
+&lt;span class="nt"&gt;nodeGroups&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ng-1&lt;/span&gt;
+    &lt;span class="nt"&gt;instanceType&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;c5.4xlarge&lt;/span&gt;
+    &lt;span class="nt"&gt;desiredCapacity&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;1&lt;/span&gt;
+    &lt;span class="nt"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="nt"&gt;publicKeyPath&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;/home/joaquin/k8s/joaquin-k8s-stockholm.pub&lt;/span&gt;
+    &lt;span class="nt"&gt;kubeletExtraConfig&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="nt"&gt;cpuManagerPolicy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;static&lt;/span&gt;
+      &lt;span class="nt"&gt;cpuManagerPolicyOptions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;full-pcpus-only&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;true&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;kubeReserved&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;cpu&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300m&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300Mi&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;ephemeral-storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1Gi&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;kubeReservedCgroup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/kube-reserved&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;systemReserved&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;cpu&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300m&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;300Mi&amp;quot;&lt;/span&gt;
+        &lt;span class="nt"&gt;ephemeral-storage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1Gi&amp;quot;&lt;/span&gt;
+      &lt;span class="nt"&gt;featureGates&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nt"&gt;CPUManager&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+        &lt;span class="nt"&gt;CPUManagerPolicyOptions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;When my file had not the correct options, the problem I was seeing was that
+eksctl got stuck with the message:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;waiting for at least 1 node(s) to become ready in &amp;quot;ng-1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;For debugging the errors, I connected by ssh to the EC2 instance that was
+created and I check the logs of the kubelet service with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;journalctl -u kubelet.service
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to have the CPUs pinned to a physical CPU, I had to make the requests
+and the limits equal (both for CPU and memory). Also, the number of CPUs had to
+be 2; if not, I got an &lt;code&gt;SMTAlignmentError&lt;/code&gt; when launching the pod.&lt;/p&gt;</content><category term="kubernetes, eksctl"></category><category term="kubernetes"></category><category term="eksctl"></category></entry><entry><title>Error cannot use path@version syntax in GOPATH mode</title><link href="https://jentrialgo.github.io/error-cannot-use-pathversion-syntax-in-gopath-mode.html" rel="alternate"></link><published>2021-12-15T12:00:00+01:00</published><updated>2021-12-15T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-12-15:/error-cannot-use-pathversion-syntax-in-gopath-mode.html</id><content type="html">&lt;p&gt;I was trying to install xk6 using this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;go install go.k6.io/xk6/cmd/xk6@latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And I got this error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;package go.k6.io/xk6/cmd/xk6@latest: cannot use path@version syntax in GOPATH mode
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Although I found &lt;a href="https://stackoverflow.com/q/54415733"&gt;a question in Stack
+Overflow&lt;/a&gt; with that error, the given
+solutions didn't work for me. In the end, I learned that the message was caused
+because I was using an old version of Go: the &lt;code&gt;path@version&lt;/code&gt; was added in Go
+1.16 and I was using 1.15. Thus, the solution for my problem was updating Go.&lt;/p&gt;</content><category term="go"></category><category term="go"></category></entry><entry><title>Reading traces from a file in k6</title><link href="https://jentrialgo.github.io/reading-traces-from-a-file-in-k6.html" rel="alternate"></link><published>2021-11-24T09:24:00+01:00</published><updated>2021-11-24T09:24:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-11-24:/reading-traces-from-a-file-in-k6.html</id><content type="html">&lt;p&gt;I wanted to read a trace of requests per second I have in a file and use it as
+the injection pattern in k6. I could do it by reading the values into an array,
+which is then used as the stages in a ramping arrival rate excutor, like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;http&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;k6/http&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;papaparse&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://jslib.k6.io/papaparse/5.1.1/index.js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;SharedArray&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="kr"&gt;from&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;k6/data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;trace_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;PATH_TO_THE_TRACE_FILE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;trace&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="ow"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;SharedArray&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;another data name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;papaparse&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;parse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;trace_file&lt;/span&gt;&lt;span class="p"&gt;)).&lt;/span&gt;&lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;stages&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;trace&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;stages&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt; &lt;span class="nx"&gt;target&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;trace&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="mf"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="nx"&gt;duration&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1s&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;})&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;export&lt;/span&gt; &lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;discardResponseBodies&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;scenarios&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;contacts&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;executor&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;ramping-arrival-rate&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;startRate&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;timeUnit&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1s&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;preAllocatedVUs&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;maxVUs&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;stages&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;stages&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="k"&gt;export&lt;/span&gt; &lt;span class="k"&gt;default&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://localhost:8555&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="nx"&gt;http&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;url&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="k6"></category><category term="k6"></category><category term="kubernetes"></category></entry><entry><title>Configuring Ubuntu Server 20.04 LTS gateway</title><link href="https://jentrialgo.github.io/configuring-ubuntu-server-2004-lts-gateway.html" rel="alternate"></link><published>2021-10-20T10:00:00+02:00</published><updated>2021-10-20T10:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-10-20:/configuring-ubuntu-server-2004-lts-gateway.html</id><content type="html">&lt;p&gt;The current version of Ubuntu Server 20.04 LTS uses netplan in order to
+configure the network. If it doesn't use cloud-init to provision the network,
+the network configuration will be in a YAML file in &lt;code&gt;/etc/netplan&lt;/code&gt;. There you
+can change the network parameters, such as the default gateway if you have a
+fixed connection.&lt;/p&gt;
+&lt;p&gt;After changing them, run this command to apply them (remember
+that you may disconnect from the network, so don't run it from a remote
+connection!):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo netplan apply
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A more detailed explanation can be found in &lt;a href="https://linuxize.com/post/how-to-configure-static-ip-address-on-ubuntu-20-04/"&gt;this very helpful post at
+linuxize&lt;/a&gt;.&lt;/p&gt;</content><category term="Ubuntu"></category><category term="Ubuntu"></category></entry><entry><title>Upgrading to dash 2.0</title><link href="https://jentrialgo.github.io/upgrading-to-dash-20.html" rel="alternate"></link><published>2021-10-05T14:20:00+02:00</published><updated>2021-10-05T14:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-10-05:/upgrading-to-dash-20.html</id><content type="html">&lt;p&gt;I had some dashboards built in Python with
+&lt;a href="https://github.com/plotly/dash"&gt;Dash&lt;/a&gt;. They were using version 1.13.4 and I
+updated it to version 2.0.0. In addition to converting the imports, as explained
+in the &lt;a href="https://dash.plotly.com/dash-2-0-migration"&gt;migration guide&lt;/a&gt;, I also
+had to change state variables because I was getting the error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;ValueError: The state keyword argument may not be provided without the input keyword argument
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I didn't understand the explanation in the migration guide. After reading the
+&lt;a href="https://dash.plotly.com/basic-callbacks"&gt;new documentation about callbacks&lt;/a&gt;,
+I've found that I had to change my &lt;code&gt;app_callbacks&lt;/code&gt;. Previously, I had something
+like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nd"&gt;@app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;Output&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;wl-plot&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sol-select&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+        &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;button-apply&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;n_clicks&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;],&lt;/span&gt;
+    &lt;span class="n"&gt;state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="n"&gt;State&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;base-dir&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And I had to change it to this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nd"&gt;@app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;Output&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;wl-plot&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sol-select&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;Input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;button-apply&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;n_clicks&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;State&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;component_id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;base-dir&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;component_property&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So, basically, now you only have a list of &lt;code&gt;Output&lt;/code&gt;, &lt;code&gt;Input&lt;/code&gt; and &lt;code&gt;State&lt;/code&gt;
+instances and you don need the &lt;code&gt;state=...&lt;/code&gt;.&lt;/p&gt;</content><category term="Python"></category><category term="Python"></category><category term="Dash"></category></entry><entry><title>Meltdown and spectre checker</title><link href="https://jentrialgo.github.io/meltdown-and-spectre-checker.html" rel="alternate"></link><published>2021-10-04T19:20:00+02:00</published><updated>2021-10-04T19:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-10-04:/meltdown-and-spectre-checker.html</id><content type="html">&lt;p&gt;I've found &lt;a href="https://github.com/speed47/spectre-meltdown-checker"&gt;this script&lt;/a&gt; which is very handy to analyze if you Linux-based system is vulnerable to Spectre and Meltdown. I found this through &lt;a href="https://www.youtube.com/watch?v=2gB9U1EcCss"&gt;this talk&lt;/a&gt;.&lt;/p&gt;</content><category term="Security"></category><category term="Meltdown"></category><category term="Spectre"></category><category term="Security"></category><category term="CPU Architecture"></category></entry><entry><title>Changing the Pelican theme to Flex</title><link href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html" rel="alternate"></link><published>2021-09-30T22:20:00+02:00</published><updated>2021-09-30T22:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-30:/changing-the-pelican-theme-to-flex.html</id><content type="html">&lt;p&gt;In &lt;a href="https://jentrialgo.github.io/using-pelican-as-blogging-platform-for-github.html"&gt;a previous
+post&lt;/a&gt; I
+explained how to use Pelican with GitHub pages but didn't explain how to change
+the theme. I've changed it now to use
+&lt;a href="https://github.com/alexandrevicenzi/Flex"&gt;Flex&lt;/a&gt; and it was harder than
+expected.&lt;/p&gt;
+&lt;p&gt;Most of the guides I've found talked about cloning
+&lt;a href="https://github.com/getpelican/pelican-themes"&gt;pelican-themes&lt;/a&gt; in a folder on
+your system and changing the variable &lt;code&gt;THEME&lt;/code&gt; to that folder. However, that
+doesn't work when you are using GitHub actions to build your site because it
+won't find that folder.&lt;/p&gt;
+&lt;p&gt;My solution was cloning the theme I wanted, Flex, to a folder inside the root
+folder of the blog:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git clone https://github.com/alexandrevicenzi/Flex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then I set in &lt;code&gt;pelicanconf.py&lt;/code&gt; the variable &lt;code&gt;THEME&lt;/code&gt; as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Flex&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to make it work with GitHub actions, I had to add in the file
+&lt;code&gt;publi.sh&lt;/code&gt;, before calling &lt;code&gt;pelican&lt;/code&gt;, this line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git clone https://github.com/alexandrevicenzi/Flex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After commiting and pushing, it worked.&lt;/p&gt;</content><category term="Blogging"></category><category term="Pelican"></category><category term="GitHub pages"></category><category term="Blog"></category></entry><entry><title>Integrating Prometheus, InfluxDB and Grafana</title><link href="https://jentrialgo.github.io/integrating-prometheus-influxdb-and-grafana.html" rel="alternate"></link><published>2021-09-29T00:00:00+02:00</published><updated>2021-09-29T00:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-29:/integrating-prometheus-influxdb-and-grafana.html</id><summary type="html">&lt;p&gt;I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with &lt;code&gt;/metrics&lt;/code&gt; and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.&lt;/p&gt;
+&lt;p&gt;This would require moving the information from Prometheus to Influx DB.
+According to
+&lt;a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/"&gt;this&lt;/a&gt;,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be &lt;code&gt;Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that &lt;code&gt;kubectl&lt;/code&gt; is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.&lt;/p&gt;
+&lt;h2&gt;Helm&lt;/h2&gt;
+&lt;p&gt;We'are going to use Helm for installing all the components, so first we …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with &lt;code&gt;/metrics&lt;/code&gt; and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.&lt;/p&gt;
+&lt;p&gt;This would require moving the information from Prometheus to Influx DB.
+According to
+&lt;a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/"&gt;this&lt;/a&gt;,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be &lt;code&gt;Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that &lt;code&gt;kubectl&lt;/code&gt; is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.&lt;/p&gt;
+&lt;h2&gt;Helm&lt;/h2&gt;
+&lt;p&gt;We'are going to use Helm for installing all the components, so first we install
+helm with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
+    chmod &lt;span class="m"&gt;700&lt;/span&gt; get_helm.sh
+
+    ./get_helm.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Influx DB&lt;/h2&gt;
+&lt;p&gt;To deploy Influx DB using Helm, we have to add the Influx DB helm repo and then
+install it with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm repo add influxdata https://helm.influxdata.com/
+
+helm upgrade --install my-influxdb influxdata/influxdb2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run this command, per the instructions, to obtain the password and save it in
+your password manager:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get secret myinfluxdb-influxdb2-auth -o &lt;span class="s2"&gt;&amp;quot;jsonpath={.data[&amp;#39;admin-password&amp;#39;]}&amp;quot;&lt;/span&gt; --namespace default &lt;span class="p"&gt;|&lt;/span&gt; base64 --decode&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we are going to redirect the port for the Influx DB web console so that it
+can be accessed from outside. Run this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl port-forward service/my-influxdb-influxdb2 &lt;span class="m"&gt;8087&lt;/span&gt;:80 &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&amp;gt; forward-influx.txt &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you are using Visual Studio Code as I am, you should now forward port 8087
+there as well.&lt;/p&gt;
+&lt;p&gt;Open in a web browser &lt;a href="http://localhost:8087"&gt;http://localhost:8087&lt;/a&gt; and you should see the InfluxDB
+console. You can log in with username &lt;code&gt;admin&lt;/code&gt; and the password for Influx DB
+obtained above.&lt;/p&gt;
+&lt;p&gt;We are going to use the Influx DB web console to create a token that will allow
+us latter to write data from Telegraf and to read it from Grafana. In the
+console, go to &lt;code&gt;Data | Tokens | Generate Token | Read/Write Token&lt;/code&gt;. Select the
+permissions to write and read in the &lt;code&gt;default&lt;/code&gt; bucket, give the token a name and
+save it. Next, select it to see it. Write it down, as we will need it later.&lt;/p&gt;
+&lt;p&gt;In case you need to check the logs of Influx DB, you can do it with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl logs -f --namespace default &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;influxdb2 -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Telegraf&lt;/h2&gt;
+&lt;p&gt;Install Telegraf with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm upgrade --install my-telegraf influxdata/telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that, at least at the time of writing, the instructions given by helm for
+running an interactive shell and obtaining the logs  are wrong because the
+labels are wrong. These would be the correct commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl &lt;span class="nb"&gt;exec&lt;/span&gt; -i -t --namespace default &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{.items[0].metadata.name}&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt; /bin/sh
+
+kubectl logs -f --namespace default &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You should see some errors in the log because the output configuration of
+Telegraf is wrong. We are going to fix it next.&lt;/p&gt;
+&lt;p&gt;We are going to change Telegraf's configuration, which can be carried out with
+the command to edit its configmap:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit configmap/my-telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Remove all this part:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    &lt;span class="o"&gt;[[&lt;/span&gt;outputs.influxdb&lt;span class="o"&gt;]]&lt;/span&gt;
+      &lt;span class="nv"&gt;database&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;telegraf&amp;quot;&lt;/span&gt;
+      &lt;span class="nv"&gt;urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;
+        &lt;span class="s2"&gt;&amp;quot;http://influxdb.monitoring.svc:8086&amp;quot;&lt;/span&gt;
+      &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And write this in its place:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    &lt;span class="o"&gt;[[&lt;/span&gt;inputs.http_listener_v2&lt;span class="o"&gt;]]&lt;/span&gt;
+    &lt;span class="nv"&gt;service_address&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;:1234&amp;quot;&lt;/span&gt;
+    &lt;span class="nv"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/receive&amp;quot;&lt;/span&gt;
+    &lt;span class="nv"&gt;data_format&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;prometheusremotewrite&amp;quot;&lt;/span&gt;
+
+    &lt;span class="o"&gt;[[&lt;/span&gt;outputs.influxdb_v2&lt;span class="o"&gt;]]&lt;/span&gt;
+    &lt;span class="nv"&gt;urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://my-influxdb-influxdb2:80&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="nv"&gt;token&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$INFLUX_TOKEN&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+    &lt;span class="nv"&gt;organization&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;influxdata&amp;quot;&lt;/span&gt;
+    &lt;span class="nv"&gt;bucket&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You have to exchange the &lt;code&gt;$INFLUX_TOKEN&lt;/code&gt; with the token that you obtained before
+from the InfluxDB web console.&lt;/p&gt;
+&lt;p&gt;This prepares Telegraf to receive the information in port 1234 with the path
+&lt;code&gt;/receive&lt;/code&gt; and forward the data to Influx DB.&lt;/p&gt;
+&lt;p&gt;In addition, increase the value of &lt;code&gt;metric_buffer_limit&lt;/code&gt; to something like
+50000.&lt;/p&gt;
+&lt;p&gt;In order to make Telegraf use this new configuration, save it and run this
+program that kills the pod and makes kubernetes create a new one with the new
+configuration:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl delete pods -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Check Telegraf's logs to see that there is no problem:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl logs -f --namespace default &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In addition, we have to create a service so that Telegraf can be reached at
+&lt;code&gt;http://my-telegraph:1234&lt;/code&gt; because by default it only exposes port 8125. Change
+the configuration of Telegraf's service with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit svc/my-telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add this in the &lt;code&gt;ports&lt;/code&gt; section:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    - name: http-listener
+      port: &lt;span class="m"&gt;1234&lt;/span&gt;
+      protocol: TCP
+      targetPort: &lt;span class="m"&gt;1234&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, you should see with this command that Telegraf's service is also listening
+in port 1234:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl get services
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Prometheus&lt;/h2&gt;
+&lt;p&gt;If you don't have Prometheus installed in your system yet, you can do it with
+these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm install my-prometheus prometheus-community/prometheus
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Edit Prometheus configuration with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit cm/my-prometheus-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add this line, at the same level as the &lt;code&gt;global&lt;/code&gt; section, i.e., inside the
+&lt;code&gt;prometheus.yml&lt;/code&gt; section, in order to make Prometheus write the data to
+Telegraf:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    remote_write:
+    - url: &lt;span class="s2"&gt;&amp;quot;http://my-telegraf:1234/receive&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Prometheus should read the new configuration automatically once you save it.
+Run this command to see the Prometheus log:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl logs -f --namespace default &lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l &lt;span class="nv"&gt;app&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;prometheus -l &lt;span class="nv"&gt;component&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;server -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt; prometheus-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If everything is OK, you should be able to see in the &lt;code&gt;Explore&lt;/code&gt; section of the
+Influx DB web console a &lt;code&gt;prometheus_remote_write&lt;/code&gt; section with metrics about the
+cluster. If you want to plot the CPU utilization, for example, you can select
+the Script editor and use this query:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;import &lt;span class="s2"&gt;&amp;quot;experimental/aggregate&amp;quot;&lt;/span&gt;
+from&lt;span class="o"&gt;(&lt;/span&gt;bucket: &lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; range&lt;span class="o"&gt;(&lt;/span&gt;start: v.timeRangeStart, stop: v.timeRangeStop&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_measurement&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;prometheus_remote_write&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cpu&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_field&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;container_cpu_usage_seconds_total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; aggregateWindow&lt;span class="o"&gt;(&lt;/span&gt;every: v.windowPeriod, fn: mean, createEmpty: &lt;span class="nb"&gt;false&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; aggregate.rate&lt;span class="o"&gt;(&lt;/span&gt;every: 1m, unit: 1s&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; yield&lt;span class="o"&gt;(&lt;/span&gt;name: &lt;span class="s2"&gt;&amp;quot;mean&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Submit it and you should see some data.&lt;/p&gt;
+&lt;h2&gt;Grafana&lt;/h2&gt;
+&lt;p&gt;Install Grafana with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm repo add grafana https://grafana.github.io/helm-charts
+
+helm install my-grafana grafana/grafana --set sidecar.datasources.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; --set sidecar.dashboards.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; --set sidecar.datasources.label&lt;span class="o"&gt;=&lt;/span&gt;grafana_datasource --set sidecar.dashboards.label&lt;span class="o"&gt;=&lt;/span&gt;grafana_dashboard
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Follow the instructions to get Grafana's password:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl get secret --namespace default my-grafana -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{.data.admin-password}&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; base64 --decode &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In addition, forward port 3000 of Grafana so that you can access its web
+console:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;POD_NAME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl get pods --namespace default -l &lt;span class="s2"&gt;&amp;quot;app.kubernetes.io/name=grafana,app.kubernetes.io/instance=my-grafana&amp;quot;&lt;/span&gt; -o &lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{.items[0].metadata.name}&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+kubectl --namespace default port-forward &lt;span class="nv"&gt;$POD_NAME&lt;/span&gt; &lt;span class="m"&gt;3000&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&amp;gt; forward-grafana.txt &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that I've changed the forward command so that it redirects its output.
+Forward the port also in Visual Studio Code if you are using it and open
+&lt;a href="http://localhost:3000"&gt;http://localhost:3000&lt;/a&gt; to access Grafana console.&lt;/p&gt;
+&lt;p&gt;Log in with username &lt;code&gt;admin&lt;/code&gt; and the password obtained above.&lt;/p&gt;
+&lt;p&gt;Now, we are going to add InfluxDB as a source for Grafana. In Grafana's web
+console, go to &lt;code&gt;Data sources | Add your first data source&lt;/code&gt; and select
+&lt;code&gt;InfluxDB&lt;/code&gt;. Select &lt;code&gt;Flux&lt;/code&gt; in the Query Language to use the new syntax. Enter
+this information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;URL: &lt;code&gt;http://my-influxdb-influxdb2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Uncheck the toggle in &lt;code&gt;Basic Auth&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Organization: &lt;code&gt;influxdata&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Token: the one obtained from InfluxDB at the beginning. It's the same one used
+  for allowing Telegraf writing in InfluxDB.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Click on &lt;code&gt;Save and test&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Add a new Dashboard and a new panel. You can add the query given above to check
+that the connection between all elements works:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;import &lt;span class="s2"&gt;&amp;quot;experimental/aggregate&amp;quot;&lt;/span&gt;
+from&lt;span class="o"&gt;(&lt;/span&gt;bucket: &lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; range&lt;span class="o"&gt;(&lt;/span&gt;start: v.timeRangeStart, stop: v.timeRangeStop&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_measurement&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;prometheus_remote_write&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cpu&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; filter&lt;span class="o"&gt;(&lt;/span&gt;fn: &lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_field&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;container_cpu_usage_seconds_total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; aggregateWindow&lt;span class="o"&gt;(&lt;/span&gt;every: v.windowPeriod, fn: mean, createEmpty: &lt;span class="nb"&gt;false&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; aggregate.rate&lt;span class="o"&gt;(&lt;/span&gt;every: 1m, unit: 1s&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt; yield&lt;span class="o"&gt;(&lt;/span&gt;name: &lt;span class="s2"&gt;&amp;quot;mean&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Kubernetes"></category><category term="Kubernetes"></category><category term="Prometheus"></category><category term="Telegraf"></category><category term="InfluxDB"></category><category term="Grafana"></category></entry><entry><title>Using Pelican as blogging platform for GitHub</title><link href="https://jentrialgo.github.io/using-pelican-as-blogging-platform-for-github.html" rel="alternate"></link><published>2021-09-28T22:20:00+02:00</published><updated>2021-09-28T22:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-28:/using-pelican-as-blogging-platform-for-github.html</id><summary type="html">&lt;p&gt;So I guess my first blog should be about setting up this blog.&lt;/p&gt;
+&lt;p&gt;I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;this post about using
+Pelican&lt;/a&gt;, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.&lt;/p&gt;
+&lt;p&gt;Create a directory for the blog, an environment and activate it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir blog
+&lt;span class="nb"&gt;cd&lt;/span&gt; blog
+python -m venv .venv
+&lt;span class="nb"&gt;source&lt;/span&gt; .venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Install pelican with one of these options:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# This option only allows reStructuredText&lt;/span&gt;
+python -m pip install pelican
+
+&lt;span class="c1"&gt;# This allows markdown and reStructuredText&lt;/span&gt;
+python -m pip install &lt;span class="s2"&gt;&amp;quot;pelican[markdown]&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create the basic structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pelican-quickstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I'll leave the standard theme. Read in the &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;mentioned
+post&lt;/a&gt; if you want to
+change the theme.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I've created a new post about &lt;a href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html"&gt;how to change the style to
+Flex&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To test locally the blog, generate the site with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now start a web server with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You …&lt;/p&gt;</summary><content type="html">&lt;p&gt;So I guess my first blog should be about setting up this blog.&lt;/p&gt;
+&lt;p&gt;I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;this post about using
+Pelican&lt;/a&gt;, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.&lt;/p&gt;
+&lt;p&gt;Create a directory for the blog, an environment and activate it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir blog
+&lt;span class="nb"&gt;cd&lt;/span&gt; blog
+python -m venv .venv
+&lt;span class="nb"&gt;source&lt;/span&gt; .venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Install pelican with one of these options:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# This option only allows reStructuredText&lt;/span&gt;
+python -m pip install pelican
+
+&lt;span class="c1"&gt;# This allows markdown and reStructuredText&lt;/span&gt;
+python -m pip install &lt;span class="s2"&gt;&amp;quot;pelican[markdown]&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create the basic structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pelican-quickstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I'll leave the standard theme. Read in the &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;mentioned
+post&lt;/a&gt; if you want to
+change the theme.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I've created a new post about &lt;a href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html"&gt;how to change the style to
+Flex&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To test locally the blog, generate the site with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now start a web server with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see the default blog in &lt;a href="http://localhost:8000"&gt;http://localhost:8000&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In order to add content, you should create your files in the &lt;code&gt;content&lt;/code&gt;
+directory. For instance, you can create an &lt;code&gt;about.md&lt;/code&gt; file with this content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Title: About
+Date: 2021-09-28 20:20
+Category: About
+
+This is just a blog.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; This type of pages which are not articles should usually go in a
+folder called &lt;code&gt;pages&lt;/code&gt; inside the &lt;code&gt;content&lt;/code&gt; folder. See the &lt;a href="https://docs.getpelican.com/en/3.6.3/content.html#pages"&gt;documentation
+about them&lt;/a&gt; in the
+Pelican docs.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;You can make the html again and serve it to test it locally, but the idea is
+using GitHub actions so that when this code is push to a repository, the
+website is generated.&lt;/p&gt;
+&lt;p&gt;Create a file called &lt;code&gt;publi.sh&lt;/code&gt; with this content (change the email and the user
+name):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="ch"&gt;#! /bin/bash&lt;/span&gt;
+
+&lt;span class="c1"&gt;# install tools&lt;/span&gt;
+sudo apt-get install -y git make python3 python3-pip python3-setuptools python3-wheel
+
+&lt;span class="c1"&gt;# setup github config&lt;/span&gt;
+git config user.email &lt;span class="s2"&gt;&amp;quot;YOUR_E_MAIL&amp;quot;&lt;/span&gt;  &lt;span class="c1"&gt;# Change this&lt;/span&gt;
+git config user.name &lt;span class="s2"&gt;&amp;quot;YOUR_USERNAME&amp;quot;&lt;/span&gt; &lt;span class="c1"&gt;# Change this&lt;/span&gt;
+
+&lt;span class="c1"&gt;# install dependencies&lt;/span&gt;
+sudo pip3 install -r requirements.txt
+
+&lt;span class="c1"&gt;# pelican commands - install theme put your theme in themes directory&lt;/span&gt;
+&lt;span class="c1"&gt;#pelican-themes --install themes/theme-name&lt;/span&gt;
+pelican
+
+&lt;span class="c1"&gt;# publish to github pages&lt;/span&gt;
+ghp-import -m &lt;span class="s2"&gt;&amp;quot;Generate Pelican site&amp;quot;&lt;/span&gt; -b gh-pages output
+git push -f origin gh-pages
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that here I had to make changes from the instructions in the original
+post. Another piece of information I found missing in the original post is that
+you have to create the &lt;code&gt;requirements.txt&lt;/code&gt; file with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip freeze &amp;gt; requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add and &lt;code&gt;.ignore&lt;/code&gt; file with this content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;*~&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DS_Store&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;swp&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;out&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;cod&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="k"&gt;output&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, create a repository in GitHub with the name &lt;code&gt;USERNAME.github.io&lt;/code&gt;, using
+your user name instead of &lt;code&gt;USERNAME&lt;/code&gt;. Follow the instructions in GitHub to
+import the files in your directory as the content of the repository. Basically,
+it should be something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Create repository&lt;/span&gt;
+git init -b main
+
+&lt;span class="c1"&gt;# Add and commit current files&lt;/span&gt;
+git add .
+git commit -m &lt;span class="s2"&gt;&amp;quot;Initial structure&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Add the GitHub repo as a remote&lt;/span&gt;
+git pull --set-upstream origin main
+
+&lt;span class="c1"&gt;# Push the files to the remote&lt;/span&gt;
+git push -u origin main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Go to the GitHub page of the repository and then to the &lt;code&gt;Actions&lt;/code&gt; section and
+click on &lt;code&gt;Set up a workflow yourself&lt;/code&gt;. Then, paste this code and commit it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Publish Blog&lt;/span&gt;
+&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;push&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p p-Indicator"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;main&lt;/span&gt; &lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+  &lt;span class="nt"&gt;pull_request&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p p-Indicator"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;main&lt;/span&gt; &lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+
+&lt;span class="nt"&gt;jobs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;actions/checkout@v2&lt;/span&gt;
+      &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;set up permissions&lt;/span&gt;
+        &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;chmod +x publi.sh&lt;/span&gt;
+      &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Run a multi-line script&lt;/span&gt;
+        &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;./publi.sh&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, pull the changes to your local repo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git pull
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the GitHub interface, you should be able to see in the branch &lt;code&gt;gh-pages&lt;/code&gt; the
+content of your blog, i.e., the HTML, CSS and javascript files that you also
+obtain in your local &lt;code&gt;output&lt;/code&gt; directory when you run &lt;code&gt;make html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Go to the settings in your GitHub repo, select the &lt;code&gt;Pages&lt;/code&gt; option in the menu
+and in the &lt;code&gt;Source&lt;/code&gt; section, indicate that your source is the branch &lt;code&gt;gh-pages&lt;/code&gt;.
+Check that it is using the &lt;code&gt;root&lt;/code&gt; directory of this branch.&lt;/p&gt;
+&lt;p&gt;If everything is correct, you should be able to see your blog by going to
+&lt;code&gt;USERNAME.github.io&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;If you want to add new content, create a new file in the &lt;code&gt;content&lt;/code&gt; folder, be
+sure to use the basic fields required for pelican (you can see them in the
+example &lt;code&gt;about&lt;/code&gt; post above), add and commit the file, and (after testing locally
+if you want) push the files to the remote directory. After the GitHub action has
+finished you should be able to see your new post in your GitHub page.&lt;/p&gt;
+&lt;p&gt;If you don't see it, check your GitHub actions page, where you can find
+errors that are generated after each push.&lt;/p&gt;</content><category term="Blogging"></category><category term="Pelican"></category><category term="GitHub pages"></category><category term="Blog"></category></entry></feed>
