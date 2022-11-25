@@ -6,7 +6,8 @@ Tags: k6
 If you want to have custom metrics per each stage in an executor, you have to
 tag the stages (with `tagWithCurrentStageIndex()`) and add bogus thresholds for
 each metric that you want with the tag `stage:i` (being `i` the number of each
-stage).
+stage). The bogus threshold has to be different for gauges (`max>0`) and rates
+(`rate>=0`).
 
 This example file shows how to do it:
 
@@ -38,18 +39,21 @@ export const options = {
   }
 }
 
-function addThreshold(thresholdName) {
+function addThreshold(thresholdName, threshold) {
     if (!options.thresholds[thresholdName]) {
         options.thresholds[thresholdName] = [];
     }
 
     // 'max>=0' is a bogus condition that will always be fulfilled
-    options.thresholds[thresholdName].push('max>=0');
+    options.thresholds[thresholdName].push(threshold);
 }
 
 for (var i=0; i<stages.length; i++) {
-    // This adds per stage metrics for http_req_duration
-    addThreshold(`http_req_duration{stage:${i}}`);
+    // This adds per stage metrics for http_req_duration (a gauge)
+    addThreshold(`http_req_duration{stage:${i}}`, 'max>=0');
+
+    // This adds per stage metrics for iterations (a rate)
+    addThreshold(`iterations{stage:${i}}`, 'rate>=0');
 }
 
 export default function () {
