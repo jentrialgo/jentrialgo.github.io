@@ -44,7 +44,8 @@ CUSTOM_CSS = "static/custom.css"
 
 MAIN_MENU = True
 MENUITEMS = [
-    ("About", "./pages/about.html#about")
+    ("About", "./pages/about.html#about"),
+    ("Tags", "/tags.html"),
 ]
 
 DISPLAY_PAGES_ON_MENU = False
