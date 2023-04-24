@@ -1,32 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 
-AUTHOR = 'J.E.'
-SITENAME = 'Giving back to tech'
-SITEURL = 'https://jentrialgo.github.io'
+AUTHOR = "J.E."
+SITENAME = "Giving back to tech"
+SITEURL = "https://jentrialgo.github.io"
 
-PATH = 'content'
+PATH = "content"
 
-TIMEZONE = 'Europe/Madrid'
+TIMEZONE = "Europe/Madrid"
 
-DEFAULT_LANG = 'en'
+DEFAULT_LANG = "en"
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
-CATEGORY_FEED_ATOM = 'feeds/{slug}.atom.xml'
+FEED_ALL_ATOM = "feeds/all.atom.xml"
+CATEGORY_FEED_ATOM = "feeds/{slug}.atom.xml"
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (
-    ('Personal page', 'http://www.atc.uniovi.es/joaquin-entrialgo/'),
-    ('GitHub page', 'https://github.com/jentrialgo'),
+    ("Personal page", "http://www.atc.uniovi.es/joaquin-entrialgo/"),
+    ("GitHub page", "https://github.com/jentrialgo"),
+    ("All posts", "/archives.html"),
 )
 
 # Social widget
 SOCIAL = (
-    ('Linked.in', 'https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/'),
+    (
+        "Linked.in",
+        "https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/",
+    ),
 )
 
 DEFAULT_PAGINATION = True
@@ -56,3 +60,5 @@ SITELOGO = "images/profile.jpg"
 SITETITLE = "Giving back to tech"
 
 REL_CANONICAL = True
+
+ARCHIVES_SAVE_AS = "archives.html"
