@@ -1,7 +1,7 @@
 Title: Projects to test AI chat bots locally
 Date: 2023-05-02 14:00
 Category: AI, chat bots, Python, LLM
-Tags: AI, chat bots, Python, LLM, ChatAI, ColossalChat, LocalAI, Text generation web UI
+Tags: AI, chat bots, Python, LLM, ChatAI, ColossalChat, LocalAI, Text generation web UI, MLC LLM
 
 Many people is interested in trying AI (Artificial Intelligence) chat bots
 locally, but they don't know how to start. These are some projects that I've
@@ -35,3 +35,9 @@ chat bots:
   [gpt4all](https://github.com/nomic-ai/gpt4all) and
   [ggml](https://github.com/ggerganov/ggml), it provides a local API to LLMs.
   Basically, it uses docker to deploy a web server developed in Go.
+
+- [MLC LLM](https://github.com/mlc-ai/mlc-llm). It's a project to deploy LLMs on
+  everyone's devices. It compiles the LLMs using [Apache TVM
+  Unity](https://github.com/apache/tvm/tree/unity). They even have a project to
+  deploy LLMs on web browsers, [Web
+  LLM](https://github.com/mlc-ai/web-llm/tree/main).
