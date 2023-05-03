@@ -14,6 +14,14 @@ chat bots:
   of text generation. Based on Gradio, it provides a web interface to test
   different LLMs.
 
+- [Serge](https://github.com/nsarrazin/serge). It's an interface based on
+  Svelte as web framework and llama.cpp for running mmodels. It's dockerized.
+  It also provides an API.
+
+- [openplayground](https://github.com/nat/openplayground). Works with local
+  models and remote APIs. Can be installed as a Python package or run with
+  Docker. It's implemented as a Flask application with a React frontend.
+
 - [ChatAI](https://github.com/Capsize-Games/chatai). It is a desktop application
   for Windows and Ubuntu developed in Python with PyQt. It uses a Google T5-Flan
   model and it is based on [A. I.
