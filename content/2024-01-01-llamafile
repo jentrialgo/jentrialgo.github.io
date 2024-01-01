@@ -1,8 +1,0 @@
-Title: Llamafile: the easiest way to try LLMs locally
-Date: 2024-01-01 14:00
-Category: AI, LLM
-Tags: AI, LLM
-
-I've found that the easiest way to try LLMs locally is to use
-[llamafile](https://github.com/Mozilla-Ocho/llamafile): download a file, run it
- and that's it.
