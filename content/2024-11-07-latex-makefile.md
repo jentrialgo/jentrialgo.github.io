@@ -1,4 +1,4 @@
-Title: A latex makefile: latexmk
+Title: A LaTeX makefile: latexmk
 Date: 2024-11-07 12:00
 Category: LaTeX
 Tags: LaTeX, makefile
@@ -16,4 +16,5 @@ latexmk -pdf yourfile.tex
 ```
 
 And it will take care of everything. It will run `pdflatex` multiple times if necessary,
-it will run `bibtex` if you have a bibliography, and it will generate the PDF file.
+it will run `bibtex` (or 'biber', as in my case) if you have a bibliography, and it will
+generate the PDF file.
