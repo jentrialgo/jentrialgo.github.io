@@ -9,7 +9,7 @@ git config user.email "joaquin@uniovi.es"
 git config user.name "jentrialgo"
 
 # install dependencies
-sudo pip3 install -r requirements.txt
+sudo pip3 install --ignore-installed -r requirements.txt
 
 # Clone the theme
 git clone https://github.com/alexandrevicenzi/Flex

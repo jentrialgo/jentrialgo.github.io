@@ -1,5 +1,5 @@
 Title: Running Ollama in a Linux Environment Without Root Privileges
-Date: 2025-12-16 12:00
+Date: 2025-01-16 12:00
 Category: ollama, open-webui
 Tags: ollama, open-webui
 
