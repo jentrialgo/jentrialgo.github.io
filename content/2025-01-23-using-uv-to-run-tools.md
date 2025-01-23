@@ -1,5 +1,5 @@
 Title: Using uv to run Python tools without installing them
-Date: 2025-01-25 12:00
+Date: 2025-01-23 12:00
 Category: python, uv
 Tags: python, uv
 
