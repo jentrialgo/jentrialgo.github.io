@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../author/je2.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Posts by J.E.:</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="http://www.atc.uniovi.es/joaquin-entrialgo/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../gpu-sharing.html#gpu-sharing">GPU sharing</a></h2>
+    <p>
+      Posted on Fri 05 April 2024 in <a href="../category/nvidia-gpu-kubernetes.html">Nvidia, GPU, Kubernetes</a>
+
+          &#8226; Tagged with
+              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>,              <a href="../tag/kubernetes.html">Kubernetes</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've found this <a href="https://developer.nvidia.com/blog/improving-gpu-utilization-in-kubernetes/">interesting post from 2022 by Nvidia about GPU sharing in
+Kubernetes</a>.</p>
+<p>The main GPU sharing technologies can be summarized in this table:</p>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Description</th>
+<th>MicroArchitecture</th>
+<th>CUDA Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CUDA Streams</strong></td>
+<td>Allows concurrent operations within a single CUDA context using software abstraction.</td>
+<td>Pascal and later</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>Time-Slicing</strong></td>
+<td>Oversubscription strategy using the GPU's time-slicing scheduler.</td>
+<td>Pascal and later</td>
+<td>11.1 (R455+ drivers)</td>
+</tr>
+<tr>
+<td><strong>CUDA MPS</strong></td>
+<td>MPS (Multi-Process Service) enables concurrent processing of CUDA kernels from different processes, typically MPI jobs.</td>
+<td>Not specified</td>
+<td>11.4+</td>
+</tr>
+<tr>
+<td><strong>MIG</strong></td>
+<td>MIG (Multi-Instance GPU) is a secure partitioning of GPUs into separate instances for dedicated resources.</td>
+<td>Ampere Architecture</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>NVIDIA vGPU</strong></td>
+<td>Provides VMs with simultaneous, direct access to a single physical GPU.</td>
+<td>Compatible with MIG-supported GPUs</td>
+<td>Not specified</td>
+</tr>
+</tbody>
+</table>
+<p>The post also explains how GPUs are advertised as schedulable resources in Kubernetes with
+the device plugin framework, but it is a integer-based resource, so it does not allow for
+oversuscription. They describe a way of achieving this with time-slicing APIs.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../how-gpgpu-came-to-exist.html#how-gpgpu-came-to-exist">How GPGPU came to exist</a></h2>
+    <p>
+      Posted on Tue 05 March 2024 in <a href="../category/gpgpu-cuda-nvidia-gpu.html">GPGPU, CUDA, Nvidia, GPU</a>
+
+          &#8226; Tagged with
+              <a href="../tag/gpgpu.html">GPGPU</a>,              <a href="../tag/cuda.html">CUDA</a>,              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've been reading about the history of GPU computing in chapter 2 of "Massively Parallel
+Processors" by David B. Kirk and Wen-mei W. Hwu. It's a fascinating story of how the GPU
+came to be used for general-purpose computing.</p>
+<p>The story begins in the 1990s, when the first consumer 3D graphics cards were being
+developed. These cards were designed to accelerate the rendering of 3D graphics for video
+games. They were able to do this by offloading the rendering work from the CPU to the GPU,
+which was specifically designed for this task.</p>
+<p>The first GPUs were fixed-function, meaning that they could only perform a limited set of
+operations. However, as the demand for more realistic and complex graphics grew, the
+capabilities of the GPU were expanded. This led to the development of programmable
+shaders, which allowed developers to write custom code to control the rendering process.
+In the beginning, these shaders were still limited to graphics-related tasks and there
+were different kinds, such as vertex shaders and pixel shaders.</p>
+<p>One of the questions I …</p></div>
+        <br>
+        <a class="btn"
+           href="../how-gpgpu-came-to-exist.html#how-gpgpu-came-to-exist">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../llamafile-the-easiest-way-to-try-llms-locally.html#llamafile-the-easiest-way-to-try-llms-locally">Llamafile: the easiest way to try LLMs locally</a></h2>
+    <p>
+      Posted on Mon 01 January 2024 in <a href="../category/ai-llm.html">AI, LLM</a>
+
+          &#8226; Tagged with
+              <a href="../tag/ai.html">AI</a>,              <a href="../tag/llm.html">LLM</a>
+    </p>
+  </header>
+  <div>
+      <div><p>From my previous post about <a href="https://jentrialgo.github.io/projects-to-test-ai-chat-bots-locally.html#projects-to-test-ai-chat-bots-locally">projects to test AI chat bots
+locally</a>,
+the field has not been standing still.</p>
+<p>I've found that the easiest way to try LLMs locally is to use
+<a href="https://github.com/Mozilla-Ocho/llamafile">llamafile</a>: download a file, run it
+ and that's it.</p>
+<p>I've also tried <a href="https://lmstudio.ai/">LM studio</a>, which is more powerful, but
+it's also more complicated to use.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../uninstalling-windows-apps-that-seem-not-to-be-installed.html#uninstalling-windows-apps-that-seem-not-to-be-installed">Uninstalling Windows Apps that seem not to be installed</a></h2>
+    <p>
+      Posted on Mon 01 January 2024 in <a href="../category/windows.html">Windows</a>
+
+          &#8226; Tagged with
+              <a href="../tag/windows.html">Windows</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I found with <a href="https://diskanalyzer.com/">WizTree</a> that there are some apps in
+<code>C:\Program Files\WindowsApps</code> that seem not to be installed for my user, and
+I'm the only user on my computer. Examples are games like Candy Crush and Disney
+Magic Kingdoms. I found a solution to uninstall them in the <a href="https://answers.microsoft.com/en-us/windows/forum/all/unnecessary-apps-in-cprogram-fileswindowsapps/43f4552a-0445-4878-9ce3-8b7a4f45fe6a?page=2">following
+thread</a>.</p>
+<p>Basically, you have to start PowerShell as administrator and run the following
+command:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-AppxPackage</span> <span class="n">-allusers</span>  <span class="p">*</span><span class="n">disney</span><span class="p">*</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">Name</span><span class="p">,</span> <span class="n">PackageFullName</span>
+<span class="nb">Get-AppxPackage</span> <span class="n">-allusers</span>  <span class="p">*</span><span class="n">disney</span><span class="p">*</span> <span class="p">|</span> <span class="nb">Remove-AppxPackage</span> <span class="n">-allusers</span>
+</code></pre></div>
+
+<p>The first command lists all apps that contain the string <code>disney</code> in their name.
+The second command removes all apps that contain the string <code>disney</code> in their
+name. You can also use <code>*candy*</code> to remove Candy Crush and so on.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../serving-javascript-with-pythons-httpserver.html#serving-javascript-with-pythons-httpserver">Serving JavaScript with Python's http.server</a></h2>
+    <p>
+      Posted on Wed 19 July 2023 in <a href="../category/python-javascript-web.html">Python, JavaScript, Web</a>
+
+          &#8226; Tagged with
+              <a href="../tag/python.html">Python</a>,              <a href="../tag/javascript.html">JavaScript</a>,              <a href="../tag/web.html">Web</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I was trying to serve a JavaScript file with Python's http.server module, but I was getting
+this error:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">Loading</span><span class="w"> </span><span class="nx">module</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">“</span><span class="nx">http</span><span class="p">:</span><span class="c1">//localhost:9876/main.js” was blocked because of a disallowed MIME type (“text/plain”).</span>
+</code></pre></div>
+
+<p>I saw in <a href="https://stackoverflow.com/a/63167571/936580">this StackOverflow answer</a> that I
+needed to change the MIME type for JavaScript files. I'm using Windows, so I checked the
+key <code>HKEY_CLASSES_ROOT\.js</code> in RegEdit, and I found that it had this value:</p>
+<div class="highlight"><pre><span></span><code>(Default)     JSFile
+ContentType   text/plain
+PerceivedType text
+</code></pre></div>
+
+<p>I changed the <code>ContentType</code> to <code>application/javascript</code>, and now my JavaScript files are
+served with the correct MIME type.</p>
+<p>I'm not sure why the MIME type was set to <code>text/plain</code> in the first place. I'm guessing
+that it was set by a program that I installed, but I don't know which one. I'm also not
+sure if changing the MIME type will cause any problems with other programs.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="../author/je3.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+    <a class="btn float-right" href="../author/je.html">
+      Newer Posts <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>
