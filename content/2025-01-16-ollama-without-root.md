@@ -45,7 +45,7 @@ Next, download the appropriate ollama release for Linux environments from their 
 GitHub releases page. The command typically looks like this:
 
 ```bash
-curl -LO https://github.com/ollama/ollama/releases/download/vX.Y.Z/ollama-vX.Y.Z-linux-amd64.tar.gz
+curl -LO https://github.com/ollama/ollama/releases/download/vX.Y.Z/ollama-linux-amd64.tgz
 ```
 
 Replace `vX.Y.Z` with the actual version number. You can find the latest release on the
@@ -55,7 +55,7 @@ Extract it to a directory within your home folder or another location you have w
 permissions for:
 
 ```bash
-tar -xzf ollama-vX.Y.Z-linux-amd64.tar.gz -C ~/ollama
+tar -xzf ollama-linux-amd64.tgz -C ~/ollama
 cd ~/ollama
 ```
 
@@ -77,9 +77,13 @@ incoming connections.
 Using `uv`, we can set up Open Web UI, which provides a web interface for ollama:
 
 ```bash
-uv init open-webui
-cd open-webui/
+uv init open-webui-proy
+cd open-webui-proy/
 ```
+
+Notice that we didn't call the project `open-webui` directly, but `open-webui-proy`. This
+is because `uv` will create a folder with the same name as the project, and we want to
+avoid conflicts with the `open-webui` folder created in the previous step.
 
 ### 5. Add and Run Open Web UI
 
@@ -103,6 +107,15 @@ setting, follow these steps:
 1. Go to `Admin Settings` in Open WebUI.
 2. Navigate to `Connections > Ollama > Manage` (click the wrench icon).
 3. Add a new connection for Ollama API with your public IP and port number.
+
+### 7. Updating Open Web UI
+
+To update Open Web UI, you can use the following command from the `open-webui-proy`
+directory:
+
+```bash
+uv sync --upgrade
+```
 
 ## Conclusion
 
