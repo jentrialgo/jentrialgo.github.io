@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Kubernetes</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/kubernetes.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2021-09-29T00:00:00+02:00</updated><entry><title>Integrating Prometheus, InfluxDB and Grafana</title><link href="https://jentrialgo.github.io/integrating-prometheus-influxdb-and-grafana.html" rel="alternate"></link><published>2021-09-29T00:00:00+02:00</published><updated>2021-09-29T00:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-29:/integrating-prometheus-influxdb-and-grafana.html</id><summary type="html">&lt;p&gt;I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with &lt;code&gt;/metrics&lt;/code&gt; and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.&lt;/p&gt;
+&lt;p&gt;This would require moving the information from Prometheus to Influx DB.
+According to
+&lt;a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/"&gt;this&lt;/a&gt;,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be &lt;code&gt;Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that &lt;code&gt;kubectl&lt;/code&gt; is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.&lt;/p&gt;
+&lt;h2&gt;Helm&lt;/h2&gt;
+&lt;p&gt;We'are going to use Helm for installing all the components, so first we …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with &lt;code&gt;/metrics&lt;/code&gt; and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.&lt;/p&gt;
+&lt;p&gt;This would require moving the information from Prometheus to Influx DB.
+According to
+&lt;a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/"&gt;this&lt;/a&gt;,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be &lt;code&gt;Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that &lt;code&gt;kubectl&lt;/code&gt; is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.&lt;/p&gt;
+&lt;h2&gt;Helm&lt;/h2&gt;
+&lt;p&gt;We'are going to use Helm for installing all the components, so first we install
+helm with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt;    &lt;/span&gt;curl&lt;span class="w"&gt; &lt;/span&gt;-fsSL&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;get_helm.sh&lt;span class="w"&gt; &lt;/span&gt;https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
+&lt;span class="w"&gt;    &lt;/span&gt;chmod&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;700&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;get_helm.sh
+
+&lt;span class="w"&gt;    &lt;/span&gt;./get_helm.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Influx DB&lt;/h2&gt;
+&lt;p&gt;To deploy Influx DB using Helm, we have to add the Influx DB helm repo and then
+install it with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm&lt;span class="w"&gt; &lt;/span&gt;repo&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;influxdata&lt;span class="w"&gt; &lt;/span&gt;https://helm.influxdata.com/
+
+helm&lt;span class="w"&gt; &lt;/span&gt;upgrade&lt;span class="w"&gt; &lt;/span&gt;--install&lt;span class="w"&gt; &lt;/span&gt;my-influxdb&lt;span class="w"&gt; &lt;/span&gt;influxdata/influxdb2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run this command, per the instructions, to obtain the password and save it in
+your password manager:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;secret&lt;span class="w"&gt; &lt;/span&gt;myinfluxdb-influxdb2-auth&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;jsonpath={.data[&amp;#39;admin-password&amp;#39;]}&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;base64&lt;span class="w"&gt; &lt;/span&gt;--decode&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we are going to redirect the port for the Influx DB web console so that it
+can be accessed from outside. Run this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;port-forward&lt;span class="w"&gt; &lt;/span&gt;service/my-influxdb-influxdb2&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;8087&lt;/span&gt;:80&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;forward-influx.txt&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you are using Visual Studio Code as I am, you should now forward port 8087
+there as well.&lt;/p&gt;
+&lt;p&gt;Open in a web browser &lt;a href="http://localhost:8087"&gt;http://localhost:8087&lt;/a&gt; and you should see the InfluxDB
+console. You can log in with username &lt;code&gt;admin&lt;/code&gt; and the password for Influx DB
+obtained above.&lt;/p&gt;
+&lt;p&gt;We are going to use the Influx DB web console to create a token that will allow
+us latter to write data from Telegraf and to read it from Grafana. In the
+console, go to &lt;code&gt;Data | Tokens | Generate Token | Read/Write Token&lt;/code&gt;. Select the
+permissions to write and read in the &lt;code&gt;default&lt;/code&gt; bucket, give the token a name and
+save it. Next, select it to see it. Write it down, as we will need it later.&lt;/p&gt;
+&lt;p&gt;In case you need to check the logs of Influx DB, you can do it with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;logs&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;influxdb2&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Telegraf&lt;/h2&gt;
+&lt;p&gt;Install Telegraf with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm&lt;span class="w"&gt; &lt;/span&gt;upgrade&lt;span class="w"&gt; &lt;/span&gt;--install&lt;span class="w"&gt; &lt;/span&gt;my-telegraf&lt;span class="w"&gt; &lt;/span&gt;influxdata/telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that, at least at the time of writing, the instructions given by helm for
+running an interactive shell and obtaining the logs  are wrong because the
+labels are wrong. These would be the correct commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-i&lt;span class="w"&gt; &lt;/span&gt;-t&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{.items[0].metadata.name}&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;/bin/sh
+
+kubectl&lt;span class="w"&gt; &lt;/span&gt;logs&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You should see some errors in the log because the output configuration of
+Telegraf is wrong. We are going to fix it next.&lt;/p&gt;
+&lt;p&gt;We are going to change Telegraf's configuration, which can be carried out with
+the command to edit its configmap:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;edit&lt;span class="w"&gt; &lt;/span&gt;configmap/my-telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Remove all this part:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;[[&lt;/span&gt;outputs.influxdb&lt;span class="o"&gt;]]&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nv"&gt;database&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;telegraf&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nv"&gt;urls&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://influxdb.monitoring.svc:8086&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And write this in its place:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;[[&lt;/span&gt;inputs.http_listener_v2&lt;span class="o"&gt;]]&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;service_address&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;:1234&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;path&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/receive&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;data_format&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;prometheusremotewrite&amp;quot;&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;[[&lt;/span&gt;outputs.influxdb_v2&lt;span class="o"&gt;]]&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;urls&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://my-influxdb-influxdb2:80&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;token&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$INFLUX_TOKEN&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;organization&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;influxdata&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;bucket&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You have to exchange the &lt;code&gt;$INFLUX_TOKEN&lt;/code&gt; with the token that you obtained before
+from the InfluxDB web console.&lt;/p&gt;
+&lt;p&gt;This prepares Telegraf to receive the information in port 1234 with the path
+&lt;code&gt;/receive&lt;/code&gt; and forward the data to Influx DB.&lt;/p&gt;
+&lt;p&gt;In addition, increase the value of &lt;code&gt;metric_buffer_limit&lt;/code&gt; to something like
+50000.&lt;/p&gt;
+&lt;p&gt;In order to make Telegraf use this new configuration, save it and run this
+program that kills the pod and makes kubernetes create a new one with the new
+configuration:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;delete&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Check Telegraf's logs to see that there is no problem:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;logs&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;app.kubernetes.io/name&lt;span class="o"&gt;=&lt;/span&gt;telegraf&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In addition, we have to create a service so that Telegraf can be reached at
+&lt;code&gt;http://my-telegraph:1234&lt;/code&gt; because by default it only exposes port 8125. Change
+the configuration of Telegraf's service with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;edit&lt;span class="w"&gt; &lt;/span&gt;svc/my-telegraf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add this in the &lt;code&gt;ports&lt;/code&gt; section:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt;    &lt;/span&gt;-&lt;span class="w"&gt; &lt;/span&gt;name:&lt;span class="w"&gt; &lt;/span&gt;http-listener
+&lt;span class="w"&gt;      &lt;/span&gt;port:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;1234&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;protocol:&lt;span class="w"&gt; &lt;/span&gt;TCP
+&lt;span class="w"&gt;      &lt;/span&gt;targetPort:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;1234&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, you should see with this command that Telegraf's service is also listening
+in port 1234:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;services
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Prometheus&lt;/h2&gt;
+&lt;p&gt;If you don't have Prometheus installed in your system yet, you can do it with
+these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm&lt;span class="w"&gt; &lt;/span&gt;repo&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;prometheus-community&lt;span class="w"&gt; &lt;/span&gt;https://prometheus-community.github.io/helm-charts
+
+helm&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;my-prometheus&lt;span class="w"&gt; &lt;/span&gt;prometheus-community/prometheus
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Edit Prometheus configuration with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;edit&lt;span class="w"&gt; &lt;/span&gt;cm/my-prometheus-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add this line, at the same level as the &lt;code&gt;global&lt;/code&gt; section, i.e., inside the
+&lt;code&gt;prometheus.yml&lt;/code&gt; section, in order to make Prometheus write the data to
+Telegraf:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt;    &lt;/span&gt;remote_write:
+&lt;span class="w"&gt;    &lt;/span&gt;-&lt;span class="w"&gt; &lt;/span&gt;url:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://my-telegraf:1234/receive&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Prometheus should read the new configuration automatically once you save it.
+Run this command to see the Prometheus log:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;logs&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;app&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;prometheus&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;component&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;server&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{ .items[0].metadata.name }&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;prometheus-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If everything is OK, you should be able to see in the &lt;code&gt;Explore&lt;/code&gt; section of the
+Influx DB web console a &lt;code&gt;prometheus_remote_write&lt;/code&gt; section with metrics about the
+cluster. If you want to plot the CPU utilization, for example, you can select
+the Script editor and use this query:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;import&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;experimental/aggregate&amp;quot;&lt;/span&gt;
+from&lt;span class="o"&gt;(&lt;/span&gt;bucket:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;range&lt;span class="o"&gt;(&lt;/span&gt;start:&lt;span class="w"&gt; &lt;/span&gt;v.timeRangeStart,&lt;span class="w"&gt; &lt;/span&gt;stop:&lt;span class="w"&gt; &lt;/span&gt;v.timeRangeStop&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_measurement&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;prometheus_remote_write&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cpu&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_field&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;container_cpu_usage_seconds_total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;aggregateWindow&lt;span class="o"&gt;(&lt;/span&gt;every:&lt;span class="w"&gt; &lt;/span&gt;v.windowPeriod,&lt;span class="w"&gt; &lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;mean,&lt;span class="w"&gt; &lt;/span&gt;createEmpty:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;false&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;aggregate.rate&lt;span class="o"&gt;(&lt;/span&gt;every:&lt;span class="w"&gt; &lt;/span&gt;1m,&lt;span class="w"&gt; &lt;/span&gt;unit:&lt;span class="w"&gt; &lt;/span&gt;1s&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;yield&lt;span class="o"&gt;(&lt;/span&gt;name:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;mean&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Submit it and you should see some data.&lt;/p&gt;
+&lt;h2&gt;Grafana&lt;/h2&gt;
+&lt;p&gt;Install Grafana with these commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;helm&lt;span class="w"&gt; &lt;/span&gt;repo&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;grafana&lt;span class="w"&gt; &lt;/span&gt;https://grafana.github.io/helm-charts
+
+helm&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;my-grafana&lt;span class="w"&gt; &lt;/span&gt;grafana/grafana&lt;span class="w"&gt; &lt;/span&gt;--set&lt;span class="w"&gt; &lt;/span&gt;sidecar.datasources.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;--set&lt;span class="w"&gt; &lt;/span&gt;sidecar.dashboards.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;--set&lt;span class="w"&gt; &lt;/span&gt;sidecar.datasources.label&lt;span class="o"&gt;=&lt;/span&gt;grafana_datasource&lt;span class="w"&gt; &lt;/span&gt;--set&lt;span class="w"&gt; &lt;/span&gt;sidecar.dashboards.label&lt;span class="o"&gt;=&lt;/span&gt;grafana_dashboard
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Follow the instructions to get Grafana's password:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;secret&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;my-grafana&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{.data.admin-password}&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;base64&lt;span class="w"&gt; &lt;/span&gt;--decode&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In addition, forward port 3000 of Grafana so that you can access its web
+console:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;POD_NAME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;kubectl&lt;span class="w"&gt; &lt;/span&gt;get&lt;span class="w"&gt; &lt;/span&gt;pods&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;-l&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;app.kubernetes.io/name=grafana,app.kubernetes.io/instance=my-grafana&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{.items[0].metadata.name}&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+kubectl&lt;span class="w"&gt; &lt;/span&gt;--namespace&lt;span class="w"&gt; &lt;/span&gt;default&lt;span class="w"&gt; &lt;/span&gt;port-forward&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$POD_NAME&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;3000&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;forward-grafana.txt&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that I've changed the forward command so that it redirects its output.
+Forward the port also in Visual Studio Code if you are using it and open
+&lt;a href="http://localhost:3000"&gt;http://localhost:3000&lt;/a&gt; to access Grafana console.&lt;/p&gt;
+&lt;p&gt;Log in with username &lt;code&gt;admin&lt;/code&gt; and the password obtained above.&lt;/p&gt;
+&lt;p&gt;Now, we are going to add InfluxDB as a source for Grafana. In Grafana's web
+console, go to &lt;code&gt;Data sources | Add your first data source&lt;/code&gt; and select
+&lt;code&gt;InfluxDB&lt;/code&gt;. Select &lt;code&gt;Flux&lt;/code&gt; in the Query Language to use the new syntax. Enter
+this information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;URL: &lt;code&gt;http://my-influxdb-influxdb2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Uncheck the toggle in &lt;code&gt;Basic Auth&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Organization: &lt;code&gt;influxdata&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Token: the one obtained from InfluxDB at the beginning. It's the same one used
+  for allowing Telegraf writing in InfluxDB.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Click on &lt;code&gt;Save and test&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Add a new Dashboard and a new panel. You can add the query given above to check
+that the connection between all elements works:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;import&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;experimental/aggregate&amp;quot;&lt;/span&gt;
+from&lt;span class="o"&gt;(&lt;/span&gt;bucket:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;range&lt;span class="o"&gt;(&lt;/span&gt;start:&lt;span class="w"&gt; &lt;/span&gt;v.timeRangeStart,&lt;span class="w"&gt; &lt;/span&gt;stop:&lt;span class="w"&gt; &lt;/span&gt;v.timeRangeStop&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_measurement&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;prometheus_remote_write&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cpu&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;filter&lt;span class="o"&gt;(&lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;r&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;r&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;_field&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;container_cpu_usage_seconds_total&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;aggregateWindow&lt;span class="o"&gt;(&lt;/span&gt;every:&lt;span class="w"&gt; &lt;/span&gt;v.windowPeriod,&lt;span class="w"&gt; &lt;/span&gt;fn:&lt;span class="w"&gt; &lt;/span&gt;mean,&lt;span class="w"&gt; &lt;/span&gt;createEmpty:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;false&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;aggregate.rate&lt;span class="o"&gt;(&lt;/span&gt;every:&lt;span class="w"&gt; &lt;/span&gt;1m,&lt;span class="w"&gt; &lt;/span&gt;unit:&lt;span class="w"&gt; &lt;/span&gt;1s&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;|&lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;yield&lt;span class="o"&gt;(&lt;/span&gt;name:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;mean&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Kubernetes"></category><category term="Kubernetes"></category><category term="Prometheus"></category><category term="Telegraf"></category><category term="InfluxDB"></category><category term="Grafana"></category></entry></feed>

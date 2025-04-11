@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - AI, LLM</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/ai-llm.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-01-01T19:00:00+01:00</updated><entry><title>Llamafile: the easiest way to try LLMs locally</title><link href="https://jentrialgo.github.io/llamafile-the-easiest-way-to-try-llms-locally.html" rel="alternate"></link><published>2024-01-01T19:00:00+01:00</published><updated>2024-01-01T19:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-01-01:/llamafile-the-easiest-way-to-try-llms-locally.html</id><content type="html">&lt;p&gt;From my previous post about &lt;a href="https://jentrialgo.github.io/projects-to-test-ai-chat-bots-locally.html#projects-to-test-ai-chat-bots-locally"&gt;projects to test AI chat bots
+locally&lt;/a&gt;,
+the field has not been standing still.&lt;/p&gt;
+&lt;p&gt;I've found that the easiest way to try LLMs locally is to use
+&lt;a href="https://github.com/Mozilla-Ocho/llamafile"&gt;llamafile&lt;/a&gt;: download a file, run it
+ and that's it.&lt;/p&gt;
+&lt;p&gt;I've also tried &lt;a href="https://lmstudio.ai/"&gt;LM studio&lt;/a&gt;, which is more powerful, but
+it's also more complicated to use.&lt;/p&gt;</content><category term="AI, LLM"></category><category term="AI"></category><category term="LLM"></category></entry></feed>

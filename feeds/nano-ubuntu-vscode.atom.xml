@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - nano, ubuntu, vscode</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/nano-ubuntu-vscode.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-03-28T12:00:00+01:00</updated><entry><title>Connecting to a Jetson Nano with Ubuntu 18.04 Using VS Code</title><link href="https://jentrialgo.github.io/connecting-to-a-jetson-nano-with-ubuntu-1804-using-vs-code.html" rel="alternate"></link><published>2025-03-28T12:00:00+01:00</published><updated>2025-03-28T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-03-28:/connecting-to-a-jetson-nano-with-ubuntu-1804-using-vs-code.html</id><summary type="html">&lt;p&gt;If you're trying to connect remotely to an NVIDIA Jetson Nano running Ubuntu 18.04 with Visual Studio Code (VS Code), you might run into a compatibility issue due to recent changes in VS Code's remote server requirements.&lt;/p&gt;
+&lt;p&gt;Starting from release &lt;strong&gt;1.99 (March 2025)&lt;/strong&gt;, VS Code’s prebuilt remote server is only compatible with Linux distributions using &lt;strong&gt;glibc 2.28 or later&lt;/strong&gt;. However, Ubuntu 18.04 ships with &lt;strong&gt;glibc 2.27&lt;/strong&gt;, making it incompatible with these newer releases.&lt;/p&gt;
+&lt;h3&gt;Solution: Use an Older Version of VS Code (1.98.2)&lt;/h3&gt;
+&lt;p&gt;To work around this limitation, you can use &lt;strong&gt;VS Code 1.98.2&lt;/strong&gt;, which is the last version compatible with Ubuntu 18.04. Here’s how to do it:&lt;/p&gt;
+&lt;h3&gt;1. Download VS Code 1.98.2 (Portable Version)&lt;/h3&gt;
+&lt;p&gt;Since later versions may not work, download the &lt;strong&gt;portable version&lt;/strong&gt; of VS Code 1.98.2 for your platform:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Windows (Portable)&lt;/strong&gt;: &lt;a href="https://update.code.visualstudio.com/1.98.2/win32-x64-archive/stable"&gt;Download here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Other platforms&lt;/strong&gt;: Follow the instructions in the &lt;a href="https://code.visualstudio.com/docs/supporting/faq#_previous-release-versions"&gt;VS Code FAQ&lt;/a&gt; to find the appropriate link.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;2. Extract and Run VS Code&lt;/h3&gt;
+&lt;p&gt;If you downloaded …&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you're trying to connect remotely to an NVIDIA Jetson Nano running Ubuntu 18.04 with Visual Studio Code (VS Code), you might run into a compatibility issue due to recent changes in VS Code's remote server requirements.&lt;/p&gt;
+&lt;p&gt;Starting from release &lt;strong&gt;1.99 (March 2025)&lt;/strong&gt;, VS Code’s prebuilt remote server is only compatible with Linux distributions using &lt;strong&gt;glibc 2.28 or later&lt;/strong&gt;. However, Ubuntu 18.04 ships with &lt;strong&gt;glibc 2.27&lt;/strong&gt;, making it incompatible with these newer releases.&lt;/p&gt;
+&lt;h3&gt;Solution: Use an Older Version of VS Code (1.98.2)&lt;/h3&gt;
+&lt;p&gt;To work around this limitation, you can use &lt;strong&gt;VS Code 1.98.2&lt;/strong&gt;, which is the last version compatible with Ubuntu 18.04. Here’s how to do it:&lt;/p&gt;
+&lt;h3&gt;1. Download VS Code 1.98.2 (Portable Version)&lt;/h3&gt;
+&lt;p&gt;Since later versions may not work, download the &lt;strong&gt;portable version&lt;/strong&gt; of VS Code 1.98.2 for your platform:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Windows (Portable)&lt;/strong&gt;: &lt;a href="https://update.code.visualstudio.com/1.98.2/win32-x64-archive/stable"&gt;Download here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Other platforms&lt;/strong&gt;: Follow the instructions in the &lt;a href="https://code.visualstudio.com/docs/supporting/faq#_previous-release-versions"&gt;VS Code FAQ&lt;/a&gt; to find the appropriate link.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;2. Extract and Run VS Code&lt;/h3&gt;
+&lt;p&gt;If you downloaded the Windows portable version:
+- Extract the archive to a location of your choice.
+- Run &lt;code&gt;Code.exe&lt;/code&gt; from the extracted folder.&lt;/p&gt;
+&lt;p&gt;For Linux/macOS:
+- Extract the archive.
+- Run &lt;code&gt;code&lt;/code&gt; from the extracted directory.&lt;/p&gt;
+&lt;h3&gt;3. Install the Remote SSH Extension&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Open VS Code.&lt;/li&gt;
+&lt;li&gt;Go to the &lt;strong&gt;Extensions&lt;/strong&gt; marketplace (&lt;code&gt;Ctrl+Shift+X&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Search for &lt;strong&gt;Remote - SSH&lt;/strong&gt; and install it.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;4. Configure SSH for Your Jetson Nano&lt;/h3&gt;
+&lt;p&gt;Ensure that SSH is enabled on your Jetson Nano. If SSH is not installed, run:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo&lt;span class="w"&gt; &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;update&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;sudo&lt;span class="w"&gt; &lt;/span&gt;apt&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;openssh-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;On your &lt;strong&gt;local machine&lt;/strong&gt;, configure the SSH connection:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open VS Code and press &lt;code&gt;Ctrl+Shift+P&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Type &lt;strong&gt;Remote-SSH: Open SSH Configuration File&lt;/strong&gt; and select it.&lt;/li&gt;
+&lt;li&gt;Add an entry for your Jetson Nano (modify as needed):&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;Host jetson-nano
+       HostName &amp;lt;JETSON_IP&amp;gt;
+       User &amp;lt;YOUR_USERNAME&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Save the file.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;5. Connect to the Jetson Nano&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Press &lt;code&gt;Ctrl+Shift+P&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Type &lt;strong&gt;Remote-SSH: Connect to Host...&lt;/strong&gt; and select your Jetson Nano.&lt;/li&gt;
+&lt;li&gt;If prompted, enter your SSH password or configure SSH keys for passwordless access.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Once connected, VS Code will install the remote server version &lt;strong&gt;1.98.2&lt;/strong&gt;, which is compatible with Ubuntu 18.04.&lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;By using &lt;strong&gt;VS Code 1.98.2&lt;/strong&gt;, you can continue remote development on a Jetson Nano running Ubuntu 18.04 despite the recent glibc compatibility changes. If upgrading your OS is not an option, this method allows you to maintain a functional remote development workflow.&lt;/p&gt;</content><category term="nano, ubuntu, vscode"></category><category term="nano"></category><category term="ubuntu"></category><category term="vscode"></category></entry></feed>
