@@ -42,7 +42,15 @@ You might need to restart your terminal session to update the PATH variable.
 ### 2. Download Ollama Release
 
 Next, download the appropriate ollama release for Linux environments from their official
-GitHub releases page. The command typically looks like this:
+GitHub releases page. These commands will help you download the latest version:
+
+```
+VERSION=$(curl -s https://api.github.com/repos/ollama/ollama/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+curl -LO "https://github.com/ollama/ollama/releases/download/${VERSION}/ollama-linux-amd64.tgz"
+```
+
+Alternatively, you can manually download the release by visiting the GitHub releases page
+and copying the link for the latest version. For example:
 
 ```bash
 curl -LO https://github.com/ollama/ollama/releases/download/vX.Y.Z/ollama-linux-amd64.tgz
@@ -51,39 +59,40 @@ curl -LO https://github.com/ollama/ollama/releases/download/vX.Y.Z/ollama-linux-
 Replace `vX.Y.Z` with the actual version number. You can find the latest release on the
 [ollama GitHub releases page](https://github.com/ollama/ollama/releases).
 
+
 Extract it to a directory within your home folder or another location you have write
 permissions for:
 
 ```bash
+mkdir -p ~/ollama
 tar -xzf ollama-linux-amd64.tgz -C ~/ollama
 cd ~/ollama
 ```
 
 ### 3. Run Ollama with Public IP
 
-To make the ollama instance accessible over a network, it needs to be run using a public
-IP address. This step might require configuring your router for port forwarding or using a
-service like ngrok:
+Ollama requires to be listening on a network interface that allows external connections. You can
+start the ollama server using the following command:
 
 ```bash
-OLLAMA_HOST=YOUR_PUBLIC_IP:PORT ./ollama serve
+OLLAMA_HOST=0.0.0.0:11434 ./ollama serve
 ```
-
-Ensure `YOUR_PUBLIC_IP` and the specified `PORT` are correctly configured to allow
-incoming connections.
 
 ### 4. Set Up Open Web UI
 
 Using `uv`, we can set up Open Web UI, which provides a web interface for ollama:
 
 ```bash
-uv init open-webui-proy
+UV_PYTHON=python3.13 uv init open-webui-proy
 cd open-webui-proy/
 ```
 
 Notice that we didn't call the project `open-webui` directly, but `open-webui-proy`. This
 is because `uv` will create a folder with the same name as the project, and we want to
 avoid conflicts with the `open-webui` folder created in the previous step.
+
+Also, we specify the Python version to use with `UV_PYTHON=python3.13`. This is important
+because a version lower than 3.11 will not work with `uv` and `open-webui`.
 
 ### 5. Add and Run Open Web UI
 
