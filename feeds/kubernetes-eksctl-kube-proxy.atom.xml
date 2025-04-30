@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - kubernetes, eksctl, kube-proxy</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/kubernetes-eksctl-kube-proxy.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2022-06-20T12:00:00+02:00</updated><entry><title>Using IPVS in kube-proxy with eksctl</title><link href="https://jentrialgo.github.io/using-ipvs-in-kube-proxy-with-eksctl.html" rel="alternate"></link><published>2022-06-20T12:00:00+02:00</published><updated>2022-06-20T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2022-06-20:/using-ipvs-in-kube-proxy-with-eksctl.html</id><summary type="html">&lt;p&gt;I have a kubernetes cluster launched with &lt;code&gt;eksctl&lt;/code&gt;. I can get the configuration
+of &lt;code&gt;kube-proxy&lt;/code&gt; with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit configmap kube-proxy-config -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I see that the default configuration uses the &lt;code&gt;iptables&lt;/code&gt; mode. In order to
+change it, the &lt;code&gt;mode&lt;/code&gt; parameter has to be changed to &lt;code&gt;ipvs&lt;/code&gt; and the scheduler
+parameter in the &lt;code&gt;ipvs&lt;/code&gt; section, which is initially empty, has to be assigned one
+of &lt;a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes"&gt;these
+policies&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rr: round-robin&lt;/li&gt;
+&lt;li&gt;lc: least connection&lt;/li&gt;
+&lt;li&gt;dh: destination hashing&lt;/li&gt;
+&lt;li&gt;sh: source hashing&lt;/li&gt;
+&lt;li&gt;sed: shortest expected delay&lt;/li&gt;
+&lt;li&gt;nq: never queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;lsmod | grep ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to apply the configuration, kube-proxy has to be restarted with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl rollout restart ds kube-proxy -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I get this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This means that the modules …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have a kubernetes cluster launched with &lt;code&gt;eksctl&lt;/code&gt;. I can get the configuration
+of &lt;code&gt;kube-proxy&lt;/code&gt; with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl edit configmap kube-proxy-config -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I see that the default configuration uses the &lt;code&gt;iptables&lt;/code&gt; mode. In order to
+change it, the &lt;code&gt;mode&lt;/code&gt; parameter has to be changed to &lt;code&gt;ipvs&lt;/code&gt; and the scheduler
+parameter in the &lt;code&gt;ipvs&lt;/code&gt; section, which is initially empty, has to be assigned one
+of &lt;a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes"&gt;these
+policies&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rr: round-robin&lt;/li&gt;
+&lt;li&gt;lc: least connection&lt;/li&gt;
+&lt;li&gt;dh: destination hashing&lt;/li&gt;
+&lt;li&gt;sh: source hashing&lt;/li&gt;
+&lt;li&gt;sed: shortest expected delay&lt;/li&gt;
+&lt;li&gt;nq: never queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;lsmod | grep ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to apply the configuration, kube-proxy has to be restarted with this
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;kubectl rollout restart ds kube-proxy -n kube-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I get this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This means that the modules for the policies lc and sed are not loaded. You can
+load them running the following commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo modprobe ip_vs_sed
+sudo modprobe ip_vs_lc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In my example, using a service with 7 replicas that takes around 200 ms of
+processing, I see an extra 100 ms of latency added by the kube-proxy load
+balancer when using the &lt;code&gt;iptables&lt;/code&gt; mode, and only 4 ms of latency added when
+using the &lt;code&gt;ipvs&lt;/code&gt; mode, even when both are using the round-robin policy.&lt;/p&gt;</content><category term="kubernetes, eksctl, kube-proxy"></category><category term="kubernetes"></category><category term="eksctl"></category><category term="kube-proxy"></category></entry></feed>

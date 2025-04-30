@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - LaTeX</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/latex.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-11-07T12:00:00+01:00</updated><entry><title>A LaTeX makefile: latexmk</title><link href="https://jentrialgo.github.io/a-latex-makefile-latexmk.html" rel="alternate"></link><published>2024-11-07T12:00:00+01:00</published><updated>2024-11-07T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-11-07:/a-latex-makefile-latexmk.html</id><content type="html">&lt;p&gt;I have been using LaTeX for a while now and I have always been annoyed by the fact that I
+have to run the &lt;code&gt;pdflatex&lt;/code&gt; command multiple times to get the references and the table of
+contents right. Today, I colleague of mine told me about the &lt;code&gt;latexmk&lt;/code&gt; command. It is a
+tool that takes care of all the dependencies and runs the necessary commands to generate
+the PDF file.&lt;/p&gt;
+&lt;p&gt;You can run:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;latexmk&lt;span class="w"&gt; &lt;/span&gt;-pdf&lt;span class="w"&gt; &lt;/span&gt;yourfile.tex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And it will take care of everything. It will run &lt;code&gt;pdflatex&lt;/code&gt; multiple times if necessary,
+it will run &lt;code&gt;bibtex&lt;/code&gt; (or 'biber', as in my case) if you have a bibliography, and it will
+generate the PDF file.&lt;/p&gt;</content><category term="LaTeX"></category><category term="LaTeX"></category><category term="makefile"></category></entry></feed>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Python, JavaScript, Web</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/python-javascript-web.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2023-07-19T14:00:00+02:00</updated><entry><title>Serving JavaScript with Python's http.server</title><link href="https://jentrialgo.github.io/serving-javascript-with-pythons-httpserver.html" rel="alternate"></link><published>2023-07-19T14:00:00+02:00</published><updated>2023-07-19T14:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2023-07-19:/serving-javascript-with-pythons-httpserver.html</id><content type="html">&lt;p&gt;I was trying to serve a JavaScript file with Python's http.server module, but I was getting
+this error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nx"&gt;Loading&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="nx"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//localhost:9876/main.js” was blocked because of a disallowed MIME type (“text/plain”).&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I saw in &lt;a href="https://stackoverflow.com/a/63167571/936580"&gt;this StackOverflow answer&lt;/a&gt; that I
+needed to change the MIME type for JavaScript files. I'm using Windows, so I checked the
+key &lt;code&gt;HKEY_CLASSES_ROOT\.js&lt;/code&gt; in RegEdit, and I found that it had this value:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;(Default)     JSFile
+ContentType   text/plain
+PerceivedType text
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I changed the &lt;code&gt;ContentType&lt;/code&gt; to &lt;code&gt;application/javascript&lt;/code&gt;, and now my JavaScript files are
+served with the correct MIME type.&lt;/p&gt;
+&lt;p&gt;I'm not sure why the MIME type was set to &lt;code&gt;text/plain&lt;/code&gt; in the first place. I'm guessing
+that it was set by a program that I installed, but I don't know which one. I'm also not
+sure if changing the MIME type will cause any problems with other programs.&lt;/p&gt;</content><category term="Python, JavaScript, Web"></category><category term="Python"></category><category term="JavaScript"></category><category term="Web"></category></entry></feed>
