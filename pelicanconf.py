@@ -20,7 +20,7 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (
-    ("Personal page", "http://www.atc.uniovi.es/joaquin-entrialgo/"),
+    ("Personal page", "https://github.com/jentrialgo/personal-website"),
     ("GitHub page", "https://github.com/jentrialgo"),
     ("All posts", "/archives.html"),
 )
