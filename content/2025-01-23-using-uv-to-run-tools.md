@@ -11,10 +11,11 @@ I wanted to run [markitdown](https://github.com/microsoft/markitdown), a tool to
 various files to Markdown. I didn't want to install it, so I used `uvx`:
 
 ```bash
-uvx markitdown "file_to_convert.docx" > output_file.md
+uvx markitdown[docx] "file_to_convert.docx" > output_file.md
 ```
 
-It downloads the tool and installs it in a temporary, isolated environment.
+It downloads the tool and installs it in a temporary, isolated environment. In this
+case, it also installs the `docx` extra, so that markitdown can convert docx files.
 
 A tool can be installed with `uv tool install`, like this:
 
