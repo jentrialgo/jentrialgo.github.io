@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="./using-ipvs-in-kube-proxy-with-eksctl.html">
+ 
+
+<meta name="author" content="J.E." />
+<meta name="description" content="I have a kubernetes cluster launched with eksctl. I can get the configuration of kube-proxy with: kubectl edit configmap kube-proxy-config -n kube-system I see that the default configuration uses the iptables mode. In order to change it, the mode parameter has to be changed to ipvs and the scheduler parameter in the ipvs section, which is initially empty, has to be assigned one of these policies: rr: round-robin lc: least connection dh: destination hashing sh: source hashing sed: shortest expected delay nq: never queue Notice that the corresponding kernel modules must be present in the working node. You can connect with ssh to the node and check with modules are loaded with: lsmod | grep ip_vs In order to apply the configuration, kube-proxy has to be restarted with this command: kubectl rollout restart ds kube-proxy -n kube-system I get this: ip_vs_sh 16384 0 ip_vs_wrr 16384 0 ip_vs_rr 16384 0 ip_vs 176128 6 ip_vs_rr,ip_vs_sh,ip_vs_wrr nf_conntrack 163840 8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs nf_defrag_ipv6 24576 2 nf_conntrack,ip_vs This means that the modules …" />
+<meta name="keywords" content="kubernetes, eksctl, kube-proxy">
+
+
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:title" content="Using IPVS in kube-proxy with eksctl"/>
+  <meta property="og:description" content="I have a kubernetes cluster launched with eksctl. I can get the configuration of kube-proxy with: kubectl edit configmap kube-proxy-config -n kube-system I see that the default configuration uses the iptables mode. In order to change it, the mode parameter has to be changed to ipvs and the scheduler parameter in the ipvs section, which is initially empty, has to be assigned one of these policies: rr: round-robin lc: least connection dh: destination hashing sh: source hashing sed: shortest expected delay nq: never queue Notice that the corresponding kernel modules must be present in the working node. You can connect with ssh to the node and check with modules are loaded with: lsmod | grep ip_vs In order to apply the configuration, kube-proxy has to be restarted with this command: kubectl rollout restart ds kube-proxy -n kube-system I get this: ip_vs_sh 16384 0 ip_vs_wrr 16384 0 ip_vs_rr 16384 0 ip_vs 176128 6 ip_vs_rr,ip_vs_sh,ip_vs_wrr nf_conntrack 163840 8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs nf_defrag_ipv6 24576 2 nf_conntrack,ip_vs This means that the modules …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="./using-ipvs-in-kube-proxy-with-eksctl.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2022-06-20 12:00:00+02:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="./author/je.html">
+  <meta property="article:section" content="kubernetes, eksctl, kube-proxy"/>
+  <meta property="article:tag" content="kubernetes"/>
+  <meta property="article:tag" content="eksctl"/>
+  <meta property="article:tag" content="kube-proxy"/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Using IPVS in kube-proxy with eksctl</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="using-ipvs-in-kube-proxy-with-eksctl">Using IPVS in kube-proxy with eksctl</h1>
+    <p>
+      Posted on Mon 20 June 2022 in <a href="./category/kubernetes-eksctl-kube-proxy.html">kubernetes, eksctl, kube-proxy</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>I have a kubernetes cluster launched with <code>eksctl</code>. I can get the configuration
+of <code>kube-proxy</code> with:</p>
+<div class="highlight"><pre><span></span><code>kubectl edit configmap kube-proxy-config -n kube-system
+</code></pre></div>
+
+<p>I see that the default configuration uses the <code>iptables</code> mode. In order to
+change it, the <code>mode</code> parameter has to be changed to <code>ipvs</code> and the scheduler
+parameter in the <code>ipvs</code> section, which is initially empty, has to be assigned one
+of <a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes">these
+policies</a>:</p>
+<ul>
+<li>rr: round-robin</li>
+<li>lc: least connection</li>
+<li>dh: destination hashing</li>
+<li>sh: source hashing</li>
+<li>sed: shortest expected delay</li>
+<li>nq: never queue</li>
+</ul>
+<p>Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:</p>
+<div class="highlight"><pre><span></span><code>lsmod | grep ip_vs
+</code></pre></div>
+
+<p>In order to apply the configuration, kube-proxy has to be restarted with this
+command:</p>
+<div class="highlight"><pre><span></span><code>kubectl rollout restart ds kube-proxy -n kube-system
+</code></pre></div>
+
+<p>I get this:</p>
+<div class="highlight"><pre><span></span><code>ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+</code></pre></div>
+
+<p>This means that the modules for the policies lc and sed are not loaded. You can
+load them running the following commands:</p>
+<div class="highlight"><pre><span></span><code>sudo modprobe ip_vs_sed
+sudo modprobe ip_vs_lc
+</code></pre></div>
+
+<p>In my example, using a service with 7 replicas that takes around 200 ms of
+processing, I see an extra 100 ms of latency added by the kube-proxy load
+balancer when using the <code>iptables</code> mode, and only 4 ms of latency added when
+using the <code>ipvs</code> mode, even when both are using the round-robin policy.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/kubernetes.html">kubernetes</a>
+      <a href="./tag/eksctl.html">eksctl</a>
+      <a href="./tag/kube-proxy.html">kube-proxy</a>
+    </p>
+  </div>
+
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

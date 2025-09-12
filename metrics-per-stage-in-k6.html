@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="./metrics-per-stage-in-k6.html">
+ 
+
+<meta name="author" content="J.E." />
+<meta name="description" content="If you want to have custom metrics per each stage in an executor, you have to tag the stages (with tagWithCurrentStageIndex()) and add bogus thresholds for each metric that you want with the tag stage:i (being i the number of each stage). The bogus threshold has to be different for gauges (max&gt;0) and rates (rate&gt;=0). This example file shows how to do it: import http from &#39;k6/http&#39;; import { tagWithCurrentStageIndex } from &#39;https://jslib.k6.io/k6-utils/1.3.0/index.js&#39;; const stages = [ { target: 1, duration: &#39;10s&#39; }, { target: 5, duration: &#39;10s&#39; }, ]; export const options = { scenarios: { contacts: { executor: &#39;ramping-arrival-rate&#39;, timeUnit: &#39;1s&#39;, preAllocatedVUs: 10, maxVUs: 200, stages: stages, }, }, // Uncomment the next line if you want the count statistic // summaryTrendStats: [&#39;avg&#39;, &#39;min&#39;, &#39;med&#39;, &#39;max&#39;, &#39;p(90)&#39;, &#39;p(95)&#39;, &#39;p(99)&#39;, &#39;count&#39;], thresholds: { // Intentionally empty. We&#39;ll programatically define our bogus // thresholds (to generate the sub-metrics) below. In your real-world // load test, you can add any real threshoulds you want here. } } function addThreshold(thresholdName, threshold) { if (!options.thresholds[thresholdName]) { options.thresholds[thresholdName] = []; } // &#39;max&gt;=0&#39; is a …" />
+<meta name="keywords" content="k6">
+
+
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:title" content="Metrics per stage in k6"/>
+  <meta property="og:description" content="If you want to have custom metrics per each stage in an executor, you have to tag the stages (with tagWithCurrentStageIndex()) and add bogus thresholds for each metric that you want with the tag stage:i (being i the number of each stage). The bogus threshold has to be different for gauges (max&gt;0) and rates (rate&gt;=0). This example file shows how to do it: import http from &#39;k6/http&#39;; import { tagWithCurrentStageIndex } from &#39;https://jslib.k6.io/k6-utils/1.3.0/index.js&#39;; const stages = [ { target: 1, duration: &#39;10s&#39; }, { target: 5, duration: &#39;10s&#39; }, ]; export const options = { scenarios: { contacts: { executor: &#39;ramping-arrival-rate&#39;, timeUnit: &#39;1s&#39;, preAllocatedVUs: 10, maxVUs: 200, stages: stages, }, }, // Uncomment the next line if you want the count statistic // summaryTrendStats: [&#39;avg&#39;, &#39;min&#39;, &#39;med&#39;, &#39;max&#39;, &#39;p(90)&#39;, &#39;p(95)&#39;, &#39;p(99)&#39;, &#39;count&#39;], thresholds: { // Intentionally empty. We&#39;ll programatically define our bogus // thresholds (to generate the sub-metrics) below. In your real-world // load test, you can add any real threshoulds you want here. } } function addThreshold(thresholdName, threshold) { if (!options.thresholds[thresholdName]) { options.thresholds[thresholdName] = []; } // &#39;max&gt;=0&#39; is a …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="./metrics-per-stage-in-k6.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2022-11-25 18:00:00+01:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="./author/je.html">
+  <meta property="article:section" content="k6"/>
+  <meta property="article:tag" content="k6"/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Metrics per stage in k6</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="metrics-per-stage-in-k6">Metrics per stage in k6</h1>
+    <p>
+      Posted on Fri 25 November 2022 in <a href="./category/k6.html">k6</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>If you want to have custom metrics per each stage in an executor, you have to
+tag the stages (with <code>tagWithCurrentStageIndex()</code>) and add bogus thresholds for
+each metric that you want with the tag <code>stage:i</code> (being <code>i</code> the number of each
+stage). The bogus threshold has to be different for gauges (<code>max&gt;0</code>) and rates
+(<code>rate&gt;=0</code>).</p>
+<p>This example file shows how to do it:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/http&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">tagWithCurrentStageIndex</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;https://jslib.k6.io/k6-utils/1.3.0/index.js&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">stages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;10s&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;10s&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">];</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">scenarios</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">contacts</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">executor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;ramping-arrival-rate&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">timeUnit</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1s&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">preAllocatedVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">maxVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">stages</span><span class="o">:</span><span class="w"> </span><span class="nx">stages</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">// Uncomment the next line if you want the count statistic</span>
+<span class="w">  </span><span class="c1">// summaryTrendStats: [&#39;avg&#39;, &#39;min&#39;, &#39;med&#39;, &#39;max&#39;, &#39;p(90)&#39;, &#39;p(95)&#39;, &#39;p(99)&#39;, &#39;count&#39;],</span>
+<span class="w">  </span><span class="nx">thresholds</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Intentionally empty. We&#39;ll programatically define our bogus</span>
+<span class="w">    </span><span class="c1">// thresholds (to generate the sub-metrics) below. In your real-world</span>
+<span class="w">    </span><span class="c1">// load test, you can add any real threshoulds you want here.</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">addThreshold</span><span class="p">(</span><span class="nx">thresholdName</span><span class="p">,</span><span class="w"> </span><span class="nx">threshold</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">thresholds</span><span class="p">[</span><span class="nx">thresholdName</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">options</span><span class="p">.</span><span class="nx">thresholds</span><span class="p">[</span><span class="nx">thresholdName</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// &#39;max&gt;=0&#39; is a bogus condition that will always be fulfilled</span>
+<span class="w">    </span><span class="nx">options</span><span class="p">.</span><span class="nx">thresholds</span><span class="p">[</span><span class="nx">thresholdName</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">threshold</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="o">=</span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">stages</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// This adds per stage metrics for http_req_duration (a gauge)</span>
+<span class="w">    </span><span class="nx">addThreshold</span><span class="p">(</span><span class="sb">`http_req_duration{stage:</span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">}`</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;max&gt;=0&#39;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// This adds per stage metrics for iterations (a rate)</span>
+<span class="w">    </span><span class="nx">addThreshold</span><span class="p">(</span><span class="sb">`iterations{stage:</span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">}`</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;rate&gt;=0&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">tagWithCurrentStageIndex</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;https://test.k6.io&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The idea has been taken from <a href="https://community.k6.io/t/multiple-scenarios-metrics-per-each/1314/3">this post about metrics per
+scenario</a>.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/k6.html">k6</a>
+    </p>
+  </div>
+
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

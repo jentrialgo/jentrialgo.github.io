@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - ollama, open-webui, AI, LLM</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/ollama-open-webui-ai-llm.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-01-16T12:00:00+01:00</updated><entry><title>Running Ollama in a Linux Environment Without Root Privileges</title><link href="https://jentrialgo.github.io/running-ollama-in-a-linux-environment-without-root-privileges.html" rel="alternate"></link><published>2025-01-16T12:00:00+01:00</published><updated>2025-01-16T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-01-16:/running-ollama-in-a-linux-environment-without-root-privileges.html</id><summary type="html">&lt;h1&gt;Running Ollama in a Linux Environment Without Root Privileges&lt;/h1&gt;
+&lt;p&gt;Running applications without root privileges is a common requirement for security and
+compliance reasons, especially on shared systems or in environments where users don't have
+administrative access. This guide will walk you through setting up &lt;strong&gt;ollama&lt;/strong&gt; on a Linux
+system under these constraints, using some tools like &lt;code&gt;uv&lt;/code&gt; to manage Python dependencies
+and configuring networking correctly. Maybe, this is not the easiest way and using Docker
+could be simpler, but it's a good exercise to understand how to manage Python applications
+without root privileges.&lt;/p&gt;
+&lt;h2&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A functional Python environment.&lt;/li&gt;
+&lt;li&gt;Basic command-line navigation skills.&lt;/li&gt;
+&lt;li&gt;Network access for downloading necessary files and configuring network settings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Step-by-step Guide&lt;/h2&gt;
+&lt;h3&gt;1. Install &lt;code&gt;uv&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Firstly, we need a tool to handle Python applications efficiently without root privileges.
+The tool I used is &lt;strong&gt;&lt;code&gt;uv&lt;/code&gt;&lt;/strong&gt;. Here’s how you can install it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl&lt;span class="w"&gt; &lt;/span&gt;-LsSf&lt;span class="w"&gt; &lt;/span&gt;https://astral.sh/uv/install.sh&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This command downloads and executes the installation script for &lt;code&gt;uv&lt;/code&gt;. After installing,
+verify its presence using:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;which&lt;span class="w"&gt; &lt;/span&gt;uv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You might need to restart …&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Running Ollama in a Linux Environment Without Root Privileges&lt;/h1&gt;
+&lt;p&gt;Running applications without root privileges is a common requirement for security and
+compliance reasons, especially on shared systems or in environments where users don't have
+administrative access. This guide will walk you through setting up &lt;strong&gt;ollama&lt;/strong&gt; on a Linux
+system under these constraints, using some tools like &lt;code&gt;uv&lt;/code&gt; to manage Python dependencies
+and configuring networking correctly. Maybe, this is not the easiest way and using Docker
+could be simpler, but it's a good exercise to understand how to manage Python applications
+without root privileges.&lt;/p&gt;
+&lt;h2&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A functional Python environment.&lt;/li&gt;
+&lt;li&gt;Basic command-line navigation skills.&lt;/li&gt;
+&lt;li&gt;Network access for downloading necessary files and configuring network settings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Step-by-step Guide&lt;/h2&gt;
+&lt;h3&gt;1. Install &lt;code&gt;uv&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Firstly, we need a tool to handle Python applications efficiently without root privileges.
+The tool I used is &lt;strong&gt;&lt;code&gt;uv&lt;/code&gt;&lt;/strong&gt;. Here’s how you can install it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl&lt;span class="w"&gt; &lt;/span&gt;-LsSf&lt;span class="w"&gt; &lt;/span&gt;https://astral.sh/uv/install.sh&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This command downloads and executes the installation script for &lt;code&gt;uv&lt;/code&gt;. After installing,
+verify its presence using:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;which&lt;span class="w"&gt; &lt;/span&gt;uv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You might need to restart your terminal session to update the PATH variable.&lt;/p&gt;
+&lt;h3&gt;2. Download Ollama Release&lt;/h3&gt;
+&lt;p&gt;Next, download the appropriate ollama release for Linux environments from their official
+GitHub releases page. These commands will help you download the latest version:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="o"&gt;=$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;api&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;github&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;repos&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ollama&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ollama&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;releases&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;latest&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;grep&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;oP&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;quot;tag_name&amp;quot;: &amp;quot;\K(.*)(?=&amp;quot;)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;LO&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;https://github.com/ollama/ollama/releases/download/${VERSION}/ollama-linux-amd64.tgz&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Alternatively, you can manually download the release by visiting the GitHub releases page
+and copying the link for the latest version. For example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;curl&lt;span class="w"&gt; &lt;/span&gt;-LO&lt;span class="w"&gt; &lt;/span&gt;https://github.com/ollama/ollama/releases/download/vX.Y.Z/ollama-linux-amd64.tgz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Replace &lt;code&gt;vX.Y.Z&lt;/code&gt; with the actual version number. You can find the latest release on the
+&lt;a href="https://github.com/ollama/ollama/releases"&gt;ollama GitHub releases page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Extract it to a directory within your home folder or another location you have write
+permissions for:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;~/ollama
+tar&lt;span class="w"&gt; &lt;/span&gt;-xzf&lt;span class="w"&gt; &lt;/span&gt;ollama-linux-amd64.tgz&lt;span class="w"&gt; &lt;/span&gt;-C&lt;span class="w"&gt; &lt;/span&gt;~/ollama
+&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;~/ollama
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;3. Run Ollama with Public IP&lt;/h3&gt;
+&lt;p&gt;Ollama requires to be listening on a network interface that allows external connections. You can
+start the ollama server using the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;OLLAMA_HOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;.0.0.0:11434&lt;span class="w"&gt; &lt;/span&gt;./ollama&lt;span class="w"&gt; &lt;/span&gt;serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;4. Set Up Open Web UI&lt;/h3&gt;
+&lt;p&gt;Using &lt;code&gt;uv&lt;/code&gt;, we can set up Open Web UI, which provides a web interface for ollama:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;UV_PYTHON&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;python3.13&lt;span class="w"&gt; &lt;/span&gt;uv&lt;span class="w"&gt; &lt;/span&gt;init&lt;span class="w"&gt; &lt;/span&gt;open-webui-proy
+&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;open-webui-proy/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that we didn't call the project &lt;code&gt;open-webui&lt;/code&gt; directly, but &lt;code&gt;open-webui-proy&lt;/code&gt;. This
+is because &lt;code&gt;uv&lt;/code&gt; will create a folder with the same name as the project, and we want to
+avoid conflicts with the &lt;code&gt;open-webui&lt;/code&gt; folder created in the previous step.&lt;/p&gt;
+&lt;p&gt;Also, we specify the Python version to use with &lt;code&gt;UV_PYTHON=python3.13&lt;/code&gt;. This is important
+because a version lower than 3.11 will not work with &lt;code&gt;uv&lt;/code&gt; and &lt;code&gt;open-webui&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;5. Add and Run Open Web UI&lt;/h3&gt;
+&lt;p&gt;After initializing the Open Web UI project, add it as a dependency:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;open-webui
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, you can start the server to access your ollama interface through a web browser:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;open-webui&lt;span class="w"&gt; &lt;/span&gt;serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;6. Configure Network Settings in Open Web UI&lt;/h3&gt;
+&lt;p&gt;By default, Open Web UI tries to connect to ollama running on &lt;code&gt;localhost&lt;/code&gt;. To change this
+setting, follow these steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Go to &lt;code&gt;Admin Settings&lt;/code&gt; in Open WebUI.&lt;/li&gt;
+&lt;li&gt;Navigate to &lt;code&gt;Connections &amp;gt; Ollama &amp;gt; Manage&lt;/code&gt; (click the wrench icon).&lt;/li&gt;
+&lt;li&gt;Add a new connection for Ollama API with your public IP and port number.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;7. Updating Open Web UI&lt;/h3&gt;
+&lt;p&gt;To update Open Web UI, you can use the following command from the &lt;code&gt;open-webui-proy&lt;/code&gt;
+directory:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;sync&lt;span class="w"&gt; &lt;/span&gt;--upgrade
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;By following these steps, you can successfully set up ollama on a Linux system without
+root privileges. This approach not only enhances security but also provides flexibility
+across various environments.&lt;/p&gt;</content><category term="ollama, open-webui, AI, LLM"></category><category term="ollama"></category><category term="open-webui"></category><category term="AI"></category><category term="LLM"></category></entry></feed>

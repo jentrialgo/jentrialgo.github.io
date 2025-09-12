@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Nvidia, GPU, Kubernetes</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/nvidia-gpu-kubernetes.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-04-05T10:00:00+02:00</updated><entry><title>GPU sharing</title><link href="https://jentrialgo.github.io/gpu-sharing.html" rel="alternate"></link><published>2024-04-05T10:00:00+02:00</published><updated>2024-04-05T10:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-04-05:/gpu-sharing.html</id><content type="html">&lt;p&gt;I've found this &lt;a href="https://developer.nvidia.com/blog/improving-gpu-utilization-in-kubernetes/"&gt;interesting post from 2022 by Nvidia about GPU sharing in
+Kubernetes&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The main GPU sharing technologies can be summarized in this table:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Technology&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;th&gt;MicroArchitecture&lt;/th&gt;
+&lt;th&gt;CUDA Version&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CUDA Streams&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Allows concurrent operations within a single CUDA context using software abstraction.&lt;/td&gt;
+&lt;td&gt;Pascal and later&lt;/td&gt;
+&lt;td&gt;Not specified&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Time-Slicing&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Oversubscription strategy using the GPU's time-slicing scheduler.&lt;/td&gt;
+&lt;td&gt;Pascal and later&lt;/td&gt;
+&lt;td&gt;11.1 (R455+ drivers)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CUDA MPS&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;MPS (Multi-Process Service) enables concurrent processing of CUDA kernels from different processes, typically MPI jobs.&lt;/td&gt;
+&lt;td&gt;Not specified&lt;/td&gt;
+&lt;td&gt;11.4+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;MIG&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;MIG (Multi-Instance GPU) is a secure partitioning of GPUs into separate instances for dedicated resources.&lt;/td&gt;
+&lt;td&gt;Ampere Architecture&lt;/td&gt;
+&lt;td&gt;Not specified&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;NVIDIA vGPU&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Provides VMs with simultaneous, direct access to a single physical GPU.&lt;/td&gt;
+&lt;td&gt;Compatible with MIG-supported GPUs&lt;/td&gt;
+&lt;td&gt;Not specified&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The post also explains how GPUs are advertised as schedulable resources in Kubernetes with
+the device plugin framework, but it is a integer-based resource, so it does not allow for
+oversuscription. They describe a way of achieving this with time-slicing APIs.&lt;/p&gt;</content><category term="Nvidia, GPU, Kubernetes"></category><category term="Nvidia"></category><category term="GPU"></category><category term="Kubernetes"></category></entry></feed>

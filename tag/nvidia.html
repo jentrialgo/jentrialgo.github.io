@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/nvidia.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag Nvidia</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../profiling-with-nvprof.html#profiling-with-nvprof">Profiling with nvprof</a></h2>
+    <p>
+      Posted on Fri 19 April 2024 in <a href="../category/nvidia-gpu-profiling-jetson.html">Nvidia, GPU, Profiling, Jetson</a>
+
+          &#8226; Tagged with
+              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>,              <a href="../tag/profiling.html">Profiling</a>,              <a href="../tag/jetson.html">Jetson</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I'm working on a Jetson Nano and I want to profile my code. Nvidia provides several tools,
+being Nsight Compute the most powerful one. However, it cannot be run on the Jetson Nano,
+so I have resorted to using <code>nvprof</code>.</p>
+<p><code>nvprof</code> is a command-line profiler that can be used to profile CUDA applications. It is
+included in the CUDA Toolkit, so you should have it installed if you have CUDA installed.
+However, you need to be root to run it. As root, I don't have the CUDA environment set up,
+so I need use the full path. These are two commands that I've found useful:</p>
+<div class="highlight"><pre><span></span><code>/usr/local/cuda/bin/nvprof<span class="w"> </span>--print-gpu-trace<span class="w"> </span>./my_program
+</code></pre></div>
+
+<p>This shows the GPU trace of the program. It is useful to see how the GPU is being used.</p>
+<div class="highlight"><pre><span></span><code>/usr/local/cuda/bin/nvprof<span class="w"> </span>--metrics<span class="w"> </span>all<span class="w"> </span>./my_program
+</code></pre></div>
+
+<p>This shows all the metrics that <code>nvprof</code> can measure. It is useful to see how the program
+is using the GPU.</p>
+<p>In addition, you can use the <code>--log-file</code> option to save the output to a file …</p></div>
+        <br>
+        <a class="btn"
+           href="../profiling-with-nvprof.html#profiling-with-nvprof">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../gpu-sharing.html#gpu-sharing">GPU sharing</a></h2>
+    <p>
+      Posted on Fri 05 April 2024 in <a href="../category/nvidia-gpu-kubernetes.html">Nvidia, GPU, Kubernetes</a>
+
+          &#8226; Tagged with
+              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>,              <a href="../tag/kubernetes.html">Kubernetes</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've found this <a href="https://developer.nvidia.com/blog/improving-gpu-utilization-in-kubernetes/">interesting post from 2022 by Nvidia about GPU sharing in
+Kubernetes</a>.</p>
+<p>The main GPU sharing technologies can be summarized in this table:</p>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Description</th>
+<th>MicroArchitecture</th>
+<th>CUDA Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CUDA Streams</strong></td>
+<td>Allows concurrent operations within a single CUDA context using software abstraction.</td>
+<td>Pascal and later</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>Time-Slicing</strong></td>
+<td>Oversubscription strategy using the GPU's time-slicing scheduler.</td>
+<td>Pascal and later</td>
+<td>11.1 (R455+ drivers)</td>
+</tr>
+<tr>
+<td><strong>CUDA MPS</strong></td>
+<td>MPS (Multi-Process Service) enables concurrent processing of CUDA kernels from different processes, typically MPI jobs.</td>
+<td>Not specified</td>
+<td>11.4+</td>
+</tr>
+<tr>
+<td><strong>MIG</strong></td>
+<td>MIG (Multi-Instance GPU) is a secure partitioning of GPUs into separate instances for dedicated resources.</td>
+<td>Ampere Architecture</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>NVIDIA vGPU</strong></td>
+<td>Provides VMs with simultaneous, direct access to a single physical GPU.</td>
+<td>Compatible with MIG-supported GPUs</td>
+<td>Not specified</td>
+</tr>
+</tbody>
+</table>
+<p>The post also explains how GPUs are advertised as schedulable resources in Kubernetes with
+the device plugin framework, but it is a integer-based resource, so it does not allow for
+oversuscription. They describe a way of achieving this with time-slicing APIs.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../how-gpgpu-came-to-exist.html#how-gpgpu-came-to-exist">How GPGPU came to exist</a></h2>
+    <p>
+      Posted on Tue 05 March 2024 in <a href="../category/gpgpu-cuda-nvidia-gpu.html">GPGPU, CUDA, Nvidia, GPU</a>
+
+          &#8226; Tagged with
+              <a href="../tag/gpgpu.html">GPGPU</a>,              <a href="../tag/cuda.html">CUDA</a>,              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've been reading about the history of GPU computing in chapter 2 of "Massively Parallel
+Processors" by David B. Kirk and Wen-mei W. Hwu. It's a fascinating story of how the GPU
+came to be used for general-purpose computing.</p>
+<p>The story begins in the 1990s, when the first consumer 3D graphics cards were being
+developed. These cards were designed to accelerate the rendering of 3D graphics for video
+games. They were able to do this by offloading the rendering work from the CPU to the GPU,
+which was specifically designed for this task.</p>
+<p>The first GPUs were fixed-function, meaning that they could only perform a limited set of
+operations. However, as the demand for more realistic and complex graphics grew, the
+capabilities of the GPU were expanded. This led to the development of programmable
+shaders, which allowed developers to write custom code to control the rendering process.
+In the beginning, these shaders were still limited to graphics-related tasks and there
+were different kinds, such as vertex shaders and pixel shaders.</p>
+<p>One of the questions I …</p></div>
+        <br>
+        <a class="btn"
+           href="../how-gpgpu-came-to-exist.html#how-gpgpu-came-to-exist">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

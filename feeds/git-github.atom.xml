@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - git, GitHub</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/git-github.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-05-28T12:00:00+02:00</updated><entry><title>Problems with the GitHub Default Remote Using SSH</title><link href="https://jentrialgo.github.io/problems-with-the-github-default-remote-using-ssh.html" rel="alternate"></link><published>2025-05-28T12:00:00+02:00</published><updated>2025-05-28T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-05-28:/problems-with-the-github-default-remote-using-ssh.html</id><content type="html">&lt;p&gt;Second time that I have this problem, so I thought I would write it down.&lt;/p&gt;
+&lt;p&gt;When I create a new repository on GitHub, the default instructions to add the remote repository to my local git repository are:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;remote&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;git@github.com:my_username/new_repo_name.git
+git&lt;span class="w"&gt; &lt;/span&gt;branch&lt;span class="w"&gt; &lt;/span&gt;-M&lt;span class="w"&gt; &lt;/span&gt;main
+git&lt;span class="w"&gt; &lt;/span&gt;push&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The problem is that this assumes that I'm using the SSH protocol to connect to GitHub. However, I prefer using HTTPS for my connections. Therefore, I need to change the remote URL to use HTTPS instead of SSH. To do this, I can use the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;remote&lt;span class="w"&gt; &lt;/span&gt;set-url&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;https://github.com/my_username/new_repo_name.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To avoid this, the instructions to add the HTTPS connection directly should be:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;remote&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;https://github.com/my_username/new_repo_name.git
+git&lt;span class="w"&gt; &lt;/span&gt;branch&lt;span class="w"&gt; &lt;/span&gt;-M&lt;span class="w"&gt; &lt;/span&gt;main
+git&lt;span class="w"&gt; &lt;/span&gt;push&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="git, GitHub"></category><category term="git"></category><category term="GitHub"></category></entry></feed>
