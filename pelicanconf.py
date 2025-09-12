@@ -20,7 +20,7 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (
-    ("Personal page", "https://github.com/jentrialgo/personal-website"),
+    ("Personal page", "https://jentrialgo.github.io/personal-website/"),
     ("GitHub page", "https://github.com/jentrialgo"),
     ("All posts", "/archives.html"),
 )
