@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href=".">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="./the-perfect-strace-command.html#the-perfect-strace-command">The perfect strace command</a></h2>
+    <p>
+      Posted on Fri 17 October 2025 in <a href="./category/operating-systems-debugging.html">Operating Systems, Debugging</a>
+
+          &#8226; Tagged with
+              <a href="./tag/operating-systems.html">Operating Systems</a>,              <a href="./tag/debugging.html">Debugging</a>
+    </p>
+  </header>
+  <div>
+      <div><p>The Linux utility <code>strace</code> is essential for diagnosing process–kernel interactions, but its default output is often unusable. The key to effective debugging is using a specific set of flags that transform raw system call data into a structured, time‑stamped, and annotated log.</p>
+<p>According to Avikam Rozenfeld in 
+<a href="https://youtu.be/SUO0rQerpMk?t=726">this presentation</a>, here is the
+essential command template, followed by a breakdown of why each flag is critical:</p>
+<div class="highlight"><pre><span></span><code>strace -f -s 256 -o trace.log -tt -T -y &lt;your_command_here&gt;
+</code></pre></div>
+
+<p>Flags and why they matter:</p>
+<ul>
+<li>
+<p><strong>-f</strong> — Follow children<br>
+  Purpose: Trace child processes spawned by <code>fork</code>/<code>clone</code>.<br>
+  Key benefit: Ensures you trace the entire application flow (e.g., piped commands).</p>
+</li>
+<li>
+<p><strong>-s 256</strong> — Increase string size<br>
+  Purpose: Increase the string output limit (default 32 bytes) to 256 bytes.<br>
+  Key benefit: Prevents truncation of file paths and data being read or written.</p>
+</li>
+<li>
+<p><strong>-o <file></strong> — Output to file<br>
+  Purpose: Redirect all <code>strace</code> output to a specified log file (e.g., <code>trace.log</code>).<br>
+  Key benefit: Separates trace output from the program's standard output for easier analysis.</p>
+</li>
+<li>
+<p><strong>-tt</strong> — Precise timestamp<br>
+  Purpose: Prefix every line …</p></li></ul></div>
+        <br>
+        <a class="btn"
+           href="./the-perfect-strace-command.html#the-perfect-strace-command">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./to-build-a-new-os-or-not-to-build-a-new-os.html#to-build-a-new-os-or-not-to-build-a-new-os">To build a new OS, or not to build a new OS?</a></h2>
+    <p>
+      Posted on Sun 07 September 2025 in <a href="./category/operating-systems-software-development.html">Operating Systems, Software Development</a>
+
+          &#8226; Tagged with
+              <a href="./tag/operating-systems.html">Operating Systems</a>,              <a href="./tag/software-development.html">Software Development</a>,              <a href="./tag/linux.html">Linux</a>,              <a href="./tag/omarchy.html">Omarchy</a>,              <a href="./tag/john-carmack.html">John Carmack</a>,              <a href="./tag/dhh.html">DHH</a>
+    </p>
+  </header>
+  <div>
+      <div><h1>To build a new OS, or not to build a new OS?</h1>
+<p>There's a fascinating debate in the software world about whether it still makes sense to create a new general-purpose operating system from scratch.</p>
+<h3>The Pragmatic View</h3>
+<p>On one side, you have figures like John Carmack. In a <a href="https://x.com/ID_AA_Carmack/status/1961172409920491849">recent discussion on X</a>, he argued that building a new OS is often impractical. The cost, short lifespan, and developer burden rarely justify the effort, a lesson he learned from opposing Meta's custom XR OS.</p>
+<h3>The Idealistic View</h3>
+<p>On the other side is the spirit of the ultimate craftsman. This is captured perfectly in a joke by DHH during <a href="https://www.youtube.com/watch?v=gcwzWzC7gUA&amp;t=3478s">this presentation</a>:</p>
+<blockquote>
+<p>"People who are really serious about software should make their own operating system."</p>
+</blockquote>
+<p>He's riffing on a famous quote by Alan Kay about hardware, but the message is clear: the ultimate challenge for a software purist is to build the whole stack.</p>
+<h3>A Middle Ground: Omarchy</h3>
+<p>Interestingly, DHH's own work offers a third path. He hasn't built an entirely new OS. Instead, he created <a href="https://omarchy.org/">Omarchy …</a></p></div>
+        <br>
+        <a class="btn"
+           href="./to-build-a-new-os-or-not-to-build-a-new-os.html#to-build-a-new-os-or-not-to-build-a-new-os">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./problems-with-the-github-default-remote-using-ssh.html#problems-with-the-github-default-remote-using-ssh">Problems with the GitHub Default Remote Using SSH</a></h2>
+    <p>
+      Posted on Wed 28 May 2025 in <a href="./category/git-github.html">git, GitHub</a>
+
+          &#8226; Tagged with
+              <a href="./tag/git.html">git</a>,              <a href="./tag/github.html">GitHub</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Second time that I have this problem, so I thought I would write it down.</p>
+<p>When I create a new repository on GitHub, the default instructions to add the remote repository to my local git repository are:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:my_username/new_repo_name.git
+git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div>
+
+<p>The problem is that this assumes that I'm using the SSH protocol to connect to GitHub. However, I prefer using HTTPS for my connections. Therefore, I need to change the remote URL to use HTTPS instead of SSH. To do this, I can use the following command:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>https://github.com/my_username/new_repo_name.git
+</code></pre></div>
+
+<p>To avoid this, the instructions to add the HTTPS connection directly should be:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/my_username/new_repo_name.git
+git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./publishing-powerpoint-presentations-with-animations-as-pdfs.html#publishing-powerpoint-presentations-with-animations-as-pdfs">Publishing PowerPoint presentations with animations as PDFs</a></h2>
+    <p>
+      Posted on Wed 30 April 2025 in <a href="./category/powerpoint-pdf.html">PowerPoint, PDF</a>
+
+          &#8226; Tagged with
+              <a href="./tag/powerpoint.html">PowerPoint</a>,              <a href="./tag/pdf.html">PDF</a>
+    </p>
+  </header>
+  <div>
+      <div><p>When I create PowerPoint presentations, I often use animations to explain complex processes. I design slides so the final state is clear on its own, but sometimes this isn’t feasible. When sharing these presentations as PDFs, animations are lost, making slides hard to understand.</p>
+<p>I’ve found a solution: <a href="https://github.com/maxonthegit/PPspliT">PPSplit</a>, a PowerPoint plug-in that exports presentations with animations as PDFs. PPSpit works by splitting animated slides into multiple PDF pages, each representing a step in the animation sequence. This preserves the flow and context of the presentation, ensuring viewers can follow the intended progression without needing the original PowerPoint file.</p>
+<p>To use PPSpit in Windows, install the plug-in from its <a href="https://www.maxonthenet.altervista.org/ppsplit.php">web page</a> and open your presentation in PowerPoint. PPsplit will add a new tab to split the slides. Notice that <em>this changes the file</em>, so make a copy of the original presentation before using it, especially if you have auto-save enabled. After splitting, you can save the presentation as a PDF. The resulting PDF will have each animation step on a separate page, making …</p></div>
+        <br>
+        <a class="btn"
+           href="./publishing-powerpoint-presentations-with-animations-as-pdfs.html#publishing-powerpoint-presentations-with-animations-as-pdfs">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./exploring-github-repos-with-cool-tools.html#exploring-github-repos-with-cool-tools">Exploring GitHub Repos with Cool Tools</a></h2>
+    <p>
+      Posted on Tue 29 April 2025 in <a href="./category/github-tools-visualization-developer-workflow.html">github, tools, visualization, developer workflow</a>
+
+          &#8226; Tagged with
+              <a href="./tag/github.html">github</a>,              <a href="./tag/tools.html">tools</a>,              <a href="./tag/visualization.html">visualization</a>,              <a href="./tag/developer-workflow.html">developer workflow</a>,              <a href="./tag/deepwiki.html">deepwiki</a>,              <a href="./tag/gitpodcast.html">gitpodcast</a>,              <a href="./tag/forgithub.html">forgithub</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Recently, I’ve come across a few tools to understand GitHub repos better: <a href="https://deepwiki.com/">DeepWiki</a>, <a href="https://www.gitpodcast.com/">GitPodcast</a>, and <a href="https://forgithub.com/">ForGitHub</a>.</p>
+<h3>DeepWiki: Turning Repos into Interactive Documentation</h3>
+<p>DeepWiki, developed by Cognition Labs, automatically converts any GitHub repo into a comprehensive, wiki-style documentation with interactive visualizations. What I love most is its "in-depth research" feature—it provides insights that feel like they’re coming from a senior engineer, covering design concepts, best practices, and even optimization opportunities. You can check it out at <a href="https://deepwiki.com/">DeepWiki</a>.</p>
+<p>As an example, you can explore <a href="https://deepwiki.com/asi-uniovi/simct/">DeepWiki for SimCT</a>.</p>
+<h3>GitPodcast: Listening to Code as a Story</h3>
+<p>GitPodcast converts any GitHub repository into an engaging podcast! Imagine listening to the evolution of a project, its commits, and its structure as a story while you’re on a walk or coding something else. It’s hosted by BandarLabs and available at <a href="https://www.gitpodcast.com/">GitPodcast</a>.</p>
+<p>This is <a href="https://www.gitpodcast.com/asi-uniovi/simct/">the podcast for SimCT</a>.</p>
+<h3>ForGitHub: Comparing Repos Side by Side</h3>
+<p><a href="https://forgithub.com/">ForGitHub</a> gives a list of cool tools and APIs that use the same URL structure as GitHub enabling you to use it by just …</p></div>
+        <br>
+        <a class="btn"
+           href="./exploring-github-repos-with-cool-tools.html#exploring-github-repos-with-cool-tools">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="./index2.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

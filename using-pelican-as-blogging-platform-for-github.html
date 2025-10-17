@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="./using-pelican-as-blogging-platform-for-github.html">
+ 
+
+<meta name="author" content="J.E." />
+<meta name="description" content="So I guess my first blog should be about setting up this blog. I wanted to use GitHub pages. By default they use Jekyll, which is built with Ruby. I have no experience with that language, so I tried to use something Python-based. I found this post about using Pelican, but I had some problems. I&#39;m going to try to give here step by step instructions, using Linux. Create a directory for the blog, an environment and activate it: mkdir blog cd blog python -m venv .venv source .venv/bin/activate Install pelican with one of these options: # This option only allows reStructuredText python -m pip install pelican # This allows markdown and reStructuredText python -m pip install &#34;pelican[markdown]&#34; Create the basic structure: pelican-quickstart I&#39;ll leave the standard theme. Read in the mentioned post if you want to change the theme. Note I&#39;ve created a new post about how to change the style to Flex To test locally the blog, generate the site with: make html Now start a web server with: make serve You …" />
+<meta name="keywords" content="Pelican, GitHub pages, Blog">
+
+
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:title" content="Using Pelican as blogging platform for GitHub"/>
+  <meta property="og:description" content="So I guess my first blog should be about setting up this blog. I wanted to use GitHub pages. By default they use Jekyll, which is built with Ruby. I have no experience with that language, so I tried to use something Python-based. I found this post about using Pelican, but I had some problems. I&#39;m going to try to give here step by step instructions, using Linux. Create a directory for the blog, an environment and activate it: mkdir blog cd blog python -m venv .venv source .venv/bin/activate Install pelican with one of these options: # This option only allows reStructuredText python -m pip install pelican # This allows markdown and reStructuredText python -m pip install &#34;pelican[markdown]&#34; Create the basic structure: pelican-quickstart I&#39;ll leave the standard theme. Read in the mentioned post if you want to change the theme. Note I&#39;ve created a new post about how to change the style to Flex To test locally the blog, generate the site with: make html Now start a web server with: make serve You …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="./using-pelican-as-blogging-platform-for-github.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2021-09-28 22:20:00+02:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="./author/je.html">
+  <meta property="article:section" content="Blogging"/>
+  <meta property="article:tag" content="Pelican"/>
+  <meta property="article:tag" content="GitHub pages"/>
+  <meta property="article:tag" content="Blog"/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Using Pelican as blogging platform for GitHub</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="using-pelican-as-blogging-platform-for-github">Using Pelican as blogging platform for GitHub</h1>
+    <p>
+      Posted on Tue 28 September 2021 in <a href="./category/blogging.html">Blogging</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>So I guess my first blog should be about setting up this blog.</p>
+<p>I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found <a href="https://avinal.space/posts/development/twilight-blog.html">this post about using
+Pelican</a>, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.</p>
+<p>Create a directory for the blog, an environment and activate it:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>blog
+<span class="nb">cd</span><span class="w"> </span>blog
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</code></pre></div>
+
+<p>Install pelican with one of these options:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># This option only allows reStructuredText</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pelican
+
+<span class="c1"># This allows markdown and reStructuredText</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;pelican[markdown]&quot;</span>
+</code></pre></div>
+
+<p>Create the basic structure:</p>
+<div class="highlight"><pre><span></span><code>pelican-quickstart
+</code></pre></div>
+
+<p>I'll leave the standard theme. Read in the <a href="https://avinal.space/posts/development/twilight-blog.html">mentioned
+post</a> if you want to
+change the theme.</p>
+<blockquote>
+<p><strong>Note</strong> I've created a new post about <a href="./changing-the-pelican-theme-to-flex.html">how to change the style to
+Flex</a></p>
+</blockquote>
+<p>To test locally the blog, generate the site with:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>html
+</code></pre></div>
+
+<p>Now start a web server with:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>serve
+</code></pre></div>
+
+<p>You can see the default blog in <a href="http://localhost:8000">http://localhost:8000</a>.</p>
+<p>In order to add content, you should create your files in the <code>content</code>
+directory. For instance, you can create an <code>about.md</code> file with this content:</p>
+<div class="highlight"><pre><span></span><code>Title: About
+Date: 2021-09-28 20:20
+Category: About
+
+This is just a blog.
+</code></pre></div>
+
+<blockquote>
+<p><strong>Note</strong> This type of pages which are not articles should usually go in a
+folder called <code>pages</code> inside the <code>content</code> folder. See the <a href="https://docs.getpelican.com/en/3.6.3/content.html#pages">documentation
+about them</a> in the
+Pelican docs.</p>
+</blockquote>
+<p>You can make the html again and serve it to test it locally, but the idea is
+using GitHub actions so that when this code is push to a repository, the
+website is generated.</p>
+<p>Create a file called <code>publi.sh</code> with this content (change the email and the user
+name):</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#! /bin/bash</span>
+
+<span class="c1"># install tools</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>git<span class="w"> </span>make<span class="w"> </span>python3<span class="w"> </span>python3-pip<span class="w"> </span>python3-setuptools<span class="w"> </span>python3-wheel
+
+<span class="c1"># setup github config</span>
+git<span class="w"> </span>config<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;YOUR_E_MAIL&quot;</span><span class="w">  </span><span class="c1"># Change this</span>
+git<span class="w"> </span>config<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;YOUR_USERNAME&quot;</span><span class="w"> </span><span class="c1"># Change this</span>
+
+<span class="c1"># install dependencies</span>
+sudo<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="c1"># pelican commands - install theme put your theme in themes directory</span>
+<span class="c1">#pelican-themes --install themes/theme-name</span>
+pelican
+
+<span class="c1"># publish to github pages</span>
+ghp-import<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Generate Pelican site&quot;</span><span class="w"> </span>-b<span class="w"> </span>gh-pages<span class="w"> </span>output
+git<span class="w"> </span>push<span class="w"> </span>-f<span class="w"> </span>origin<span class="w"> </span>gh-pages
+</code></pre></div>
+
+<p>Notice that here I had to make changes from the instructions in the original
+post. Another piece of information I found missing in the original post is that
+you have to create the <code>requirements.txt</code> file with this command:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</code></pre></div>
+
+<p>Add and <code>.ignore</code> file with this content:</p>
+<div class="highlight"><pre><span></span><code><span class="o">*~</span>
+<span class="p">.</span><span class="n">_</span><span class="o">*</span>
+<span class="o">*</span><span class="p">.</span><span class="n">lock</span>
+<span class="o">*</span><span class="p">.</span><span class="n">DS_Store</span>
+<span class="o">*</span><span class="p">.</span><span class="n">swp</span>
+<span class="o">*</span><span class="p">.</span><span class="k">out</span>
+<span class="o">*</span><span class="p">.</span><span class="n">py</span><span class="o">[</span><span class="n">cod</span><span class="o">]</span>
+<span class="k">output</span>
+</code></pre></div>
+
+<p>Now, create a repository in GitHub with the name <code>USERNAME.github.io</code>, using
+your user name instead of <code>USERNAME</code>. Follow the instructions in GitHub to
+import the files in your directory as the content of the repository. Basically,
+it should be something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Create repository</span>
+git<span class="w"> </span>init<span class="w"> </span>-b<span class="w"> </span>main
+
+<span class="c1"># Add and commit current files</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial structure&quot;</span>
+
+<span class="c1"># Add the GitHub repo as a remote</span>
+git<span class="w"> </span>pull<span class="w"> </span>--set-upstream<span class="w"> </span>origin<span class="w"> </span>main
+
+<span class="c1"># Push the files to the remote</span>
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div>
+
+<p>Go to the GitHub page of the repository and then to the <code>Actions</code> section and
+click on <code>Set up a workflow yourself</code>. Then, paste this code and commit it:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Publish Blog</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">set up permissions</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chmod +x publi.sh</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a multi-line script</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./publi.sh</span>
+</code></pre></div>
+
+<p>Now, pull the changes to your local repo:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>pull
+</code></pre></div>
+
+<p>In the GitHub interface, you should be able to see in the branch <code>gh-pages</code> the
+content of your blog, i.e., the HTML, CSS and javascript files that you also
+obtain in your local <code>output</code> directory when you run <code>make html</code>.</p>
+<p>Go to the settings in your GitHub repo, select the <code>Pages</code> option in the menu
+and in the <code>Source</code> section, indicate that your source is the branch <code>gh-pages</code>.
+Check that it is using the <code>root</code> directory of this branch.</p>
+<p>If everything is correct, you should be able to see your blog by going to
+<code>USERNAME.github.io</code>.</p>
+<p>If you want to add new content, create a new file in the <code>content</code> folder, be
+sure to use the basic fields required for pelican (you can see them in the
+example <code>about</code> post above), add and commit the file, and (after testing locally
+if you want) push the files to the remote directory. After the GitHub action has
+finished you should be able to see your new post in your GitHub page.</p>
+<p>If you don't see it, check your GitHub actions page, where you can find
+errors that are generated after each push.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/pelican.html">Pelican</a>
+      <a href="./tag/github-pages.html">GitHub pages</a>
+      <a href="./tag/blog.html">Blog</a>
+    </p>
+  </div>
+
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

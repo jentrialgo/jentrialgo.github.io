@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../author/je6.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Posts by J.E.:</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../metrics-per-stage-in-k6.html#metrics-per-stage-in-k6">Metrics per stage in k6</a></h2>
+    <p>
+      Posted on Fri 25 November 2022 in <a href="../category/k6.html">k6</a>
+
+          &#8226; Tagged with
+              <a href="../tag/k6.html">k6</a>
+    </p>
+  </header>
+  <div>
+      <div><p>If you want to have custom metrics per each stage in an executor, you have to
+tag the stages (with <code>tagWithCurrentStageIndex()</code>) and add bogus thresholds for
+each metric that you want with the tag <code>stage:i</code> (being <code>i</code> the number of each
+stage). The bogus threshold has to be different for gauges (<code>max&gt;0</code>) and rates
+(<code>rate&gt;=0</code>).</p>
+<p>This example file shows how to do it:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/http&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">tagWithCurrentStageIndex</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;https://jslib.k6.io/k6-utils/1.3.0/index.js&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">stages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;10s&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;10s&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">];</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">scenarios</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">contacts</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">executor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;ramping-arrival-rate&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">timeUnit</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1s&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">preAllocatedVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">maxVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">stages</span><span class="o">:</span><span class="w"> </span><span class="nx">stages</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">// Uncomment the next line if you want the count statistic</span>
+<span class="w">  </span><span class="c1">// summaryTrendStats: [&#39;avg&#39;, &#39;min&#39;, &#39;med&#39;, &#39;max&#39;, &#39;p(90)&#39;, &#39;p(95)&#39;, &#39;p(99)&#39;, &#39;count&#39;],</span>
+<span class="w">  </span><span class="nx">thresholds</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Intentionally empty. We&#39;ll programatically define our bogus</span>
+<span class="w">    </span><span class="c1">// thresholds (to generate the sub-metrics) below. In your real-world</span>
+<span class="w">    </span><span class="c1">// load test, you can add any real threshoulds you want here.</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">addThreshold</span><span class="p">(</span><span class="nx">thresholdName</span><span class="p">,</span><span class="w"> </span><span class="nx">threshold</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">thresholds</span><span class="p">[</span><span class="nx">thresholdName</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">options</span><span class="p">.</span><span class="nx">thresholds</span><span class="p">[</span><span class="nx">thresholdName</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// &#39;max&gt;=0&#39; is a …</span></code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="../metrics-per-stage-in-k6.html#metrics-per-stage-in-k6">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../installing-tensorflow-serving-in-amazon-ec2-linux.html#installing-tensorflow-serving-in-amazon-ec2-linux">Installing Tensorflow Serving in Amazon EC2 Linux</a></h2>
+    <p>
+      Posted on Fri 11 November 2022 in <a href="../category/tensorflow-ec2.html">tensorflow, ec2</a>
+
+          &#8226; Tagged with
+              <a href="../tag/tensorflow.html">tensorflow</a>
+    </p>
+  </header>
+  <div>
+      <div><p>How to install and test Tensorflow Serving in a Amazon EC2 instance running
+Amazon EC2 Linux 2. We will use docker and we will serve a resnet image. These
+are the commands:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Install docker</span>
+sudo<span class="w"> </span>yum<span class="w"> </span>update
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>docker
+sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>docker<span class="w"> </span>ec2-user
+newgrp<span class="w"> </span>docker
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>docker.service
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>docker.service
+
+<span class="c1"># Prepare the resnet model</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>/tmp/resnet
+wget<span class="w"> </span>https://tfhub.dev/tensorflow/resnet_50/classification/1?tf-hub-format<span class="o">=</span>compressed<span class="w"> </span>-o<span class="w"> </span>resnet.tar.gz
+mv<span class="w"> </span><span class="m">1</span>?tf-hub-format<span class="o">=</span>compressed<span class="w"> </span>resnet.tar.gz
+mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/resnet/123
+tar<span class="w"> </span>xvfz<span class="w"> </span>resnet.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/resnet/123/
+
+<span class="c1"># Create and run a docker image with tensorflow serving using the resnet model</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>serving_base<span class="w"> </span>tensorflow/serving
+docker<span class="w"> </span>cp<span class="w"> </span>/tmp/resnet<span class="w"> </span>serving_base:/models/resnet
+docker<span class="w"> </span>commit<span class="w"> </span>--change<span class="w"> </span><span class="s2">&quot;ENV MODEL_NAME resnet&quot;</span><span class="w"> </span>serving_base<span class="w"> </span><span class="nv">$USER</span>/resnet_serving
+docker<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>serving_base
+docker<span class="w"> </span>rm<span class="w"> </span>serving_base
+docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8500</span>:8500<span class="w"> </span>-p<span class="w"> </span><span class="m">8501</span>:8501<span class="w"> </span>-t<span class="w"> </span><span class="nv">$USER</span>/resnet_serving<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p>To test that the serving works, you can run</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>git
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tensorflow/serving …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="../installing-tensorflow-serving-in-amazon-ec2-linux.html#installing-tensorflow-serving-in-amazon-ec2-linux">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../using-ipvs-in-kube-proxy-with-eksctl.html#using-ipvs-in-kube-proxy-with-eksctl">Using IPVS in kube-proxy with eksctl</a></h2>
+    <p>
+      Posted on Mon 20 June 2022 in <a href="../category/kubernetes-eksctl-kube-proxy.html">kubernetes, eksctl, kube-proxy</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">kubernetes</a>,              <a href="../tag/eksctl.html">eksctl</a>,              <a href="../tag/kube-proxy.html">kube-proxy</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I have a kubernetes cluster launched with <code>eksctl</code>. I can get the configuration
+of <code>kube-proxy</code> with:</p>
+<div class="highlight"><pre><span></span><code>kubectl edit configmap kube-proxy-config -n kube-system
+</code></pre></div>
+
+<p>I see that the default configuration uses the <code>iptables</code> mode. In order to
+change it, the <code>mode</code> parameter has to be changed to <code>ipvs</code> and the scheduler
+parameter in the <code>ipvs</code> section, which is initially empty, has to be assigned one
+of <a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes">these
+policies</a>:</p>
+<ul>
+<li>rr: round-robin</li>
+<li>lc: least connection</li>
+<li>dh: destination hashing</li>
+<li>sh: source hashing</li>
+<li>sed: shortest expected delay</li>
+<li>nq: never queue</li>
+</ul>
+<p>Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:</p>
+<div class="highlight"><pre><span></span><code>lsmod | grep ip_vs
+</code></pre></div>
+
+<p>In order to apply the configuration, kube-proxy has to be restarted with this
+command:</p>
+<div class="highlight"><pre><span></span><code>kubectl rollout restart ds kube-proxy -n kube-system
+</code></pre></div>
+
+<p>I get this:</p>
+<div class="highlight"><pre><span></span><code>ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+</code></pre></div>
+
+<p>This means that the modules …</p></div>
+        <br>
+        <a class="btn"
+           href="../using-ipvs-in-kube-proxy-with-eksctl.html#using-ipvs-in-kube-proxy-with-eksctl">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html#pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl">Pinning CPUs in Kubernetes using full-pcpus-only with eksctl</a></h2>
+    <p>
+      Posted on Mon 16 May 2022 in <a href="../category/kubernetes-eksctl.html">kubernetes, eksctl</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">kubernetes</a>,              <a href="../tag/eksctl.html">eksctl</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I was trying to use the option <code>full-pcpus-only</code> with eksctl and I was not
+having luck. In the end, I was able to do it by using this <code>cluster.yaml</code>
+configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eksctl.io/v1alpha5</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterConfig</span>
+
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-Stokholm-Cluster</span>
+<span class="w">  </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eu-north-1</span>
+
+<span class="nt">nodeGroups</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ng-1</span>
+<span class="w">    </span><span class="nt">instanceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c5.4xlarge</span>
+<span class="w">    </span><span class="nt">desiredCapacity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">ssh</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">publicKeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/joaquin/k8s/joaquin-k8s-stockholm.pub</span>
+<span class="w">    </span><span class="nt">kubeletExtraConfig</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cpuManagerPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static</span>
+<span class="w">      </span><span class="nt">cpuManagerPolicyOptions</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">full-pcpus-only</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">      </span><span class="nt">kubeReserved</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300m&quot;</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300Mi&quot;</span>
+<span class="w">        </span><span class="nt">ephemeral-storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span>
+<span class="w">      </span><span class="nt">kubeReservedCgroup</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/kube-reserved&quot;</span>
+<span class="w">      </span><span class="nt">systemReserved</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300m&quot;</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300Mi&quot;</span>
+<span class="w">        </span><span class="nt">ephemeral-storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span>
+<span class="w">      </span><span class="nt">featureGates</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">CPUManager</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">CPUManagerPolicyOptions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>When my file had not the correct options, the problem I was seeing was that
+eksctl got stuck with the message:</p>
+<div class="highlight"><pre><span></span><code>waiting for at least 1 node(s) to become ready in &quot;ng-1&quot;
+</code></pre></div>
+
+<p>For debugging the errors, I connected by ssh to the EC2 instance that was
+created and I check the logs of the kubelet service with this command:</p>
+<div class="highlight"><pre><span></span><code>journalctl<span class="w"> </span>-u<span class="w"> </span>kubelet.service
+</code></pre></div>
+
+<p>In order to have the CPUs pinned to a physical CPU, I had to make the requests
+and the limits equal (both for CPU and memory …</p></div>
+        <br>
+        <a class="btn"
+           href="../pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html#pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../error-cannot-use-pathversion-syntax-in-gopath-mode.html#error-cannot-use-pathversion-syntax-in-gopath-mode">Error cannot use path@version syntax in GOPATH mode</a></h2>
+    <p>
+      Posted on Wed 15 December 2021 in <a href="../category/go.html">go</a>
+
+          &#8226; Tagged with
+              <a href="../tag/go.html">go</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I was trying to install xk6 using this command:</p>
+<div class="highlight"><pre><span></span><code>go<span class="w"> </span>install<span class="w"> </span>go.k6.io/xk6/cmd/xk6@latest
+</code></pre></div>
+
+<p>And I got this error:</p>
+<div class="highlight"><pre><span></span><code>package go.k6.io/xk6/cmd/xk6@latest: cannot use path@version syntax in GOPATH mode
+</code></pre></div>
+
+<p>Although I found <a href="https://stackoverflow.com/q/54415733">a question in Stack
+Overflow</a> with that error, the given
+solutions didn't work for me. In the end, I learned that the message was caused
+because I was using an old version of Go: the <code>path@version</code> was added in Go
+1.16 and I was using 1.15. Thus, the solution for my problem was updating Go.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="../author/je7.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+    <a class="btn float-right" href="../author/je5.html">
+      Newer Posts <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

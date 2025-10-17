@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="./click-removal-in-audio-files-with-python.html">
+ 
+
+<meta name="author" content="J.E." />
+<meta name="description" content="A friend of mine had an audio file with many clicks in it. He asked me if I could remove them. I tried with the Audacity click removal tool, but it didn&#39;t work: it removed the clicks, but created a lot of artifacts in the audio, so I thought it would be a nice challenge to try to do it with Python. The waveform looked like this: I did it using the pydub package. The basic idea is detecting the clicks and replacing them with the previous sample. I used two different criteria to detect the clicks: If the average of the previous samples is below a threshold and the current sample is above another threshold. If the difference between the previous sample and the current one is above a threshold. The code is not very clean, but it worked. I had to play with the thresholds and the width of the samples to get the best results. I also had to play with the width of the clicks to avoid removing too much audio …" />
+<meta name="keywords" content="Audio, Python">
+
+
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:title" content="Click removal in audio files with Python"/>
+  <meta property="og:description" content="A friend of mine had an audio file with many clicks in it. He asked me if I could remove them. I tried with the Audacity click removal tool, but it didn&#39;t work: it removed the clicks, but created a lot of artifacts in the audio, so I thought it would be a nice challenge to try to do it with Python. The waveform looked like this: I did it using the pydub package. The basic idea is detecting the clicks and replacing them with the previous sample. I used two different criteria to detect the clicks: If the average of the previous samples is below a threshold and the current sample is above another threshold. If the difference between the previous sample and the current one is above a threshold. The code is not very clean, but it worked. I had to play with the thresholds and the width of the samples to get the best results. I also had to play with the width of the clicks to avoid removing too much audio …"/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="./click-removal-in-audio-files-with-python.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="article:published_time" content="2023-05-23 08:00:00+02:00"/>
+  <meta property="article:modified_time" content=""/>
+  <meta property="article:author" content="./author/je.html">
+  <meta property="article:section" content="Audio, Python"/>
+  <meta property="article:tag" content="Audio"/>
+  <meta property="article:tag" content="Python"/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Click removal in audio files with Python</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="click-removal-in-audio-files-with-python">Click removal in audio files with Python</h1>
+    <p>
+      Posted on Tue 23 May 2023 in <a href="./category/audio-python.html">Audio, Python</a>
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>A friend of mine had an audio file with many clicks in it. He asked me if I
+could remove them. I tried with the Audacity click removal tool, but it didn't
+work: it removed the clicks, but created a lot of artifacts in the audio, so I
+thought it would be a nice challenge to try to do it with Python.</p>
+<p>The waveform looked like this:</p>
+<p><img alt="Waveform with clicks" src="images/2023-05-23-waveform.png"></p>
+<p>I did it using the <a href="https://github.com/jiaaro/pydub">pydub</a> package. The basic
+idea is detecting the clicks and replacing them with the previous sample. I
+used two different criteria to detect the clicks:</p>
+<ul>
+<li>
+<p>If the average of the previous samples is below a threshold and the current
+  sample is above another threshold.</p>
+</li>
+<li>
+<p>If the difference between the previous sample and the current one is above a
+  threshold.</p>
+</li>
+</ul>
+<p>The code is not very clean, but it worked. I had to play with the thresholds
+and the width of the samples to get the best results. I also had to play with
+the width of the clicks to avoid removing too much audio.</p>
+<p>The result was pretty good. The waveform looked like this:</p>
+<p><img alt="Waveform without clicks" src="images/2023-05-23-waveform-declicked.png"></p>
+<p>And the audio sounded much better. It was not perfect, but it was good enough.</p>
+<p>The code is below. The audio file is not included.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
+<span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">track</span>
+
+<span class="c1"># Read file</span>
+<span class="n">FILE_NAME</span> <span class="o">=</span> <span class="s2">&quot;original&quot;</span>
+<span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FILE_NAME</span><span class="si">}</span><span class="s2">.wav&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">big_avg_diff</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">avg</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">threshold</span> <span class="ow">and</span> <span class="n">sample</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+
+
+<span class="c1"># Get samples</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">get_array_of_samples</span><span class="p">()</span>
+
+<span class="c1"># Declick</span>
+<span class="n">num_clicks</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">max_click_width</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">threshold_avg</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">threshold_abs</span> <span class="o">=</span> <span class="mi">18000</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">big_avg_diff</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">width</span> <span class="p">:</span> <span class="n">i</span><span class="p">],</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">threshold_avg</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">threshold_abs</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found click </span><span class="si">{</span><span class="n">num_clicks</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">_</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">num_clicks</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">click_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="p">(</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">threshold_abs</span>
+            <span class="ow">and</span> <span class="n">click_width</span> <span class="o">&lt;</span> <span class="n">max_click_width</span>
+        <span class="p">):</span>
+            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">click_width</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; (width: </span><span class="si">{</span><span class="n">click_width</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">num_clicks</span><span class="si">}</span><span class="s2"> clicks&quot;</span><span class="p">)</span>
+
+<span class="c1"># Save new audio from samples</span>
+<span class="n">new_audio</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">_spawn</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="n">new_audio</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FILE_NAME</span><span class="si">}</span><span class="s2">_declicked.wav&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">)</span>
+</code></pre></div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/audio.html">Audio</a>
+      <a href="./tag/python.html">Python</a>
+    </p>
+  </div>
+
+
+
+
+
+
+
+</article>
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

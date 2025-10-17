@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - GPGPU, CUDA, Nvidia, GPU</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/gpgpu-cuda-nvidia-gpu.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-03-05T10:00:00+01:00</updated><entry><title>How GPGPU came to exist</title><link href="https://jentrialgo.github.io/how-gpgpu-came-to-exist.html" rel="alternate"></link><published>2024-03-05T10:00:00+01:00</published><updated>2024-03-05T10:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-03-05:/how-gpgpu-came-to-exist.html</id><summary type="html">&lt;p&gt;I've been reading about the history of GPU computing in chapter 2 of "Massively Parallel
+Processors" by David B. Kirk and Wen-mei W. Hwu. It's a fascinating story of how the GPU
+came to be used for general-purpose computing.&lt;/p&gt;
+&lt;p&gt;The story begins in the 1990s, when the first consumer 3D graphics cards were being
+developed. These cards were designed to accelerate the rendering of 3D graphics for video
+games. They were able to do this by offloading the rendering work from the CPU to the GPU,
+which was specifically designed for this task.&lt;/p&gt;
+&lt;p&gt;The first GPUs were fixed-function, meaning that they could only perform a limited set of
+operations. However, as the demand for more realistic and complex graphics grew, the
+capabilities of the GPU were expanded. This led to the development of programmable
+shaders, which allowed developers to write custom code to control the rendering process.
+In the beginning, these shaders were still limited to graphics-related tasks and there
+were different kinds, such as vertex shaders and pixel shaders.&lt;/p&gt;
+&lt;p&gt;One of the questions I …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've been reading about the history of GPU computing in chapter 2 of "Massively Parallel
+Processors" by David B. Kirk and Wen-mei W. Hwu. It's a fascinating story of how the GPU
+came to be used for general-purpose computing.&lt;/p&gt;
+&lt;p&gt;The story begins in the 1990s, when the first consumer 3D graphics cards were being
+developed. These cards were designed to accelerate the rendering of 3D graphics for video
+games. They were able to do this by offloading the rendering work from the CPU to the GPU,
+which was specifically designed for this task.&lt;/p&gt;
+&lt;p&gt;The first GPUs were fixed-function, meaning that they could only perform a limited set of
+operations. However, as the demand for more realistic and complex graphics grew, the
+capabilities of the GPU were expanded. This led to the development of programmable
+shaders, which allowed developers to write custom code to control the rendering process.
+In the beginning, these shaders were still limited to graphics-related tasks and there
+were different kinds, such as vertex shaders and pixel shaders.&lt;/p&gt;
+&lt;p&gt;One of the questions I had when I read about CUDA cores, was this: are they independent of
+the pixel and vertex shaders? Well, what happened was that GPUs evolved to have an array a
+processing cores that could be used as pixel or vertex shaders. Then, the idea of using
+these cores for general-purpose computing started to emerge. This was the beginning of
+GPGPU. So the answer to my question is that CUDA cores are the same as pixel and vertex
+shaders, but when those cores are used for general-purpose computing instead of shaders.&lt;/p&gt;
+&lt;p&gt;When the idea of using GPUs for general-purpose was proposed, one of the limitations was
+that the memory addressing was very limited. The first GPUs were designed to work with
+textures and frame buffers, which have a very specific memory access pattern. In
+particular, pixel shaders could not access memory randomly. This was a major limitation
+for general-purpose computing, which requires random access to memory. When NVIDIA
+introduced random load and store instructions in the Tesla architecture, it was a major
+step forward for GPGPU.&lt;/p&gt;</content><category term="GPGPU, CUDA, Nvidia, GPU"></category><category term="GPGPU"></category><category term="CUDA"></category><category term="Nvidia"></category><category term="GPU"></category></entry></feed>

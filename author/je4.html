@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../author/je4.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Posts by J.E.:</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../llamafile-the-easiest-way-to-try-llms-locally.html#llamafile-the-easiest-way-to-try-llms-locally">Llamafile: the easiest way to try LLMs locally</a></h2>
+    <p>
+      Posted on Mon 01 January 2024 in <a href="../category/ai-llm.html">AI, LLM</a>
+
+          &#8226; Tagged with
+              <a href="../tag/ai.html">AI</a>,              <a href="../tag/llm.html">LLM</a>
+    </p>
+  </header>
+  <div>
+      <div><p>From my previous post about <a href="https://jentrialgo.github.io/projects-to-test-ai-chat-bots-locally.html#projects-to-test-ai-chat-bots-locally">projects to test AI chat bots
+locally</a>,
+the field has not been standing still.</p>
+<p>I've found that the easiest way to try LLMs locally is to use
+<a href="https://github.com/Mozilla-Ocho/llamafile">llamafile</a>: download a file, run it
+ and that's it.</p>
+<p>I've also tried <a href="https://lmstudio.ai/">LM studio</a>, which is more powerful, but
+it's also more complicated to use.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../uninstalling-windows-apps-that-seem-not-to-be-installed.html#uninstalling-windows-apps-that-seem-not-to-be-installed">Uninstalling Windows Apps that seem not to be installed</a></h2>
+    <p>
+      Posted on Mon 01 January 2024 in <a href="../category/windows.html">Windows</a>
+
+          &#8226; Tagged with
+              <a href="../tag/windows.html">Windows</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I found with <a href="https://diskanalyzer.com/">WizTree</a> that there are some apps in
+<code>C:\Program Files\WindowsApps</code> that seem not to be installed for my user, and
+I'm the only user on my computer. Examples are games like Candy Crush and Disney
+Magic Kingdoms. I found a solution to uninstall them in the <a href="https://answers.microsoft.com/en-us/windows/forum/all/unnecessary-apps-in-cprogram-fileswindowsapps/43f4552a-0445-4878-9ce3-8b7a4f45fe6a?page=2">following
+thread</a>.</p>
+<p>Basically, you have to start PowerShell as administrator and run the following
+command:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-AppxPackage</span> <span class="n">-allusers</span>  <span class="p">*</span><span class="n">disney</span><span class="p">*</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">Name</span><span class="p">,</span> <span class="n">PackageFullName</span>
+<span class="nb">Get-AppxPackage</span> <span class="n">-allusers</span>  <span class="p">*</span><span class="n">disney</span><span class="p">*</span> <span class="p">|</span> <span class="nb">Remove-AppxPackage</span> <span class="n">-allusers</span>
+</code></pre></div>
+
+<p>The first command lists all apps that contain the string <code>disney</code> in their name.
+The second command removes all apps that contain the string <code>disney</code> in their
+name. You can also use <code>*candy*</code> to remove Candy Crush and so on.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../serving-javascript-with-pythons-httpserver.html#serving-javascript-with-pythons-httpserver">Serving JavaScript with Python's http.server</a></h2>
+    <p>
+      Posted on Wed 19 July 2023 in <a href="../category/python-javascript-web.html">Python, JavaScript, Web</a>
+
+          &#8226; Tagged with
+              <a href="../tag/python.html">Python</a>,              <a href="../tag/javascript.html">JavaScript</a>,              <a href="../tag/web.html">Web</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I was trying to serve a JavaScript file with Python's http.server module, but I was getting
+this error:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">Loading</span><span class="w"> </span><span class="nx">module</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">“</span><span class="nx">http</span><span class="p">:</span><span class="c1">//localhost:9876/main.js” was blocked because of a disallowed MIME type (“text/plain”).</span>
+</code></pre></div>
+
+<p>I saw in <a href="https://stackoverflow.com/a/63167571/936580">this StackOverflow answer</a> that I
+needed to change the MIME type for JavaScript files. I'm using Windows, so I checked the
+key <code>HKEY_CLASSES_ROOT\.js</code> in RegEdit, and I found that it had this value:</p>
+<div class="highlight"><pre><span></span><code>(Default)     JSFile
+ContentType   text/plain
+PerceivedType text
+</code></pre></div>
+
+<p>I changed the <code>ContentType</code> to <code>application/javascript</code>, and now my JavaScript files are
+served with the correct MIME type.</p>
+<p>I'm not sure why the MIME type was set to <code>text/plain</code> in the first place. I'm guessing
+that it was set by a program that I installed, but I don't know which one. I'm also not
+sure if changing the MIME type will cause any problems with other programs.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../pylance-and-mypy-cannot-find-editable-local-imports.html#pylance-and-mypy-cannot-find-editable-local-imports">Pylance and mypy cannot find editable local imports</a></h2>
+    <p>
+      Posted on Thu 01 June 2023 in <a href="../category/pylance-mypy-python.html">Pylance, Mypy, Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/mypy.html">Mypy</a>,              <a href="../tag/python.html">Python</a>
+    </p>
+  </header>
+  <div>
+      <div><p>The other day, I wrote <a href="../pylance-cannot-find-editable-local-import.html">a post</a>
+about how I fixed a problem with Pylance not finding a local import. It worked, but now
+mypy was complaining about the same import.</p>
+<p>The solution was installing the package in compat mode with:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--config-settings<span class="w"> </span><span class="nv">editable_mode</span><span class="o">=</span>compat
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../reading-units-from-a-pickle-file-with-pint.html#reading-units-from-a-pickle-file-with-pint">Reading units from a pickle file with Pint</a></h2>
+    <p>
+      Posted on Tue 30 May 2023 in <a href="../category/pylance-python-pint.html">Pylance, Python, Pint</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/python.html">Python</a>,              <a href="../tag/pint.html">Pint</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I have a Python package called cloudmodel that uses Pint to define units and adds some to
+the default registry. When I read a pickle file that use these units, I get an error:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">.</span><span class="n">errors</span><span class="p">.</span><span class="nl">UndefinedUnitError:</span><span class="w"> </span><span class="p">&#39;</span><span class="n">usd</span><span class="p">&#39;</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">defined</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="n">registry</span>
+</code></pre></div>
+
+<p>The way to fix it is to set the application registry to the one used by cloudmodel:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cloudmodel.unified.units</span> <span class="kn">import</span> <span class="n">ureg</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">set_application_registry</span>
+
+<span class="n">set_application_registry</span><span class="p">(</span><span class="n">ureg</span><span class="p">)</span>
+</code></pre></div></div>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="../author/je5.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+    <a class="btn float-right" href="../author/je3.html">
+      Newer Posts <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>
