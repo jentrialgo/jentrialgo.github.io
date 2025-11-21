@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Pylance, Python</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/pylance-python.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2023-05-27T08:00:00+02:00</updated><entry><title>Pylance cannot find editable local import</title><link href="https://jentrialgo.github.io/pylance-cannot-find-editable-local-import.html" rel="alternate"></link><published>2023-05-27T08:00:00+02:00</published><updated>2023-05-27T08:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2023-05-27:/pylance-cannot-find-editable-local-import.html</id><content type="html">&lt;p&gt;I had a problem with Pylance not finding a local import. I had installed the package in
+editable mode with &lt;code&gt;pip install -e .&lt;/code&gt; and it was working fine in the terminal, but Pylance
+was not able to find it.&lt;/p&gt;
+&lt;p&gt;The solution was installing the package in strict mode with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-e&lt;span class="w"&gt; &lt;/span&gt;.&lt;span class="w"&gt; &lt;/span&gt;--config-settings&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;editable_mode&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;strict
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I got there from &lt;a href="https://github.com/microsoft/pylance-release/blob/main/TROUBLESHOOTING.md#editable-install-modules-not-found"&gt;this troubleshooting
+page&lt;/a&gt;
+and &lt;a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs"&gt;this
+explanation&lt;/a&gt;
+in the Setuptools documentation.&lt;/p&gt;</content><category term="Pylance, Python"></category><category term="Pylance"></category><category term="Python"></category></entry></feed>

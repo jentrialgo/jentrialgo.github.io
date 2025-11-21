@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../category/time-series-prediction-darts.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Category Time series prediction, darts</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../computing-the-mase-for-historical_forecasts-in-darts.html#computing-the-mase-for-historical_forecasts-in-darts">Computing the MASE for historical_forecasts in darts</a></h2>
+    <p>
+      Posted on Thu 11 May 2023 in <a href="../category/time-series-prediction-darts.html">Time series prediction, darts</a>
+
+          &#8226; Tagged with
+              <a href="../tag/time-series-prediction.html">Time series prediction</a>,              <a href="../tag/darts.html">darts</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I haven't found any example online on how to compute the MASE (Mean Absolute
+Scaled Error) for historical forecasts in
+<a href="https://unit8co.github.io/darts/">darts</a>, so I thought I'd share this example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">darts</span> <span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span> <span class="nn">darts.models</span> <span class="kn">import</span> <span class="n">NaiveSeasonal</span>
+<span class="kn">from</span> <span class="nn">darts.metrics</span> <span class="kn">import</span> <span class="n">mase</span>
+
+<span class="n">my_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+<span class="n">my_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">my_data</span><span class="p">)</span>
+<span class="n">my_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">my_np</span><span class="p">)</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">NaiveSeasonal</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">my_forecast</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">historical_forecasts</span><span class="p">(</span><span class="n">series</span><span class="o">=</span><span class="n">my_ts</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">my_mase</span> <span class="o">=</span> <span class="n">mase</span><span class="p">(</span><span class="n">actual_series</span><span class="o">=</span><span class="n">my_ts</span><span class="p">,</span> <span class="n">pred_series</span><span class="o">=</span><span class="n">my_forecast</span><span class="p">,</span> <span class="n">insample</span><span class="o">=</span><span class="n">my_ts</span><span class="p">[:</span><span class="n">start</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;my_mase: </span><span class="si">{</span><span class="n">my_mase</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">my_ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+<span class="n">my_forecast</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;historical_forecasts&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Notice that the <code>insample</code> parameter is set to the original time series up to
+the start of the historical forecast.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

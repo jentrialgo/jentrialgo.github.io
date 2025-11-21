@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/dash.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag Dash</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../upgrading-to-dash-20.html#upgrading-to-dash-20">Upgrading to dash 2.0</a></h2>
+    <p>
+      Posted on Tue 05 October 2021 in <a href="../category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/python.html">Python</a>,              <a href="../tag/dash.html">Dash</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I had some dashboards built in Python with
+<a href="https://github.com/plotly/dash">Dash</a>. They were using version 1.13.4 and I
+updated it to version 2.0.0. In addition to converting the imports, as explained
+in the <a href="https://dash.plotly.com/dash-2-0-migration">migration guide</a>, I also
+had to change state variables because I was getting the error:</p>
+<div class="highlight"><pre><span></span><code>ValueError: The state keyword argument may not be provided without the input keyword argument
+</code></pre></div>
+
+<p>I didn't understand the explanation in the migration guide. After reading the
+<a href="https://dash.plotly.com/basic-callbacks">new documentation about callbacks</a>,
+I've found that I had to change my <code>app_callbacks</code>. Previously, I had something
+like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;wl-plot&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;src&#39;</span><span class="p">),</span>
+    <span class="p">[</span>
+        <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;sol-select&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+        <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;button-apply&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">state</span><span class="o">=</span>
+    <span class="p">[</span>
+        <span class="n">State</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;base-dir&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>And I had to change it to this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;wl-plot&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;src&#39;</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;sol-select&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;button-apply&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+    <span class="n">State</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;base-dir&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>So, basically, now you only have a list of <code>Output</code>, <code>Input</code> and <code>State</code>
+instances and you don need the <code>state=...</code>.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

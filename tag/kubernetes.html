@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/kubernetes.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag Kubernetes</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../gpu-sharing.html#gpu-sharing">GPU sharing</a></h2>
+    <p>
+      Posted on Fri 05 April 2024 in <a href="../category/nvidia-gpu-kubernetes.html">Nvidia, GPU, Kubernetes</a>
+
+          &#8226; Tagged with
+              <a href="../tag/nvidia.html">Nvidia</a>,              <a href="../tag/gpu.html">GPU</a>,              <a href="../tag/kubernetes.html">Kubernetes</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've found this <a href="https://developer.nvidia.com/blog/improving-gpu-utilization-in-kubernetes/">interesting post from 2022 by Nvidia about GPU sharing in
+Kubernetes</a>.</p>
+<p>The main GPU sharing technologies can be summarized in this table:</p>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Description</th>
+<th>MicroArchitecture</th>
+<th>CUDA Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CUDA Streams</strong></td>
+<td>Allows concurrent operations within a single CUDA context using software abstraction.</td>
+<td>Pascal and later</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>Time-Slicing</strong></td>
+<td>Oversubscription strategy using the GPU's time-slicing scheduler.</td>
+<td>Pascal and later</td>
+<td>11.1 (R455+ drivers)</td>
+</tr>
+<tr>
+<td><strong>CUDA MPS</strong></td>
+<td>MPS (Multi-Process Service) enables concurrent processing of CUDA kernels from different processes, typically MPI jobs.</td>
+<td>Not specified</td>
+<td>11.4+</td>
+</tr>
+<tr>
+<td><strong>MIG</strong></td>
+<td>MIG (Multi-Instance GPU) is a secure partitioning of GPUs into separate instances for dedicated resources.</td>
+<td>Ampere Architecture</td>
+<td>Not specified</td>
+</tr>
+<tr>
+<td><strong>NVIDIA vGPU</strong></td>
+<td>Provides VMs with simultaneous, direct access to a single physical GPU.</td>
+<td>Compatible with MIG-supported GPUs</td>
+<td>Not specified</td>
+</tr>
+</tbody>
+</table>
+<p>The post also explains how GPUs are advertised as schedulable resources in Kubernetes with
+the device plugin framework, but it is a integer-based resource, so it does not allow for
+oversuscription. They describe a way of achieving this with time-slicing APIs.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../using-ipvs-in-kube-proxy-with-eksctl.html#using-ipvs-in-kube-proxy-with-eksctl">Using IPVS in kube-proxy with eksctl</a></h2>
+    <p>
+      Posted on Mon 20 June 2022 in <a href="../category/kubernetes-eksctl-kube-proxy.html">kubernetes, eksctl, kube-proxy</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">kubernetes</a>,              <a href="../tag/eksctl.html">eksctl</a>,              <a href="../tag/kube-proxy.html">kube-proxy</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I have a kubernetes cluster launched with <code>eksctl</code>. I can get the configuration
+of <code>kube-proxy</code> with:</p>
+<div class="highlight"><pre><span></span><code>kubectl edit configmap kube-proxy-config -n kube-system
+</code></pre></div>
+
+<p>I see that the default configuration uses the <code>iptables</code> mode. In order to
+change it, the <code>mode</code> parameter has to be changed to <code>ipvs</code> and the scheduler
+parameter in the <code>ipvs</code> section, which is initially empty, has to be assigned one
+of <a href="https://kubernetes.io/blog/2018/07/09/ipvs-based-in-cluster-load-balancing-deep-dive/#parameter-changes">these
+policies</a>:</p>
+<ul>
+<li>rr: round-robin</li>
+<li>lc: least connection</li>
+<li>dh: destination hashing</li>
+<li>sh: source hashing</li>
+<li>sed: shortest expected delay</li>
+<li>nq: never queue</li>
+</ul>
+<p>Notice that the corresponding kernel modules must be present in the working
+node. You can connect with ssh to the node and check with modules are loaded
+with:</p>
+<div class="highlight"><pre><span></span><code>lsmod | grep ip_vs
+</code></pre></div>
+
+<p>In order to apply the configuration, kube-proxy has to be restarted with this
+command:</p>
+<div class="highlight"><pre><span></span><code>kubectl rollout restart ds kube-proxy -n kube-system
+</code></pre></div>
+
+<p>I get this:</p>
+<div class="highlight"><pre><span></span><code>ip_vs_sh               16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs                 176128  6 ip_vs_rr,ip_vs_sh,ip_vs_wrr
+nf_conntrack          163840  8 xt_conntrack,nf_nat,xt_state,xt_nat,nf_conntrack_netlink,xt_connmark,xt_MASQUERADE,ip_vs
+nf_defrag_ipv6         24576  2 nf_conntrack,ip_vs
+</code></pre></div>
+
+<p>This means that the modules …</p></div>
+        <br>
+        <a class="btn"
+           href="../using-ipvs-in-kube-proxy-with-eksctl.html#using-ipvs-in-kube-proxy-with-eksctl">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html#pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl">Pinning CPUs in Kubernetes using full-pcpus-only with eksctl</a></h2>
+    <p>
+      Posted on Mon 16 May 2022 in <a href="../category/kubernetes-eksctl.html">kubernetes, eksctl</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">kubernetes</a>,              <a href="../tag/eksctl.html">eksctl</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I was trying to use the option <code>full-pcpus-only</code> with eksctl and I was not
+having luck. In the end, I was able to do it by using this <code>cluster.yaml</code>
+configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eksctl.io/v1alpha5</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterConfig</span>
+
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-Stokholm-Cluster</span>
+<span class="w">  </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eu-north-1</span>
+
+<span class="nt">nodeGroups</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ng-1</span>
+<span class="w">    </span><span class="nt">instanceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c5.4xlarge</span>
+<span class="w">    </span><span class="nt">desiredCapacity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">ssh</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">publicKeyPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/joaquin/k8s/joaquin-k8s-stockholm.pub</span>
+<span class="w">    </span><span class="nt">kubeletExtraConfig</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cpuManagerPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static</span>
+<span class="w">      </span><span class="nt">cpuManagerPolicyOptions</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">full-pcpus-only</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">      </span><span class="nt">kubeReserved</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300m&quot;</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300Mi&quot;</span>
+<span class="w">        </span><span class="nt">ephemeral-storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span>
+<span class="w">      </span><span class="nt">kubeReservedCgroup</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/kube-reserved&quot;</span>
+<span class="w">      </span><span class="nt">systemReserved</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300m&quot;</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300Mi&quot;</span>
+<span class="w">        </span><span class="nt">ephemeral-storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span>
+<span class="w">      </span><span class="nt">featureGates</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">CPUManager</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">CPUManagerPolicyOptions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>When my file had not the correct options, the problem I was seeing was that
+eksctl got stuck with the message:</p>
+<div class="highlight"><pre><span></span><code>waiting for at least 1 node(s) to become ready in &quot;ng-1&quot;
+</code></pre></div>
+
+<p>For debugging the errors, I connected by ssh to the EC2 instance that was
+created and I check the logs of the kubelet service with this command:</p>
+<div class="highlight"><pre><span></span><code>journalctl<span class="w"> </span>-u<span class="w"> </span>kubelet.service
+</code></pre></div>
+
+<p>In order to have the CPUs pinned to a physical CPU, I had to make the requests
+and the limits equal (both for CPU and memory …</p></div>
+        <br>
+        <a class="btn"
+           href="../pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl.html#pinning-cpus-in-kubernetes-using-full-pcpus-only-with-eksctl">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../reading-traces-from-a-file-in-k6.html#reading-traces-from-a-file-in-k6">Reading traces from a file in k6</a></h2>
+    <p>
+      Posted on Wed 24 November 2021 in <a href="../category/k6.html">k6</a>
+
+          &#8226; Tagged with
+              <a href="../tag/k6.html">k6</a>,              <a href="../tag/kubernetes.html">kubernetes</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I wanted to read a trace of requests per second I have in a file and use it as
+the injection pattern in k6. I could do it by reading the values into an array,
+which is then used as the stages in a ramping arrival rate excutor, like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/http&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">papaparse</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;https://jslib.k6.io/papaparse/5.1.1/index.js&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SharedArray</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/data&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">trace_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;PATH_TO_THE_TRACE_FILE&#39;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">SharedArray</span><span class="p">(</span><span class="s1">&#39;another data name&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">papaparse</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">open</span><span class="p">(</span><span class="nx">trace_file</span><span class="p">)).</span><span class="nx">data</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">stages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">trace</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">stages</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="nx">trace</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1s&quot;</span><span class="w"> </span><span class="p">})</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">discardResponseBodies</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">scenarios</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">contacts</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">executor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;ramping-arrival-rate&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">startRate</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">timeUnit</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1s&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">preAllocatedVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">50</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">maxVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">stages</span><span class="o">:</span><span class="w"> </span><span class="nx">stages</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://localhost:8555&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../integrating-prometheus-influxdb-and-grafana.html#integrating-prometheus-influxdb-and-grafana">Integrating Prometheus, InfluxDB and Grafana</a></h2>
+    <p>
+      Posted on Wed 29 September 2021 in <a href="../category/kubernetes.html">Kubernetes</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">Kubernetes</a>,              <a href="../tag/prometheus.html">Prometheus</a>,              <a href="../tag/telegraf.html">Telegraf</a>,              <a href="../tag/influxdb.html">InfluxDB</a>,              <a href="../tag/grafana.html">Grafana</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with <code>/metrics</code> and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.</p>
+<p>This would require moving the information from Prometheus to Influx DB.
+According to
+<a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/">this</a>,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be <code>Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana</code>.</p>
+<p>I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that <code>kubectl</code> is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.</p>
+<h2>Helm</h2>
+<p>We'are going to use Helm for installing all the components, so first we …</p></div>
+        <br>
+        <a class="btn"
+           href="../integrating-prometheus-influxdb-and-grafana.html#integrating-prometheus-influxdb-and-grafana">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

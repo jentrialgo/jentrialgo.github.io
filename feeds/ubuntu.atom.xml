@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Ubuntu</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/ubuntu.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2021-10-20T10:00:00+02:00</updated><entry><title>Configuring Ubuntu Server 20.04 LTS gateway</title><link href="https://jentrialgo.github.io/configuring-ubuntu-server-2004-lts-gateway.html" rel="alternate"></link><published>2021-10-20T10:00:00+02:00</published><updated>2021-10-20T10:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-10-20:/configuring-ubuntu-server-2004-lts-gateway.html</id><content type="html">&lt;p&gt;The current version of Ubuntu Server 20.04 LTS uses netplan in order to
+configure the network. If it doesn't use cloud-init to provision the network,
+the network configuration will be in a YAML file in &lt;code&gt;/etc/netplan&lt;/code&gt;. There you
+can change the network parameters, such as the default gateway if you have a
+fixed connection.&lt;/p&gt;
+&lt;p&gt;After changing them, run this command to apply them (remember
+that you may disconnect from the network, so don't run it from a remote
+connection!):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo&lt;span class="w"&gt; &lt;/span&gt;netplan&lt;span class="w"&gt; &lt;/span&gt;apply
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A more detailed explanation can be found in &lt;a href="https://linuxize.com/post/how-to-configure-static-ip-address-on-ubuntu-20-04/"&gt;this very helpful post at
+linuxize&lt;/a&gt;.&lt;/p&gt;</content><category term="Ubuntu"></category><category term="Ubuntu"></category></entry></feed>

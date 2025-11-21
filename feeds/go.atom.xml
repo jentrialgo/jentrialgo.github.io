@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - go</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/go.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2021-12-15T12:00:00+01:00</updated><entry><title>Error cannot use path@version syntax in GOPATH mode</title><link href="https://jentrialgo.github.io/error-cannot-use-pathversion-syntax-in-gopath-mode.html" rel="alternate"></link><published>2021-12-15T12:00:00+01:00</published><updated>2021-12-15T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-12-15:/error-cannot-use-pathversion-syntax-in-gopath-mode.html</id><content type="html">&lt;p&gt;I was trying to install xk6 using this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;go&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;go.k6.io/xk6/cmd/xk6@latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And I got this error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;package go.k6.io/xk6/cmd/xk6@latest: cannot use path@version syntax in GOPATH mode
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Although I found &lt;a href="https://stackoverflow.com/q/54415733"&gt;a question in Stack
+Overflow&lt;/a&gt; with that error, the given
+solutions didn't work for me. In the end, I learned that the message was caused
+because I was using an old version of Go: the &lt;code&gt;path@version&lt;/code&gt; was added in Go
+1.16 and I was using 1.15. Thus, the solution for my problem was updating Go.&lt;/p&gt;</content><category term="go"></category><category term="go"></category></entry></feed>

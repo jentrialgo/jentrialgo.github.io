@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="./theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="./static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="./index7.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content="."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="./">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="./">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="./">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="./reading-traces-from-a-file-in-k6.html#reading-traces-from-a-file-in-k6">Reading traces from a file in k6</a></h2>
+    <p>
+      Posted on Wed 24 November 2021 in <a href="./category/k6.html">k6</a>
+
+          &#8226; Tagged with
+              <a href="./tag/k6.html">k6</a>,              <a href="./tag/kubernetes.html">kubernetes</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I wanted to read a trace of requests per second I have in a file and use it as
+the injection pattern in k6. I could do it by reading the values into an array,
+which is then used as the stages in a ramping arrival rate excutor, like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/http&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">papaparse</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;https://jslib.k6.io/papaparse/5.1.1/index.js&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SharedArray</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;k6/data&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">trace_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;PATH_TO_THE_TRACE_FILE&#39;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">SharedArray</span><span class="p">(</span><span class="s1">&#39;another data name&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">papaparse</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">open</span><span class="p">(</span><span class="nx">trace_file</span><span class="p">)).</span><span class="nx">data</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">stages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">trace</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">stages</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"> </span><span class="nx">target</span><span class="o">:</span><span class="w"> </span><span class="nx">trace</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mf">0</span><span class="p">],</span><span class="w"> </span><span class="nx">duration</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1s&quot;</span><span class="w"> </span><span class="p">})</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">discardResponseBodies</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">scenarios</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">contacts</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">executor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;ramping-arrival-rate&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">startRate</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">timeUnit</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1s&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">preAllocatedVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">50</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">maxVUs</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">stages</span><span class="o">:</span><span class="w"> </span><span class="nx">stages</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://localhost:8555&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./configuring-ubuntu-server-2004-lts-gateway.html#configuring-ubuntu-server-2004-lts-gateway">Configuring Ubuntu Server 20.04 LTS gateway</a></h2>
+    <p>
+      Posted on Wed 20 October 2021 in <a href="./category/ubuntu.html">Ubuntu</a>
+
+          &#8226; Tagged with
+              <a href="./tag/ubuntu.html">Ubuntu</a>
+    </p>
+  </header>
+  <div>
+      <div><p>The current version of Ubuntu Server 20.04 LTS uses netplan in order to
+configure the network. If it doesn't use cloud-init to provision the network,
+the network configuration will be in a YAML file in <code>/etc/netplan</code>. There you
+can change the network parameters, such as the default gateway if you have a
+fixed connection.</p>
+<p>After changing them, run this command to apply them (remember
+that you may disconnect from the network, so don't run it from a remote
+connection!):</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>apply
+</code></pre></div>
+
+<p>A more detailed explanation can be found in <a href="https://linuxize.com/post/how-to-configure-static-ip-address-on-ubuntu-20-04/">this very helpful post at
+linuxize</a>.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./upgrading-to-dash-20.html#upgrading-to-dash-20">Upgrading to dash 2.0</a></h2>
+    <p>
+      Posted on Tue 05 October 2021 in <a href="./category/python.html">Python</a>
+
+          &#8226; Tagged with
+              <a href="./tag/python.html">Python</a>,              <a href="./tag/dash.html">Dash</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I had some dashboards built in Python with
+<a href="https://github.com/plotly/dash">Dash</a>. They were using version 1.13.4 and I
+updated it to version 2.0.0. In addition to converting the imports, as explained
+in the <a href="https://dash.plotly.com/dash-2-0-migration">migration guide</a>, I also
+had to change state variables because I was getting the error:</p>
+<div class="highlight"><pre><span></span><code>ValueError: The state keyword argument may not be provided without the input keyword argument
+</code></pre></div>
+
+<p>I didn't understand the explanation in the migration guide. After reading the
+<a href="https://dash.plotly.com/basic-callbacks">new documentation about callbacks</a>,
+I've found that I had to change my <code>app_callbacks</code>. Previously, I had something
+like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;wl-plot&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;src&#39;</span><span class="p">),</span>
+    <span class="p">[</span>
+        <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;sol-select&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+        <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;button-apply&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">state</span><span class="o">=</span>
+    <span class="p">[</span>
+        <span class="n">State</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;base-dir&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>And I had to change it to this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;wl-plot&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;src&#39;</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;sol-select&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;button-apply&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+    <span class="n">State</span><span class="p">(</span><span class="n">component_id</span><span class="o">=</span><span class="s1">&#39;base-dir&#39;</span><span class="p">,</span> <span class="n">component_property</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>So, basically, now you only have a list of <code>Output</code>, <code>Input</code> and <code>State</code>
+instances and you don need the <code>state=...</code>.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./meltdown-and-spectre-checker.html#meltdown-and-spectre-checker">Meltdown and spectre checker</a></h2>
+    <p>
+      Posted on Mon 04 October 2021 in <a href="./category/security.html">Security</a>
+
+          &#8226; Tagged with
+              <a href="./tag/meltdown.html">Meltdown</a>,              <a href="./tag/spectre.html">Spectre</a>,              <a href="./tag/security.html">Security</a>,              <a href="./tag/cpu-architecture.html">CPU Architecture</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've found <a href="https://github.com/speed47/spectre-meltdown-checker">this script</a> which is very handy to analyze if you Linux-based system is vulnerable to Spectre and Meltdown. I found this through <a href="https://www.youtube.com/watch?v=2gB9U1EcCss">this talk</a>.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="./changing-the-pelican-theme-to-flex.html#changing-the-pelican-theme-to-flex">Changing the Pelican theme to Flex</a></h2>
+    <p>
+      Posted on Thu 30 September 2021 in <a href="./category/blogging.html">Blogging</a>
+
+          &#8226; Tagged with
+              <a href="./tag/pelican.html">Pelican</a>,              <a href="./tag/github-pages.html">GitHub pages</a>,              <a href="./tag/blog.html">Blog</a>
+    </p>
+  </header>
+  <div>
+      <div><p>In <a href="./using-pelican-as-blogging-platform-for-github.html">a previous
+post</a> I
+explained how to use Pelican with GitHub pages but didn't explain how to change
+the theme. I've changed it now to use
+<a href="https://github.com/alexandrevicenzi/Flex">Flex</a> and it was harder than
+expected.</p>
+<p>Most of the guides I've found talked about cloning
+<a href="https://github.com/getpelican/pelican-themes">pelican-themes</a> in a folder on
+your system and changing the variable <code>THEME</code> to that folder. However, that
+doesn't work when you are using GitHub actions to build your site because it
+won't find that folder.</p>
+<p>My solution was cloning the theme I wanted, Flex, to a folder inside the root
+folder of the blog:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/alexandrevicenzi/Flex
+</code></pre></div>
+
+<p>Then I set in <code>pelicanconf.py</code> the variable <code>THEME</code> as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;Flex&#39;</span>
+</code></pre></div>
+
+<p>In order to make it work with GitHub actions, I had to add in the file
+<code>publi.sh</code>, before calling <code>pelican</code>, this line:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/alexandrevicenzi/Flex
+</code></pre></div>
+
+<p>After commiting and pushing, it worked.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="./index8.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+    <a class="btn float-right" href="./index6.html">
+      Newer Posts <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : ".",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

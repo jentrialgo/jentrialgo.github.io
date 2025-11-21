@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Operating Systems, Software Development</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/operating-systems-software-development.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-09-07T12:00:00+02:00</updated><entry><title>To build a new OS, or not to build a new OS?</title><link href="https://jentrialgo.github.io/to-build-a-new-os-or-not-to-build-a-new-os.html" rel="alternate"></link><published>2025-09-07T12:00:00+02:00</published><updated>2025-09-07T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-09-07:/to-build-a-new-os-or-not-to-build-a-new-os.html</id><summary type="html">&lt;h1&gt;To build a new OS, or not to build a new OS?&lt;/h1&gt;
+&lt;p&gt;There's a fascinating debate in the software world about whether it still makes sense to create a new general-purpose operating system from scratch.&lt;/p&gt;
+&lt;h3&gt;The Pragmatic View&lt;/h3&gt;
+&lt;p&gt;On one side, you have figures like John Carmack. In a &lt;a href="https://x.com/ID_AA_Carmack/status/1961172409920491849"&gt;recent discussion on X&lt;/a&gt;, he argued that building a new OS is often impractical. The cost, short lifespan, and developer burden rarely justify the effort, a lesson he learned from opposing Meta's custom XR OS.&lt;/p&gt;
+&lt;h3&gt;The Idealistic View&lt;/h3&gt;
+&lt;p&gt;On the other side is the spirit of the ultimate craftsman. This is captured perfectly in a joke by DHH during &lt;a href="https://www.youtube.com/watch?v=gcwzWzC7gUA&amp;amp;t=3478s"&gt;this presentation&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;"People who are really serious about software should make their own operating system."&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;He's riffing on a famous quote by Alan Kay about hardware, but the message is clear: the ultimate challenge for a software purist is to build the whole stack.&lt;/p&gt;
+&lt;h3&gt;A Middle Ground: Omarchy&lt;/h3&gt;
+&lt;p&gt;Interestingly, DHH's own work offers a third path. He hasn't built an entirely new OS. Instead, he created &lt;a href="https://omarchy.org/"&gt;Omarchy …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h1&gt;To build a new OS, or not to build a new OS?&lt;/h1&gt;
+&lt;p&gt;There's a fascinating debate in the software world about whether it still makes sense to create a new general-purpose operating system from scratch.&lt;/p&gt;
+&lt;h3&gt;The Pragmatic View&lt;/h3&gt;
+&lt;p&gt;On one side, you have figures like John Carmack. In a &lt;a href="https://x.com/ID_AA_Carmack/status/1961172409920491849"&gt;recent discussion on X&lt;/a&gt;, he argued that building a new OS is often impractical. The cost, short lifespan, and developer burden rarely justify the effort, a lesson he learned from opposing Meta's custom XR OS.&lt;/p&gt;
+&lt;h3&gt;The Idealistic View&lt;/h3&gt;
+&lt;p&gt;On the other side is the spirit of the ultimate craftsman. This is captured perfectly in a joke by DHH during &lt;a href="https://www.youtube.com/watch?v=gcwzWzC7gUA&amp;amp;t=3478s"&gt;this presentation&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;"People who are really serious about software should make their own operating system."&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;He's riffing on a famous quote by Alan Kay about hardware, but the message is clear: the ultimate challenge for a software purist is to build the whole stack.&lt;/p&gt;
+&lt;h3&gt;A Middle Ground: Omarchy&lt;/h3&gt;
+&lt;p&gt;Interestingly, DHH's own work offers a third path. He hasn't built an entirely new OS. Instead, he created &lt;a href="https://omarchy.org/"&gt;Omarchy&lt;/a&gt;, an "opinionated Arch + Hyprland Setup."&lt;/p&gt;
+&lt;p&gt;Omarchy is a customized version of Arch Linux, tailored for a keyboard-first, developer-focused workflow. It's a practical compromise: leveraging the stable foundation of Linux while building a bespoke user experience on top. It avoids reinventing the kernel but still achieves the goal of a perfectly tailored environment.&lt;/p&gt;
+&lt;h3&gt;The End of the OS Wars?&lt;/h3&gt;
+&lt;p&gt;This conversation raises a bigger question: have we reached the end of the line for general-purpose operating systems? For decades, the landscape has been dominated by two major families: &lt;strong&gt;Unix-likes&lt;/strong&gt; (now primarily Linux and macOS) and &lt;strong&gt;Windows&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The sheer scale of these ecosystems is staggering. They have decades of development, vast hardware support, and millions of applications. For any newcomer to compete, they wouldn't just need a better kernel; they'd need to replicate this entire universe. The network effect is so strong that it creates an almost insurmountable barrier to entry.&lt;/p&gt;
+&lt;p&gt;I'm with Carmack on this one. The practical challenges of building a new OS are immense, and the likelihood of widespread adoption is slim. The only way I see this changing is if some hardware company decides to break the mold for new hardware, using a modern language (Rust?) and bridging the gap with existing ecosystems by using AI. But, even then, the odds are against them.&lt;/p&gt;</content><category term="Operating Systems, Software Development"></category><category term="Operating Systems"></category><category term="Software Development"></category><category term="Linux"></category><category term="Omarchy"></category><category term="John Carmack"></category><category term="DHH"></category></entry></feed>

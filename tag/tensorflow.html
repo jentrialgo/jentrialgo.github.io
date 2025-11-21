@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/tensorflow.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag tensorflow</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../installing-tensorflow-serving-in-amazon-ec2-linux.html#installing-tensorflow-serving-in-amazon-ec2-linux">Installing Tensorflow Serving in Amazon EC2 Linux</a></h2>
+    <p>
+      Posted on Fri 11 November 2022 in <a href="../category/tensorflow-ec2.html">tensorflow, ec2</a>
+
+          &#8226; Tagged with
+              <a href="../tag/tensorflow.html">tensorflow</a>
+    </p>
+  </header>
+  <div>
+      <div><p>How to install and test Tensorflow Serving in a Amazon EC2 instance running
+Amazon EC2 Linux 2. We will use docker and we will serve a resnet image. These
+are the commands:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Install docker</span>
+sudo<span class="w"> </span>yum<span class="w"> </span>update
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>docker
+sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>docker<span class="w"> </span>ec2-user
+newgrp<span class="w"> </span>docker
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>docker.service
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>docker.service
+
+<span class="c1"># Prepare the resnet model</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>/tmp/resnet
+wget<span class="w"> </span>https://tfhub.dev/tensorflow/resnet_50/classification/1?tf-hub-format<span class="o">=</span>compressed<span class="w"> </span>-o<span class="w"> </span>resnet.tar.gz
+mv<span class="w"> </span><span class="m">1</span>?tf-hub-format<span class="o">=</span>compressed<span class="w"> </span>resnet.tar.gz
+mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/resnet/123
+tar<span class="w"> </span>xvfz<span class="w"> </span>resnet.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/resnet/123/
+
+<span class="c1"># Create and run a docker image with tensorflow serving using the resnet model</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>serving_base<span class="w"> </span>tensorflow/serving
+docker<span class="w"> </span>cp<span class="w"> </span>/tmp/resnet<span class="w"> </span>serving_base:/models/resnet
+docker<span class="w"> </span>commit<span class="w"> </span>--change<span class="w"> </span><span class="s2">&quot;ENV MODEL_NAME resnet&quot;</span><span class="w"> </span>serving_base<span class="w"> </span><span class="nv">$USER</span>/resnet_serving
+docker<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>serving_base
+docker<span class="w"> </span>rm<span class="w"> </span>serving_base
+docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8500</span>:8500<span class="w"> </span>-p<span class="w"> </span><span class="m">8501</span>:8501<span class="w"> </span>-t<span class="w"> </span><span class="nv">$USER</span>/resnet_serving<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p>To test that the serving works, you can run</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>git
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tensorflow/serving …</code></pre></div></div>
+        <br>
+        <a class="btn"
+           href="../installing-tensorflow-serving-in-amazon-ec2-linux.html#installing-tensorflow-serving-in-amazon-ec2-linux">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

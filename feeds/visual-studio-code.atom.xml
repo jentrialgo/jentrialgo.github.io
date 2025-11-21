@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Visual Studio Code</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/visual-studio-code.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2023-04-21T12:00:00+02:00</updated><entry><title>Visual Studio Code unable to connect</title><link href="https://jentrialgo.github.io/visual-studio-code-unable-to-connect.html" rel="alternate"></link><published>2023-04-21T12:00:00+02:00</published><updated>2023-04-21T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2023-04-21:/visual-studio-code-unable-to-connect.html</id><content type="html">&lt;p&gt;Some times, I get this error:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;Unable&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;to&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;connect&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;to&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;VS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Code&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;server&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;Error&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;request&lt;/span&gt;.
+&lt;span class="nv"&gt;Error&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;connect&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;ENOENT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;[...]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I always have to search for the solution, so I decided to write it down here.
+From &lt;a href="https://github.com/microsoft/vscode-remote-release/issues/6997"&gt;this
+issue&lt;/a&gt;, I found
+that running this solves the problem:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;VSCODE_IPC_HOOK_CLI=$(lsof | grep $USER | grep vscode-ipc | awk &amp;#39;{print $(NF-1)}&amp;#39; | head -n 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Visual Studio Code"></category><category term="Visual Studio Code"></category><category term="VS Code"></category></entry></feed>

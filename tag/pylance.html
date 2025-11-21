@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/pylance.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag Pylance</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../pylance-and-mypy-cannot-find-editable-local-imports.html#pylance-and-mypy-cannot-find-editable-local-imports">Pylance and mypy cannot find editable local imports</a></h2>
+    <p>
+      Posted on Thu 01 June 2023 in <a href="../category/pylance-mypy-python.html">Pylance, Mypy, Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/mypy.html">Mypy</a>,              <a href="../tag/python.html">Python</a>
+    </p>
+  </header>
+  <div>
+      <div><p>The other day, I wrote <a href="../pylance-cannot-find-editable-local-import.html">a post</a>
+about how I fixed a problem with Pylance not finding a local import. It worked, but now
+mypy was complaining about the same import.</p>
+<p>The solution was installing the package in compat mode with:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--config-settings<span class="w"> </span><span class="nv">editable_mode</span><span class="o">=</span>compat
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../reading-units-from-a-pickle-file-with-pint.html#reading-units-from-a-pickle-file-with-pint">Reading units from a pickle file with Pint</a></h2>
+    <p>
+      Posted on Tue 30 May 2023 in <a href="../category/pylance-python-pint.html">Pylance, Python, Pint</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/python.html">Python</a>,              <a href="../tag/pint.html">Pint</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I have a Python package called cloudmodel that uses Pint to define units and adds some to
+the default registry. When I read a pickle file that use these units, I get an error:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">.</span><span class="n">errors</span><span class="p">.</span><span class="nl">UndefinedUnitError:</span><span class="w"> </span><span class="p">&#39;</span><span class="n">usd</span><span class="p">&#39;</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">defined</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="n">registry</span>
+</code></pre></div>
+
+<p>The way to fix it is to set the application registry to the one used by cloudmodel:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cloudmodel.unified.units</span> <span class="kn">import</span> <span class="n">ureg</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">set_application_registry</span>
+
+<span class="n">set_application_registry</span><span class="p">(</span><span class="n">ureg</span><span class="p">)</span>
+</code></pre></div></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../pylance-cannot-find-editable-local-import.html#pylance-cannot-find-editable-local-import">Pylance cannot find editable local import</a></h2>
+    <p>
+      Posted on Sat 27 May 2023 in <a href="../category/pylance-python.html">Pylance, Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/python.html">Python</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I had a problem with Pylance not finding a local import. I had installed the package in
+editable mode with <code>pip install -e .</code> and it was working fine in the terminal, but Pylance
+was not able to find it.</p>
+<p>The solution was installing the package in strict mode with:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--config-settings<span class="w"> </span><span class="nv">editable_mode</span><span class="o">=</span>strict
+</code></pre></div>
+
+<p>I got there from <a href="https://github.com/microsoft/pylance-release/blob/main/TROUBLESHOOTING.md#editable-install-modules-not-found">this troubleshooting
+page</a>
+and <a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs">this
+explanation</a>
+in the Setuptools documentation.</p></div>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

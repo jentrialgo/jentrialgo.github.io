@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Blogging</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/blogging.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2021-09-30T22:20:00+02:00</updated><entry><title>Changing the Pelican theme to Flex</title><link href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html" rel="alternate"></link><published>2021-09-30T22:20:00+02:00</published><updated>2021-09-30T22:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-30:/changing-the-pelican-theme-to-flex.html</id><content type="html">&lt;p&gt;In &lt;a href="https://jentrialgo.github.io/using-pelican-as-blogging-platform-for-github.html"&gt;a previous
+post&lt;/a&gt; I
+explained how to use Pelican with GitHub pages but didn't explain how to change
+the theme. I've changed it now to use
+&lt;a href="https://github.com/alexandrevicenzi/Flex"&gt;Flex&lt;/a&gt; and it was harder than
+expected.&lt;/p&gt;
+&lt;p&gt;Most of the guides I've found talked about cloning
+&lt;a href="https://github.com/getpelican/pelican-themes"&gt;pelican-themes&lt;/a&gt; in a folder on
+your system and changing the variable &lt;code&gt;THEME&lt;/code&gt; to that folder. However, that
+doesn't work when you are using GitHub actions to build your site because it
+won't find that folder.&lt;/p&gt;
+&lt;p&gt;My solution was cloning the theme I wanted, Flex, to a folder inside the root
+folder of the blog:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;clone&lt;span class="w"&gt; &lt;/span&gt;https://github.com/alexandrevicenzi/Flex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then I set in &lt;code&gt;pelicanconf.py&lt;/code&gt; the variable &lt;code&gt;THEME&lt;/code&gt; as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Flex&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to make it work with GitHub actions, I had to add in the file
+&lt;code&gt;publi.sh&lt;/code&gt;, before calling &lt;code&gt;pelican&lt;/code&gt;, this line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;clone&lt;span class="w"&gt; &lt;/span&gt;https://github.com/alexandrevicenzi/Flex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After commiting and pushing, it worked.&lt;/p&gt;</content><category term="Blogging"></category><category term="Pelican"></category><category term="GitHub pages"></category><category term="Blog"></category></entry><entry><title>Using Pelican as blogging platform for GitHub</title><link href="https://jentrialgo.github.io/using-pelican-as-blogging-platform-for-github.html" rel="alternate"></link><published>2021-09-28T22:20:00+02:00</published><updated>2021-09-28T22:20:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2021-09-28:/using-pelican-as-blogging-platform-for-github.html</id><summary type="html">&lt;p&gt;So I guess my first blog should be about setting up this blog.&lt;/p&gt;
+&lt;p&gt;I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;this post about using
+Pelican&lt;/a&gt;, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.&lt;/p&gt;
+&lt;p&gt;Create a directory for the blog, an environment and activate it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;blog
+&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;blog
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;venv&lt;span class="w"&gt; &lt;/span&gt;.venv
+&lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Install pelican with one of these options:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# This option only allows reStructuredText&lt;/span&gt;
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;pelican
+
+&lt;span class="c1"&gt;# This allows markdown and reStructuredText&lt;/span&gt;
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;pelican[markdown]&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create the basic structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pelican-quickstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I'll leave the standard theme. Read in the &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;mentioned
+post&lt;/a&gt; if you want to
+change the theme.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I've created a new post about &lt;a href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html"&gt;how to change the style to
+Flex&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To test locally the blog, generate the site with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make&lt;span class="w"&gt; &lt;/span&gt;html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now start a web server with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make&lt;span class="w"&gt; &lt;/span&gt;serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You …&lt;/p&gt;</summary><content type="html">&lt;p&gt;So I guess my first blog should be about setting up this blog.&lt;/p&gt;
+&lt;p&gt;I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;this post about using
+Pelican&lt;/a&gt;, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.&lt;/p&gt;
+&lt;p&gt;Create a directory for the blog, an environment and activate it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;blog
+&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;blog
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;venv&lt;span class="w"&gt; &lt;/span&gt;.venv
+&lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Install pelican with one of these options:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# This option only allows reStructuredText&lt;/span&gt;
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;pelican
+
+&lt;span class="c1"&gt;# This allows markdown and reStructuredText&lt;/span&gt;
+python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;pelican[markdown]&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create the basic structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pelican-quickstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I'll leave the standard theme. Read in the &lt;a href="https://avinal.space/posts/development/twilight-blog.html"&gt;mentioned
+post&lt;/a&gt; if you want to
+change the theme.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I've created a new post about &lt;a href="https://jentrialgo.github.io/changing-the-pelican-theme-to-flex.html"&gt;how to change the style to
+Flex&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To test locally the blog, generate the site with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make&lt;span class="w"&gt; &lt;/span&gt;html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now start a web server with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;make&lt;span class="w"&gt; &lt;/span&gt;serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see the default blog in &lt;a href="http://localhost:8000"&gt;http://localhost:8000&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In order to add content, you should create your files in the &lt;code&gt;content&lt;/code&gt;
+directory. For instance, you can create an &lt;code&gt;about.md&lt;/code&gt; file with this content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Title: About
+Date: 2021-09-28 20:20
+Category: About
+
+This is just a blog.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; This type of pages which are not articles should usually go in a
+folder called &lt;code&gt;pages&lt;/code&gt; inside the &lt;code&gt;content&lt;/code&gt; folder. See the &lt;a href="https://docs.getpelican.com/en/3.6.3/content.html#pages"&gt;documentation
+about them&lt;/a&gt; in the
+Pelican docs.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;You can make the html again and serve it to test it locally, but the idea is
+using GitHub actions so that when this code is push to a repository, the
+website is generated.&lt;/p&gt;
+&lt;p&gt;Create a file called &lt;code&gt;publi.sh&lt;/code&gt; with this content (change the email and the user
+name):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="ch"&gt;#! /bin/bash&lt;/span&gt;
+
+&lt;span class="c1"&gt;# install tools&lt;/span&gt;
+sudo&lt;span class="w"&gt; &lt;/span&gt;apt-get&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-y&lt;span class="w"&gt; &lt;/span&gt;git&lt;span class="w"&gt; &lt;/span&gt;make&lt;span class="w"&gt; &lt;/span&gt;python3&lt;span class="w"&gt; &lt;/span&gt;python3-pip&lt;span class="w"&gt; &lt;/span&gt;python3-setuptools&lt;span class="w"&gt; &lt;/span&gt;python3-wheel
+
+&lt;span class="c1"&gt;# setup github config&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;user.email&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;YOUR_E_MAIL&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# Change this&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;user.name&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;YOUR_USERNAME&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;# Change this&lt;/span&gt;
+
+&lt;span class="c1"&gt;# install dependencies&lt;/span&gt;
+sudo&lt;span class="w"&gt; &lt;/span&gt;pip3&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-r&lt;span class="w"&gt; &lt;/span&gt;requirements.txt
+
+&lt;span class="c1"&gt;# pelican commands - install theme put your theme in themes directory&lt;/span&gt;
+&lt;span class="c1"&gt;#pelican-themes --install themes/theme-name&lt;/span&gt;
+pelican
+
+&lt;span class="c1"&gt;# publish to github pages&lt;/span&gt;
+ghp-import&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Generate Pelican site&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-b&lt;span class="w"&gt; &lt;/span&gt;gh-pages&lt;span class="w"&gt; &lt;/span&gt;output
+git&lt;span class="w"&gt; &lt;/span&gt;push&lt;span class="w"&gt; &lt;/span&gt;-f&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;gh-pages
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that here I had to make changes from the instructions in the original
+post. Another piece of information I found missing in the original post is that
+you have to create the &lt;code&gt;requirements.txt&lt;/code&gt; file with this command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip&lt;span class="w"&gt; &lt;/span&gt;freeze&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Add and &lt;code&gt;.ignore&lt;/code&gt; file with this content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;*~&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DS_Store&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;swp&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;out&lt;/span&gt;
+&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;cod&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;output&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, create a repository in GitHub with the name &lt;code&gt;USERNAME.github.io&lt;/code&gt;, using
+your user name instead of &lt;code&gt;USERNAME&lt;/code&gt;. Follow the instructions in GitHub to
+import the files in your directory as the content of the repository. Basically,
+it should be something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Create repository&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;init&lt;span class="w"&gt; &lt;/span&gt;-b&lt;span class="w"&gt; &lt;/span&gt;main
+
+&lt;span class="c1"&gt;# Add and commit current files&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;.
+git&lt;span class="w"&gt; &lt;/span&gt;commit&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Initial structure&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Add the GitHub repo as a remote&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;pull&lt;span class="w"&gt; &lt;/span&gt;--set-upstream&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;main
+
+&lt;span class="c1"&gt;# Push the files to the remote&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;push&lt;span class="w"&gt; &lt;/span&gt;-u&lt;span class="w"&gt; &lt;/span&gt;origin&lt;span class="w"&gt; &lt;/span&gt;main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Go to the GitHub page of the repository and then to the &lt;code&gt;Actions&lt;/code&gt; section and
+click on &lt;code&gt;Set up a workflow yourself&lt;/code&gt;. Then, paste this code and commit it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Publish Blog&lt;/span&gt;
+&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;push&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;main&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;pull_request&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;main&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;
+
+&lt;span class="nt"&gt;jobs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;ubuntu-latest&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;actions/checkout@v2&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;set up permissions&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;chmod +x publi.sh&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Run a multi-line script&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;./publi.sh&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, pull the changes to your local repo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;pull
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the GitHub interface, you should be able to see in the branch &lt;code&gt;gh-pages&lt;/code&gt; the
+content of your blog, i.e., the HTML, CSS and javascript files that you also
+obtain in your local &lt;code&gt;output&lt;/code&gt; directory when you run &lt;code&gt;make html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Go to the settings in your GitHub repo, select the &lt;code&gt;Pages&lt;/code&gt; option in the menu
+and in the &lt;code&gt;Source&lt;/code&gt; section, indicate that your source is the branch &lt;code&gt;gh-pages&lt;/code&gt;.
+Check that it is using the &lt;code&gt;root&lt;/code&gt; directory of this branch.&lt;/p&gt;
+&lt;p&gt;If everything is correct, you should be able to see your blog by going to
+&lt;code&gt;USERNAME.github.io&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;If you want to add new content, create a new file in the &lt;code&gt;content&lt;/code&gt; folder, be
+sure to use the basic fields required for pelican (you can see them in the
+example &lt;code&gt;about&lt;/code&gt; post above), add and commit the file, and (after testing locally
+if you want) push the files to the remote directory. After the GitHub action has
+finished you should be able to see your new post in your GitHub page.&lt;/p&gt;
+&lt;p&gt;If you don't see it, check your GitHub actions page, where you can find
+errors that are generated after each push.&lt;/p&gt;</content><category term="Blogging"></category><category term="Pelican"></category><category term="GitHub pages"></category><category term="Blog"></category></entry></feed>

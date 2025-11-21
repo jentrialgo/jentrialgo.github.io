@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Windows</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/windows.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-01-01T14:00:00+01:00</updated><entry><title>Uninstalling Windows Apps that seem not to be installed</title><link href="https://jentrialgo.github.io/uninstalling-windows-apps-that-seem-not-to-be-installed.html" rel="alternate"></link><published>2024-01-01T14:00:00+01:00</published><updated>2024-01-01T14:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-01-01:/uninstalling-windows-apps-that-seem-not-to-be-installed.html</id><content type="html">&lt;p&gt;I found with &lt;a href="https://diskanalyzer.com/"&gt;WizTree&lt;/a&gt; that there are some apps in
+&lt;code&gt;C:\Program Files\WindowsApps&lt;/code&gt; that seem not to be installed for my user, and
+I'm the only user on my computer. Examples are games like Candy Crush and Disney
+Magic Kingdoms. I found a solution to uninstall them in the &lt;a href="https://answers.microsoft.com/en-us/windows/forum/all/unnecessary-apps-in-cprogram-fileswindowsapps/43f4552a-0445-4878-9ce3-8b7a4f45fe6a?page=2"&gt;following
+thread&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Basically, you have to start PowerShell as administrator and run the following
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;Get-AppxPackage&lt;/span&gt; &lt;span class="n"&gt;-allusers&lt;/span&gt;  &lt;span class="p"&gt;*&lt;/span&gt;&lt;span class="n"&gt;disney&lt;/span&gt;&lt;span class="p"&gt;*&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Select &lt;/span&gt;&lt;span class="n"&gt;Name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;PackageFullName&lt;/span&gt;
+&lt;span class="nb"&gt;Get-AppxPackage&lt;/span&gt; &lt;span class="n"&gt;-allusers&lt;/span&gt;  &lt;span class="p"&gt;*&lt;/span&gt;&lt;span class="n"&gt;disney&lt;/span&gt;&lt;span class="p"&gt;*&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="nb"&gt;Remove-AppxPackage&lt;/span&gt; &lt;span class="n"&gt;-allusers&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The first command lists all apps that contain the string &lt;code&gt;disney&lt;/code&gt; in their name.
+The second command removes all apps that contain the string &lt;code&gt;disney&lt;/code&gt; in their
+name. You can also use &lt;code&gt;*candy*&lt;/code&gt; to remove Candy Crush and so on.&lt;/p&gt;</content><category term="Windows"></category><category term="Windows"></category></entry></feed>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - tensorflow, ec2</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/tensorflow-ec2.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2022-11-11T18:00:00+01:00</updated><entry><title>Installing Tensorflow Serving in Amazon EC2 Linux</title><link href="https://jentrialgo.github.io/installing-tensorflow-serving-in-amazon-ec2-linux.html" rel="alternate"></link><published>2022-11-11T18:00:00+01:00</published><updated>2022-11-11T18:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2022-11-11:/installing-tensorflow-serving-in-amazon-ec2-linux.html</id><summary type="html">&lt;p&gt;How to install and test Tensorflow Serving in a Amazon EC2 instance running
+Amazon EC2 Linux 2. We will use docker and we will serve a resnet image. These
+are the commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Install docker&lt;/span&gt;
+sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;update
+sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;docker
+sudo&lt;span class="w"&gt; &lt;/span&gt;usermod&lt;span class="w"&gt; &lt;/span&gt;-a&lt;span class="w"&gt; &lt;/span&gt;-G&lt;span class="w"&gt; &lt;/span&gt;docker&lt;span class="w"&gt; &lt;/span&gt;ec2-user
+newgrp&lt;span class="w"&gt; &lt;/span&gt;docker
+sudo&lt;span class="w"&gt; &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;enable&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;docker.service
+sudo&lt;span class="w"&gt; &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;start&lt;span class="w"&gt; &lt;/span&gt;docker.service
+
+&lt;span class="c1"&gt;# Prepare the resnet model&lt;/span&gt;
+rm&lt;span class="w"&gt; &lt;/span&gt;-rf&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet
+wget&lt;span class="w"&gt; &lt;/span&gt;https://tfhub.dev/tensorflow/resnet_50/classification/1?tf-hub-format&lt;span class="o"&gt;=&lt;/span&gt;compressed&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz
+mv&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;?tf-hub-format&lt;span class="o"&gt;=&lt;/span&gt;compressed&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz
+mkdir&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet/123
+tar&lt;span class="w"&gt; &lt;/span&gt;xvfz&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz&lt;span class="w"&gt; &lt;/span&gt;-C&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet/123/
+
+&lt;span class="c1"&gt;# Create and run a docker image with tensorflow serving using the resnet model&lt;/span&gt;
+docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;-d&lt;span class="w"&gt; &lt;/span&gt;--name&lt;span class="w"&gt; &lt;/span&gt;serving_base&lt;span class="w"&gt; &lt;/span&gt;tensorflow/serving
+docker&lt;span class="w"&gt; &lt;/span&gt;cp&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet&lt;span class="w"&gt; &lt;/span&gt;serving_base:/models/resnet
+docker&lt;span class="w"&gt; &lt;/span&gt;commit&lt;span class="w"&gt; &lt;/span&gt;--change&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ENV MODEL_NAME resnet&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;serving_base&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$USER&lt;/span&gt;/resnet_serving
+docker&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;kill&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;serving_base
+docker&lt;span class="w"&gt; &lt;/span&gt;rm&lt;span class="w"&gt; &lt;/span&gt;serving_base
+docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;8500&lt;/span&gt;:8500&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;8501&lt;/span&gt;:8501&lt;span class="w"&gt; &lt;/span&gt;-t&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$USER&lt;/span&gt;/resnet_serving&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To test that the serving works, you can run&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;git
+git&lt;span class="w"&gt; &lt;/span&gt;clone&lt;span class="w"&gt; &lt;/span&gt;https://github.com/tensorflow/serving …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;How to install and test Tensorflow Serving in a Amazon EC2 instance running
+Amazon EC2 Linux 2. We will use docker and we will serve a resnet image. These
+are the commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Install docker&lt;/span&gt;
+sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;update
+sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;docker
+sudo&lt;span class="w"&gt; &lt;/span&gt;usermod&lt;span class="w"&gt; &lt;/span&gt;-a&lt;span class="w"&gt; &lt;/span&gt;-G&lt;span class="w"&gt; &lt;/span&gt;docker&lt;span class="w"&gt; &lt;/span&gt;ec2-user
+newgrp&lt;span class="w"&gt; &lt;/span&gt;docker
+sudo&lt;span class="w"&gt; &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;enable&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;docker.service
+sudo&lt;span class="w"&gt; &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;start&lt;span class="w"&gt; &lt;/span&gt;docker.service
+
+&lt;span class="c1"&gt;# Prepare the resnet model&lt;/span&gt;
+rm&lt;span class="w"&gt; &lt;/span&gt;-rf&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet
+wget&lt;span class="w"&gt; &lt;/span&gt;https://tfhub.dev/tensorflow/resnet_50/classification/1?tf-hub-format&lt;span class="o"&gt;=&lt;/span&gt;compressed&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz
+mv&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;?tf-hub-format&lt;span class="o"&gt;=&lt;/span&gt;compressed&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz
+mkdir&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet/123
+tar&lt;span class="w"&gt; &lt;/span&gt;xvfz&lt;span class="w"&gt; &lt;/span&gt;resnet.tar.gz&lt;span class="w"&gt; &lt;/span&gt;-C&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet/123/
+
+&lt;span class="c1"&gt;# Create and run a docker image with tensorflow serving using the resnet model&lt;/span&gt;
+docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;-d&lt;span class="w"&gt; &lt;/span&gt;--name&lt;span class="w"&gt; &lt;/span&gt;serving_base&lt;span class="w"&gt; &lt;/span&gt;tensorflow/serving
+docker&lt;span class="w"&gt; &lt;/span&gt;cp&lt;span class="w"&gt; &lt;/span&gt;/tmp/resnet&lt;span class="w"&gt; &lt;/span&gt;serving_base:/models/resnet
+docker&lt;span class="w"&gt; &lt;/span&gt;commit&lt;span class="w"&gt; &lt;/span&gt;--change&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ENV MODEL_NAME resnet&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;serving_base&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$USER&lt;/span&gt;/resnet_serving
+docker&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;kill&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;serving_base
+docker&lt;span class="w"&gt; &lt;/span&gt;rm&lt;span class="w"&gt; &lt;/span&gt;serving_base
+docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;8500&lt;/span&gt;:8500&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;8501&lt;/span&gt;:8501&lt;span class="w"&gt; &lt;/span&gt;-t&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$USER&lt;/span&gt;/resnet_serving&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To test that the serving works, you can run&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo&lt;span class="w"&gt; &lt;/span&gt;yum&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;git
+git&lt;span class="w"&gt; &lt;/span&gt;clone&lt;span class="w"&gt; &lt;/span&gt;https://github.com/tensorflow/serving
+&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;serving/
+pip3.7&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;numpy&lt;span class="w"&gt; &lt;/span&gt;pillow&lt;span class="w"&gt; &lt;/span&gt;requests
+python3.7&lt;span class="w"&gt; &lt;/span&gt;tensorflow_serving/example/resnet_client.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="tensorflow, ec2"></category><category term="tensorflow"></category></entry></feed>

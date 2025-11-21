@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../tag/prometheus.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Tag Prometheus</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../integrating-prometheus-influxdb-and-grafana.html#integrating-prometheus-influxdb-and-grafana">Integrating Prometheus, InfluxDB and Grafana</a></h2>
+    <p>
+      Posted on Wed 29 September 2021 in <a href="../category/kubernetes.html">Kubernetes</a>
+
+          &#8226; Tagged with
+              <a href="../tag/kubernetes.html">Kubernetes</a>,              <a href="../tag/prometheus.html">Prometheus</a>,              <a href="../tag/telegraf.html">Telegraf</a>,              <a href="../tag/influxdb.html">InfluxDB</a>,              <a href="../tag/grafana.html">Grafana</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I've got a Kubernetes cluster prepared to be be integrated with Prometheus,
+i.e., all relevant information is exposed with <code>/metrics</code> and scraped by a
+Prometheus instance. I want to save the information long term and I've decided
+that Influx DB is the best option for that. In addition, I want to create
+dashboards using Grafana.</p>
+<p>This would require moving the information from Prometheus to Influx DB.
+According to
+<a href="https://www.influxdata.com/blog/prometheus-remote-write-support-with-influxdb-2-0/">this</a>,
+for Influx DB v1, this would be accomplished by using directly remote writes in
+Prometheus. However, Influx DB v2 doesn't allow this way of working. Instead,
+Telegraf has to be inserted in the middle. Therefore, the whole pipeline would
+be <code>Prometheus 🠮 Telegraf 🠮 Influx DB 🠮 Grafana</code>.</p>
+<p>I'm using EKS to deploy the cluster, but these instructions should work with any
+other Kubernetes cluster. I'll only assume that <code>kubectl</code> is already configured
+to work with your cluster. We are going to deploy many services, so you may
+require new nodes in your cluster.</p>
+<h2>Helm</h2>
+<p>We'are going to use Helm for installing all the components, so first we …</p></div>
+        <br>
+        <a class="btn"
+           href="../integrating-prometheus-influxdb-and-grafana.html#integrating-prometheus-influxdb-and-grafana">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

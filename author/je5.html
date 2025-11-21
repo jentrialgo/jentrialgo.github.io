@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../author/je5.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Posts by J.E.:</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../pylance-cannot-find-editable-local-import.html#pylance-cannot-find-editable-local-import">Pylance cannot find editable local import</a></h2>
+    <p>
+      Posted on Sat 27 May 2023 in <a href="../category/pylance-python.html">Pylance, Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pylance.html">Pylance</a>,              <a href="../tag/python.html">Python</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I had a problem with Pylance not finding a local import. I had installed the package in
+editable mode with <code>pip install -e .</code> and it was working fine in the terminal, but Pylance
+was not able to find it.</p>
+<p>The solution was installing the package in strict mode with:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--config-settings<span class="w"> </span><span class="nv">editable_mode</span><span class="o">=</span>strict
+</code></pre></div>
+
+<p>I got there from <a href="https://github.com/microsoft/pylance-release/blob/main/TROUBLESHOOTING.md#editable-install-modules-not-found">this troubleshooting
+page</a>
+and <a href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html#strict-editable-installs">this
+explanation</a>
+in the Setuptools documentation.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../click-removal-in-audio-files-with-python.html#click-removal-in-audio-files-with-python">Click removal in audio files with Python</a></h2>
+    <p>
+      Posted on Tue 23 May 2023 in <a href="../category/audio-python.html">Audio, Python</a>
+
+          &#8226; Tagged with
+              <a href="../tag/audio.html">Audio</a>,              <a href="../tag/python.html">Python</a>
+    </p>
+  </header>
+  <div>
+      <div><p>A friend of mine had an audio file with many clicks in it. He asked me if I
+could remove them. I tried with the Audacity click removal tool, but it didn't
+work: it removed the clicks, but created a lot of artifacts in the audio, so I
+thought it would be a nice challenge to try to do it with Python.</p>
+<p>The waveform looked like this:</p>
+<p><img alt="Waveform with clicks" src="images/2023-05-23-waveform.png"></p>
+<p>I did it using the <a href="https://github.com/jiaaro/pydub">pydub</a> package. The basic
+idea is detecting the clicks and replacing them with the previous sample. I
+used two different criteria to detect the clicks:</p>
+<ul>
+<li>
+<p>If the average of the previous samples is below a threshold and the current
+  sample is above another threshold.</p>
+</li>
+<li>
+<p>If the difference between the previous sample and the current one is above a
+  threshold.</p>
+</li>
+</ul>
+<p>The code is not very clean, but it worked. I had to play with the thresholds
+and the width of the samples to get the best results. I also had to play with
+the width of the clicks to avoid removing too much audio …</p></div>
+        <br>
+        <a class="btn"
+           href="../click-removal-in-audio-files-with-python.html#click-removal-in-audio-files-with-python">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../computing-the-mase-for-historical_forecasts-in-darts.html#computing-the-mase-for-historical_forecasts-in-darts">Computing the MASE for historical_forecasts in darts</a></h2>
+    <p>
+      Posted on Thu 11 May 2023 in <a href="../category/time-series-prediction-darts.html">Time series prediction, darts</a>
+
+          &#8226; Tagged with
+              <a href="../tag/time-series-prediction.html">Time series prediction</a>,              <a href="../tag/darts.html">darts</a>
+    </p>
+  </header>
+  <div>
+      <div><p>I haven't found any example online on how to compute the MASE (Mean Absolute
+Scaled Error) for historical forecasts in
+<a href="https://unit8co.github.io/darts/">darts</a>, so I thought I'd share this example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">darts</span> <span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span> <span class="nn">darts.models</span> <span class="kn">import</span> <span class="n">NaiveSeasonal</span>
+<span class="kn">from</span> <span class="nn">darts.metrics</span> <span class="kn">import</span> <span class="n">mase</span>
+
+<span class="n">my_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+<span class="n">my_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">my_data</span><span class="p">)</span>
+<span class="n">my_ts</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">my_np</span><span class="p">)</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">NaiveSeasonal</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">my_forecast</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">historical_forecasts</span><span class="p">(</span><span class="n">series</span><span class="o">=</span><span class="n">my_ts</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">my_mase</span> <span class="o">=</span> <span class="n">mase</span><span class="p">(</span><span class="n">actual_series</span><span class="o">=</span><span class="n">my_ts</span><span class="p">,</span> <span class="n">pred_series</span><span class="o">=</span><span class="n">my_forecast</span><span class="p">,</span> <span class="n">insample</span><span class="o">=</span><span class="n">my_ts</span><span class="p">[:</span><span class="n">start</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;my_mase: </span><span class="si">{</span><span class="n">my_mase</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">my_ts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+<span class="n">my_forecast</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;historical_forecasts&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Notice that the <code>insample</code> parameter is set to the original time series up to
+the start of the historical forecast.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../projects-to-test-ai-chat-bots-locally.html#projects-to-test-ai-chat-bots-locally">Projects to test AI chat bots locally</a></h2>
+    <p>
+      Posted on Tue 02 May 2023 in <a href="../category/ai-chat-bots-python-llm.html">AI, chat bots, Python, LLM</a>
+
+          &#8226; Tagged with
+              <a href="../tag/ai.html">AI</a>,              <a href="../tag/chat-bots.html">chat bots</a>,              <a href="../tag/python.html">Python</a>,              <a href="../tag/llm.html">LLM</a>,              <a href="../tag/chatai.html">ChatAI</a>,              <a href="../tag/colossalchat.html">ColossalChat</a>,              <a href="../tag/localai.html">LocalAI</a>,              <a href="../tag/text-generation-web-ui.html">Text generation web UI</a>,              <a href="../tag/mlc-llm.html">MLC LLM</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Many people is interested in trying AI (Artificial Intelligence) chat bots
+locally, but they don't know how to start. These are some projects that I've
+found that can be used to test different LLMs (Language Learning Models) and
+chat bots:</p>
+<ul>
+<li>
+<p><a href="https://github.com/oobabooga/text-generation-webui">Text generation web UI</a>.
+  It tries to be the
+  <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111/stable-diffusion-webui</a>
+  of text generation. Based on Gradio, it provides a web interface to test
+  different LLMs.</p>
+</li>
+<li>
+<p><a href="https://github.com/nsarrazin/serge">Serge</a>. It's an interface based on
+  Svelte as web framework and llama.cpp for running mmodels. It's dockerized.
+  It also provides an API.</p>
+</li>
+<li>
+<p><a href="https://github.com/nat/openplayground">openplayground</a>. Works with local
+  models and remote APIs. Can be installed as a Python package or run with
+  Docker. It's implemented as a Flask application with a React frontend.</p>
+</li>
+<li>
+<p><a href="https://github.com/Capsize-Games/chatai">ChatAI</a>. It is a desktop application
+  for Windows and Ubuntu developed in Python with PyQt. It uses a Google T5-Flan
+  model and it is based on <a href="https://github.com/Capsize-Games/airunner">A. I.
+  Runner</a>, a framework to run AI
+  models.</p>
+</li>
+<li>
+<p><a href="https://github.com/hpcaitech/ColossalAI">ColossalChat</a>. ColossalAI provides a
+  set of tools to develop deep learning models, and it includes ColossalChat,
+  which is a chat bot based …</p></li></ul></div>
+        <br>
+        <a class="btn"
+           href="../projects-to-test-ai-chat-bots-locally.html#projects-to-test-ai-chat-bots-locally">
+          Continue reading
+        </a>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../visual-studio-code-unable-to-connect.html#visual-studio-code-unable-to-connect">Visual Studio Code unable to connect</a></h2>
+    <p>
+      Posted on Fri 21 April 2023 in <a href="../category/visual-studio-code.html">Visual Studio Code</a>
+
+          &#8226; Tagged with
+              <a href="../tag/visual-studio-code.html">Visual Studio Code</a>,              <a href="../tag/vs-code.html">VS Code</a>
+    </p>
+  </header>
+  <div>
+      <div><p>Some times, I get this error:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">Unable</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">VS</span><span class="w"> </span><span class="nv">Code</span><span class="w"> </span><span class="nv">server</span>:<span class="w"> </span><span class="nv">Error</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">request</span>.
+<span class="nv">Error</span>:<span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">ENOENT</span><span class="w"> </span>[...]
+</code></pre></div>
+
+<p>I always have to search for the solution, so I decided to write it down here.
+From <a href="https://github.com/microsoft/vscode-remote-release/issues/6997">this
+issue</a>, I found
+that running this solves the problem:</p>
+<div class="highlight"><pre><span></span><code>VSCODE_IPC_HOOK_CLI=$(lsof | grep $USER | grep vscode-ipc | awk &#39;{print $(NF-1)}&#39; | head -n 1)
+</code></pre></div></div>
+  </div>
+</article>
+
+  <div class="pagination">
+    <a class="btn float-left" href="../author/je6.html">
+      <i class="fa fa-angle-left"></i> Older Posts
+    </a>
+    <a class="btn float-right" href="../author/je4.html">
+      Newer Posts <i class="fa fa-angle-right"></i>
+    </a>
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - python, uv</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/python-uv.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-01-23T12:00:00+01:00</updated><entry><title>Using uv to run Python tools without installing them</title><link href="https://jentrialgo.github.io/using-uv-to-run-python-tools-without-installing-them.html" rel="alternate"></link><published>2025-01-23T12:00:00+01:00</published><updated>2025-01-23T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-01-23:/using-uv-to-run-python-tools-without-installing-them.html</id><content type="html">&lt;p&gt;I wanted to run a Python tool without installing it, or preparing a virtual environment
+and all that. This is now very easy with &lt;a href="https://github.com/astral-sh/uv"&gt;uv&lt;/a&gt;, using
+&lt;a href="https://docs.astral.sh/uv/guides/tools/"&gt;uvx&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I wanted to run &lt;a href="https://github.com/microsoft/markitdown"&gt;markitdown&lt;/a&gt;, a tool to convert
+various files to Markdown. I didn't want to install it, so I used &lt;code&gt;uvx&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uvx&lt;span class="w"&gt; &lt;/span&gt;markitdown&lt;span class="o"&gt;[&lt;/span&gt;docx&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;file_to_convert.docx&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;output_file.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It downloads the tool and installs it in a temporary, isolated environment. In this
+case, it also installs the &lt;code&gt;docx&lt;/code&gt; extra, so that markitdown can convert docx files.&lt;/p&gt;
+&lt;p&gt;A tool can be installed with &lt;code&gt;uv tool install&lt;/code&gt;, like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;tool&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;markitdown
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It's very convenient.&lt;/p&gt;</content><category term="python, uv"></category><category term="python"></category><category term="uv"></category></entry></feed>

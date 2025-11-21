@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Nvidia, GPU, Profiling, Jetson</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/nvidia-gpu-profiling-jetson.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2024-04-19T12:00:00+02:00</updated><entry><title>Profiling with nvprof</title><link href="https://jentrialgo.github.io/profiling-with-nvprof.html" rel="alternate"></link><published>2024-04-19T12:00:00+02:00</published><updated>2024-04-19T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2024-04-19:/profiling-with-nvprof.html</id><summary type="html">&lt;p&gt;I'm working on a Jetson Nano and I want to profile my code. Nvidia provides several tools,
+being Nsight Compute the most powerful one. However, it cannot be run on the Jetson Nano,
+so I have resorted to using &lt;code&gt;nvprof&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;nvprof&lt;/code&gt; is a command-line profiler that can be used to profile CUDA applications. It is
+included in the CUDA Toolkit, so you should have it installed if you have CUDA installed.
+However, you need to be root to run it. As root, I don't have the CUDA environment set up,
+so I need use the full path. These are two commands that I've found useful:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/usr/local/cuda/bin/nvprof&lt;span class="w"&gt; &lt;/span&gt;--print-gpu-trace&lt;span class="w"&gt; &lt;/span&gt;./my_program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This shows the GPU trace of the program. It is useful to see how the GPU is being used.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/usr/local/cuda/bin/nvprof&lt;span class="w"&gt; &lt;/span&gt;--metrics&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;./my_program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This shows all the metrics that &lt;code&gt;nvprof&lt;/code&gt; can measure. It is useful to see how the program
+is using the GPU.&lt;/p&gt;
+&lt;p&gt;In addition, you can use the &lt;code&gt;--log-file&lt;/code&gt; option to save the output to a file …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I'm working on a Jetson Nano and I want to profile my code. Nvidia provides several tools,
+being Nsight Compute the most powerful one. However, it cannot be run on the Jetson Nano,
+so I have resorted to using &lt;code&gt;nvprof&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;nvprof&lt;/code&gt; is a command-line profiler that can be used to profile CUDA applications. It is
+included in the CUDA Toolkit, so you should have it installed if you have CUDA installed.
+However, you need to be root to run it. As root, I don't have the CUDA environment set up,
+so I need use the full path. These are two commands that I've found useful:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/usr/local/cuda/bin/nvprof&lt;span class="w"&gt; &lt;/span&gt;--print-gpu-trace&lt;span class="w"&gt; &lt;/span&gt;./my_program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This shows the GPU trace of the program. It is useful to see how the GPU is being used.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/usr/local/cuda/bin/nvprof&lt;span class="w"&gt; &lt;/span&gt;--metrics&lt;span class="w"&gt; &lt;/span&gt;all&lt;span class="w"&gt; &lt;/span&gt;./my_program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This shows all the metrics that &lt;code&gt;nvprof&lt;/code&gt; can measure. It is useful to see how the program
+is using the GPU.&lt;/p&gt;
+&lt;p&gt;In addition, you can use the &lt;code&gt;--log-file&lt;/code&gt; option to save the output to a file.&lt;/p&gt;</content><category term="Nvidia, GPU, Profiling, Jetson"></category><category term="Nvidia"></category><category term="GPU"></category><category term="Profiling"></category><category term="Jetson"></category></entry></feed>
