@@ -1,7 +1,7 @@
 title: CPUs are back (acording to Semianalysis)
 date: 2026-02-18 12:00
-category: CPUs, GPUs, Datacenters, Computer Architecture, Networks
-tags: CPUs, GPUs, Datacenters, Computer Architecture, Networks
+category: CPU, GPU, Datacenters, Computer Architecture, Networks
+tags: CPU, GPU, Datacenters, Computer Architecture, Networks
 
 Semianalysis has published a [fantastic
 analysis](https://newsletter.semianalysis.com/p/cpus-are-back-the-datacenter-cpu) of the
