@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - git</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/git.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-01-22T12:00:00+01:00</updated><entry><title>Essential git cheat sheet for loners</title><link href="https://jentrialgo.github.io/essential-git-cheat-sheet-for-loners.html" rel="alternate"></link><published>2025-01-22T12:00:00+01:00</published><updated>2025-01-22T12:00:00+01:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-01-22:/essential-git-cheat-sheet-for-loners.html</id><summary type="html">&lt;p&gt;This are the basic commands to operate with git as a loner: no branches, no remotes, no
+merges... Just the basic stuff.&lt;/p&gt;
+&lt;p&gt;The minimum concepts you need to know are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Git is a version control system. It allows you to store changes in your files. Don't
+  mix it with GitHub, which is a platform to store your repositories.&lt;/li&gt;
+&lt;li&gt;Working directory: the directory where you are working.&lt;/li&gt;
+&lt;li&gt;Staging area: a place to store changes before committing them.&lt;/li&gt;
+&lt;li&gt;Repository: the place where the changes are stored.&lt;/li&gt;
+&lt;li&gt;Commit: a set of changes stored in the repository. They are identified by a hash. For
+  example, &lt;code&gt;commit 1234567&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The basic workflow is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make changes in the working directory.&lt;/li&gt;
+&lt;li&gt;Add changes to the staging area.&lt;/li&gt;
+&lt;li&gt;Commit changes to the repository.&lt;/li&gt;
+&lt;li&gt;Repeat.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Conceptually: working directory -&amp;gt; staging area -&amp;gt; repository.&lt;/p&gt;
+&lt;h1&gt;Configuration&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;--global&lt;span class="w"&gt; &lt;/span&gt;user.name&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Your Name&amp;quot;&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;--global&lt;span class="w"&gt; &lt;/span&gt;user.email&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_email@example.com&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Create a new repository&lt;/h1&gt;
+&lt;p&gt;In the directory of your project:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Add files to the repository&lt;/h1&gt;
+&lt;p&gt;This adds all the changes in your current directory to the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;This are the basic commands to operate with git as a loner: no branches, no remotes, no
+merges... Just the basic stuff.&lt;/p&gt;
+&lt;p&gt;The minimum concepts you need to know are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Git is a version control system. It allows you to store changes in your files. Don't
+  mix it with GitHub, which is a platform to store your repositories.&lt;/li&gt;
+&lt;li&gt;Working directory: the directory where you are working.&lt;/li&gt;
+&lt;li&gt;Staging area: a place to store changes before committing them.&lt;/li&gt;
+&lt;li&gt;Repository: the place where the changes are stored.&lt;/li&gt;
+&lt;li&gt;Commit: a set of changes stored in the repository. They are identified by a hash. For
+  example, &lt;code&gt;commit 1234567&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The basic workflow is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make changes in the working directory.&lt;/li&gt;
+&lt;li&gt;Add changes to the staging area.&lt;/li&gt;
+&lt;li&gt;Commit changes to the repository.&lt;/li&gt;
+&lt;li&gt;Repeat.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Conceptually: working directory -&amp;gt; staging area -&amp;gt; repository.&lt;/p&gt;
+&lt;h1&gt;Configuration&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;--global&lt;span class="w"&gt; &lt;/span&gt;user.name&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Your Name&amp;quot;&lt;/span&gt;
+git&lt;span class="w"&gt; &lt;/span&gt;config&lt;span class="w"&gt; &lt;/span&gt;--global&lt;span class="w"&gt; &lt;/span&gt;user.email&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;your_email@example.com&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Create a new repository&lt;/h1&gt;
+&lt;p&gt;In the directory of your project:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Add files to the repository&lt;/h1&gt;
+&lt;p&gt;This adds all the changes in your current directory to the staging area.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you only want to add a specific file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;file.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Commit changes&lt;/h1&gt;
+&lt;p&gt;This commits the changes in the staging area to the repository.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;commit&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Your commit message&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Check the status of the repository&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;status
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Check the history of the repository&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Compare changes&lt;/h1&gt;
+&lt;p&gt;Working directory vs repository:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;diff
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Staging area vs repository:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;diff&lt;span class="w"&gt; &lt;/span&gt;--staged
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h1&gt;Discard changes in the working directory&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;checkout&lt;span class="w"&gt; &lt;/span&gt;--&lt;span class="w"&gt; &lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Caution: This removes all uncommitted changes. For specific files, use &lt;code&gt;git checkout --
+filename&lt;/code&gt;.&lt;/p&gt;
+&lt;h1&gt;Discard changes in the staging area&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;git&lt;span class="w"&gt; &lt;/span&gt;reset
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Any other command you need, you can find it in the &lt;a href="https://git-scm.com/doc"&gt;official
+documentation&lt;/a&gt; or, better, ask to an LLM like ChatGPT.&lt;/p&gt;
+&lt;p&gt;Probably, the next step is to learn about remotes and, then, branches.&lt;/p&gt;</content><category term="git"></category><category term="git"></category></entry></feed>

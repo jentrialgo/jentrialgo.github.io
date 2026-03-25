@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - uv, pip, python</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/uv-pip-python.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-04-11T12:00:00+02:00</updated><entry><title>Updating to uv from pip</title><link href="https://jentrialgo.github.io/updating-to-uv-from-pip.html" rel="alternate"></link><published>2025-04-11T12:00:00+02:00</published><updated>2025-04-11T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-04-11:/updating-to-uv-from-pip.html</id><content type="html">&lt;p&gt;This is a short guide on how to upgrade a project from using &lt;code&gt;pip&lt;/code&gt; with a
+&lt;code&gt;requirements.txt&lt;/code&gt; file to using Astral's &lt;code&gt;uv&lt;/code&gt;. It assumes that &lt;code&gt;uv&lt;/code&gt; is already installed
+and that you have a project set up with a &lt;code&gt;requirements.txt&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;Initialize uv:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Remove &lt;code&gt;hello.py&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;rm&lt;span class="w"&gt; &lt;/span&gt;hello.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Modify &lt;code&gt;project.toml&lt;/code&gt; to update the information about the project.&lt;/p&gt;
+&lt;p&gt;Add the dependencies from &lt;code&gt;requirements.txt&lt;/code&gt; to the &lt;code&gt;project.toml&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;-r&lt;span class="w"&gt; &lt;/span&gt;requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That's it! You can now use &lt;code&gt;uv&lt;/code&gt; to manage your dependencies. You can run the project with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;your_script.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Alternatively, you can use uv sync to manually update the environment then activate it
+before executing a command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;sync
+&lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.venv/bin/activate
+python&lt;span class="w"&gt; &lt;/span&gt;your_script.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To add new dependencies, you can use the &lt;code&gt;uv add&lt;/code&gt; command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;package_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To upgrade a package, you can use the &lt;code&gt;uv upgrade&lt;/code&gt; command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;uv&lt;span class="w"&gt; &lt;/span&gt;lock&lt;span class="w"&gt; &lt;/span&gt;--upgrade-package&lt;span class="w"&gt; &lt;/span&gt;package_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="uv, pip, python"></category><category term="uv"></category><category term="pip"></category><category term="python"></category></entry></feed>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Giving back to tech - Operating Systems, Debugging</title><link href="https://jentrialgo.github.io/" rel="alternate"></link><link href="https://jentrialgo.github.io/feeds/operating-systems-debugging.atom.xml" rel="self"></link><id>https://jentrialgo.github.io/</id><updated>2025-10-17T12:00:00+02:00</updated><entry><title>The perfect strace command</title><link href="https://jentrialgo.github.io/the-perfect-strace-command.html" rel="alternate"></link><published>2025-10-17T12:00:00+02:00</published><updated>2025-10-17T12:00:00+02:00</updated><author><name>J.E.</name></author><id>tag:jentrialgo.github.io,2025-10-17:/the-perfect-strace-command.html</id><summary type="html">&lt;p&gt;The Linux utility &lt;code&gt;strace&lt;/code&gt; is essential for diagnosing process–kernel interactions, but its default output is often unusable. The key to effective debugging is using a specific set of flags that transform raw system call data into a structured, time‑stamped, and annotated log.&lt;/p&gt;
+&lt;p&gt;According to Avikam Rozenfeld in 
+&lt;a href="https://youtu.be/SUO0rQerpMk?t=726"&gt;this presentation&lt;/a&gt;, here is the
+essential command template, followed by a breakdown of why each flag is critical:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;strace -f -s 256 -o trace.log -tt -T -y &amp;lt;your_command_here&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Flags and why they matter:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-f&lt;/strong&gt; — Follow children&lt;br&gt;
+  Purpose: Trace child processes spawned by &lt;code&gt;fork&lt;/code&gt;/&lt;code&gt;clone&lt;/code&gt;.&lt;br&gt;
+  Key benefit: Ensures you trace the entire application flow (e.g., piped commands).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-s 256&lt;/strong&gt; — Increase string size&lt;br&gt;
+  Purpose: Increase the string output limit (default 32 bytes) to 256 bytes.&lt;br&gt;
+  Key benefit: Prevents truncation of file paths and data being read or written.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-o &lt;file&gt;&lt;/strong&gt; — Output to file&lt;br&gt;
+  Purpose: Redirect all &lt;code&gt;strace&lt;/code&gt; output to a specified log file (e.g., &lt;code&gt;trace.log&lt;/code&gt;).&lt;br&gt;
+  Key benefit: Separates trace output from the program's standard output for easier analysis.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-tt&lt;/strong&gt; — Precise timestamp&lt;br&gt;
+  Purpose: Prefix every line …&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;p&gt;The Linux utility &lt;code&gt;strace&lt;/code&gt; is essential for diagnosing process–kernel interactions, but its default output is often unusable. The key to effective debugging is using a specific set of flags that transform raw system call data into a structured, time‑stamped, and annotated log.&lt;/p&gt;
+&lt;p&gt;According to Avikam Rozenfeld in 
+&lt;a href="https://youtu.be/SUO0rQerpMk?t=726"&gt;this presentation&lt;/a&gt;, here is the
+essential command template, followed by a breakdown of why each flag is critical:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;strace -f -s 256 -o trace.log -tt -T -y &amp;lt;your_command_here&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Flags and why they matter:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-f&lt;/strong&gt; — Follow children&lt;br&gt;
+  Purpose: Trace child processes spawned by &lt;code&gt;fork&lt;/code&gt;/&lt;code&gt;clone&lt;/code&gt;.&lt;br&gt;
+  Key benefit: Ensures you trace the entire application flow (e.g., piped commands).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-s 256&lt;/strong&gt; — Increase string size&lt;br&gt;
+  Purpose: Increase the string output limit (default 32 bytes) to 256 bytes.&lt;br&gt;
+  Key benefit: Prevents truncation of file paths and data being read or written.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-o &lt;file&gt;&lt;/strong&gt; — Output to file&lt;br&gt;
+  Purpose: Redirect all &lt;code&gt;strace&lt;/code&gt; output to a specified log file (e.g., &lt;code&gt;trace.log&lt;/code&gt;).&lt;br&gt;
+  Key benefit: Separates trace output from the program's standard output for easier analysis.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-tt&lt;/strong&gt; — Precise timestamp&lt;br&gt;
+  Purpose: Prefix every line with the time of day including microsecond resolution.&lt;br&gt;
+  Key benefit: Essential for observing the sequence of events across processes.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-T&lt;/strong&gt; — Time in syscall&lt;br&gt;
+  Purpose: Show the time spent inside the kernel for each syscall.&lt;br&gt;
+  Key benefit: Quickly spot bottlenecks (e.g., a long &lt;code&gt;poll&lt;/code&gt; timeout).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-y&lt;/strong&gt; — File descriptor paths&lt;br&gt;
+  Purpose: Translate file descriptor numbers into associated file paths, pipes, or socket addresses.&lt;br&gt;
+  Key benefit: Eliminates manual lookup of fd → path associations.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Power user flags (for complex scenarios)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-ff&lt;/strong&gt;&lt;br&gt;
+  Use instead of &lt;code&gt;-f&lt;/code&gt; together with &lt;code&gt;-o &amp;lt;prefix&amp;gt;&lt;/code&gt;; writes each child's trace to its own file (e.g., &lt;code&gt;prefix.12345&lt;/code&gt;), preventing interleaved logs.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;-e &lt;syscall_set&gt;&lt;/strong&gt;&lt;br&gt;
+  Filter output to specific system calls. Examples:  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e trace=file&lt;/code&gt; — file operations  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e trace=open,poll,connect&lt;/code&gt; — specific calls of interest&lt;br&gt;
+  Key benefit: Drastically reduces log noise and focuses analysis.&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Operating Systems, Debugging"></category><category term="Operating Systems"></category><category term="Debugging"></category></entry></feed>

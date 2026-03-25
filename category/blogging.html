@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../theme/stylesheet/style.min.css">
+
+
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+          href="../theme/pygments/github.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="../theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/custom.css">
+
+
+
+  <link href="https://jentrialgo.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Giving back to tech Atom">
+
+
+
+
+
+
+
+
+        <link rel="canonical" href="../category/blogging.html">
+ 
+
+    <meta name="author" content="J.E." />
+    <meta name="description" content="" />
+  <meta property="og:site_name" content="Giving back to tech"/>
+  <meta property="og:type" content="blog"/>
+  <meta property="og:title" content="Giving back to tech"/>
+  <meta property="og:description" content=""/>
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:url" content=".."/>
+  <meta property="og:image" content="images/profile.jpg">
+
+  <title>Giving back to tech &ndash; Category Blogging</title>
+
+
+</head>
+<body class="light-theme">
+
+<aside>
+  <div>
+    <a href="../">
+      <img src="images/profile.jpg" alt="Giving back to tech" title="Giving back to tech">
+    </a>
+
+    <h1>
+      <a href="../">Giving back to tech</a>
+    </h1>
+
+
+
+    <nav>
+      <ul class="list">
+
+
+
+          <li>
+            <a target="_self" href="https://jentrialgo.github.io/personal-website/" >Personal page</a>
+          </li>
+          <li>
+            <a target="_self" href="https://github.com/jentrialgo" >GitHub page</a>
+          </li>
+          <li>
+            <a target="_self" href="/archives.html" >All posts</a>
+          </li>
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li>
+        <a class="sc-Linked.in"
+           href="https://www.linkedin.com/in/joaqu%C3%ADn-entrialgo-casta%C3%B1o-8a74714b/"
+           target="_blank">
+          <i class="fa-brands fa-Linked.in"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
+  <main>
+
+<nav>
+  <a href="../">Home</a>
+
+  <a href="./pages/about.html#about">About</a>
+  <a href="/tags.html">Tags</a>
+
+  <a href="https://jentrialgo.github.io/feeds/all.atom.xml">Atom</a>
+
+</nav>
+
+
+
+<article>
+  <header>
+    <h2><a href="../changing-the-pelican-theme-to-flex.html#changing-the-pelican-theme-to-flex">Changing the Pelican theme to Flex</a></h2>
+    <p>
+      Posted on Thu 30 September 2021 in <a href="../category/blogging.html">Blogging</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pelican.html">Pelican</a>,              <a href="../tag/github-pages.html">GitHub pages</a>,              <a href="../tag/blog.html">Blog</a>
+    </p>
+  </header>
+  <div>
+      <div><p>In <a href="../using-pelican-as-blogging-platform-for-github.html">a previous
+post</a> I
+explained how to use Pelican with GitHub pages but didn't explain how to change
+the theme. I've changed it now to use
+<a href="https://github.com/alexandrevicenzi/Flex">Flex</a> and it was harder than
+expected.</p>
+<p>Most of the guides I've found talked about cloning
+<a href="https://github.com/getpelican/pelican-themes">pelican-themes</a> in a folder on
+your system and changing the variable <code>THEME</code> to that folder. However, that
+doesn't work when you are using GitHub actions to build your site because it
+won't find that folder.</p>
+<p>My solution was cloning the theme I wanted, Flex, to a folder inside the root
+folder of the blog:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/alexandrevicenzi/Flex
+</code></pre></div>
+
+<p>Then I set in <code>pelicanconf.py</code> the variable <code>THEME</code> as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;Flex&#39;</span>
+</code></pre></div>
+
+<p>In order to make it work with GitHub actions, I had to add in the file
+<code>publi.sh</code>, before calling <code>pelican</code>, this line:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/alexandrevicenzi/Flex
+</code></pre></div>
+
+<p>After commiting and pushing, it worked.</p></div>
+  </div>
+  <hr />
+</article>
+<article>
+  <header>
+    <h2><a href="../using-pelican-as-blogging-platform-for-github.html#using-pelican-as-blogging-platform-for-github">Using Pelican as blogging platform for GitHub</a></h2>
+    <p>
+      Posted on Tue 28 September 2021 in <a href="../category/blogging.html">Blogging</a>
+
+          &#8226; Tagged with
+              <a href="../tag/pelican.html">Pelican</a>,              <a href="../tag/github-pages.html">GitHub pages</a>,              <a href="../tag/blog.html">Blog</a>
+    </p>
+  </header>
+  <div>
+      <div><p>So I guess my first blog should be about setting up this blog.</p>
+<p>I wanted to use GitHub pages. By default they use Jekyll, which is built with
+Ruby. I have no experience with that language, so I tried to use something
+Python-based. I found <a href="https://avinal.space/posts/development/twilight-blog.html">this post about using
+Pelican</a>, but I had
+some problems. I'm going to try to give here step by step instructions, using
+Linux.</p>
+<p>Create a directory for the blog, an environment and activate it:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>blog
+<span class="nb">cd</span><span class="w"> </span>blog
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</code></pre></div>
+
+<p>Install pelican with one of these options:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># This option only allows reStructuredText</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pelican
+
+<span class="c1"># This allows markdown and reStructuredText</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;pelican[markdown]&quot;</span>
+</code></pre></div>
+
+<p>Create the basic structure:</p>
+<div class="highlight"><pre><span></span><code>pelican-quickstart
+</code></pre></div>
+
+<p>I'll leave the standard theme. Read in the <a href="https://avinal.space/posts/development/twilight-blog.html">mentioned
+post</a> if you want to
+change the theme.</p>
+<blockquote>
+<p><strong>Note</strong> I've created a new post about <a href="../changing-the-pelican-theme-to-flex.html">how to change the style to
+Flex</a></p>
+</blockquote>
+<p>To test locally the blog, generate the site with:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>html
+</code></pre></div>
+
+<p>Now start a web server with:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>serve
+</code></pre></div>
+
+<p>You …</p></div>
+        <br>
+        <a class="btn"
+           href="../using-pelican-as-blogging-platform-for-github.html#using-pelican-as-blogging-platform-for-github">
+          Continue reading
+        </a>
+  </div>
+</article>
+
+  <div class="pagination">
+  </div>
+
+
+
+<footer>
+<p>&copy;  </p>
+<p>
+Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
+</p></footer>  </main>
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Giving back to tech ",
+  "url" : "..",
+  "image": "images/profile.jpg",
+  "description": ""
+}
+</script>
+</body>
+</html>
